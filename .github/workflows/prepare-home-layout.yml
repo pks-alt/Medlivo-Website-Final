@@ -25,7 +25,7 @@ jobs:
           existing='<link rel="stylesheet" href="assets/css/index.css">'
           assert before.count(existing)==1
           after=before.replace(existing,existing+'\n<link rel="stylesheet" href="assets/css/home-responsive.css?v=20260928">')
-          assert BeautifulSoup(before,'html.parser').get_text()==BeautifulSoup(after,'html.parser').get_text()
+          assert BeautifulSoup(before,'html.parser').body.decode()==BeautifulSoup(after,'html.parser').body.decode(),'Homepage body changed'
           p.write_text(after)
           css=Path('assets/css/home-responsive.css')
           css.write_text(css.read_text()+'\n/* Keep the compact header inside narrow phone viewports. */\n@media(max-width:359px){.nav .logo{width:116px}.nav{gap:8px}.actions{gap:6px}.actions .btn-green{font-size:11px;padding:0 9px}}\n')
