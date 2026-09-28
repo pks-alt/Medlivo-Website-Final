@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Search Healthcare Jobs Nationwide | Medlivo</title>
+<meta name="description" content="Search Medlivo healthcare jobs nationwide across Nursing & Allied, Rehabilitation, and Locum Tenens. Filter by profession, specialty, and location.">
+<link rel="stylesheet" href="assets/css/search-jobs.css">
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a href="index.html" aria-label="Medlivo home"><img class="logo" src="assets/brand/medlivo-logo.png" alt="Medlivo"></a>
+    <nav class="links">
+      <a href="workforce-solutions.html">Solutions</a>
+      <div class="nav-dropdown">
+        <button class="nav-drop-trigger" type="button" aria-haspopup="true" aria-expanded="false">Specialties<span class="nav-chevron" aria-hidden="true"></span></button>
+        <div class="nav-dropdown-menu">
+          <div class="nav-dropdown-panel">
+            <a href="nursing-allied.html"><span class="nav-drop-title">Nursing &amp; Allied</span><span class="nav-drop-desc">Nursing and allied clinical staffing</span></a>
+            <a href="rehabilitation.html"><span class="nav-drop-title">Rehabilitation</span><span class="nav-drop-desc">PT, OT and SLP staffing</span></a>
+            <a href="locum-tenens.html"><span class="nav-drop-title">Locum Tenens</span><span class="nav-drop-desc">Physician and APP coverage</span></a>
+          </div>
+        </div>
+      </div>
+      <a class="active" href="search-jobs.html">For Clinicians</a>
+      <div class="nav-dropdown nav-company">
+        <button class="nav-drop-trigger" type="button" aria-haspopup="true" aria-expanded="false">Company<span class="nav-chevron" aria-hidden="true"></span></button>
+        <div class="nav-dropdown-menu">
+          <div class="nav-dropdown-panel">
+            <a href="about.html"><span class="nav-drop-title">About Medlivo</span><span class="nav-drop-desc">Our story, experience and healthcare focus</span></a>
+            <a href="index.html#why"><span class="nav-drop-title">Why Medlivo</span><span class="nav-drop-desc">How we work with clients and clinicians</span></a>
+            <a href="leadership.html"><span class="nav-drop-title">Leadership</span><span class="nav-drop-desc">The people behind Medlivo</span></a>
+            <a href="careers.html"><span class="nav-drop-title">Careers at Medlivo</span><span class="nav-drop-desc">Join our corporate and operations team</span></a>
+          </div>
+        </div>
+      </div>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="actions">
+      <a class="btn btn-outline active" href="search-jobs.html">Search Jobs</a>
+      <a class="btn btn-green" href="request-staff.html">Request Staff</a>
+      <button class="menu" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</header>
+
+<main class="jobs-page">
+  <section class="jobs-hero">
+    <div class="wrap jobs-hero-grid">
+      <div class="jobs-hero-copy">
+        <div class="kicker">Healthcare Jobs Nationwide</div>
+        <h1>Find your next healthcare job.</h1>
+        <p>Search by division, profession, specialty, and location. Review current openings and apply online, or connect with a Medlivo recruiter for support.</p>
+        <div class="jobs-trust">
+          <span>Nationwide job search</span>
+          <span>Recruiter support</span>
+          <span>Credentialing &amp; onboarding guidance</span>
+        </div>
+      </div>
+
+      <div class="jobs-hero-photo">
+        <img src="assets/images/embedded/e70494b94f9f610e514f.webp" alt="Healthcare professionals collaborating during a hospital shift">
+      </div>
+    </div>
+  </section>
+
+  <section class="jobs-search-stage">
+    <div class="wrap">
+      <form class="jobs-search-panel" id="jobsSearchForm" action="search-jobs.html" method="get" data-ats-integration="pending">
+        <div class="jobs-search-field">
+          <label for="searchDivision">Division</label>
+          <select id="searchDivision" name="division" aria-label="Healthcare division">
+            <option value="">All divisions</option>
+            <option value="Nursing & Allied">Nursing &amp; Allied</option>
+            <option value="Rehabilitation">Rehabilitation</option>
+            <option value="Locum Tenens">Locum Tenens</option>
+          </select>
+        </div>
+        <div class="jobs-search-field">
+          <label for="searchProfession">Profession</label>
+          <select id="searchProfession" name="profession" aria-label="Profession">
+            <option value="">All professions</option>
+          </select>
+        </div>
+        <div class="jobs-search-field">
+          <label for="searchSpecialty">Specialty</label>
+          <select id="searchSpecialty" name="specialty" aria-label="Specialty">
+            <option value="">All specialties</option>
+          </select>
+        </div>
+        <div class="jobs-search-field">
+          <label for="searchLocation">Location</label>
+          <input id="searchLocation" name="location" placeholder="City or state" autocomplete="address-level2">
+        </div>
+        <button class="btn btn-green jobs-search-button" type="submit">Find Jobs →</button>
+        <p class="jobs-search-helper">Not sure what to choose? Leave any field as “All” and search by location.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="jobs-results-section">
+    <div class="wrap jobs-layout">
+      <div class="jobs-filter-backdrop" id="filterBackdrop" hidden></div>
+      <aside class="jobs-filters" id="jobsFilters" aria-label="Refine job results">
+        <button class="jobs-filter-close" id="filterClose" type="button" aria-label="Close filters">×</button>
+        <div class="jobs-filter-head">
+          <div>
+            <span>Your Search</span>
+            <strong>Narrow results</strong>
+          </div>
+          <button type="button" id="clearFilters">Clear all</button>
+        </div>
+
+        <div class="jobs-filter-group">
+          <label for="filterState">State</label>
+          <select id="filterState">
+            <option value="">All states</option>
+            <option value="AL">Alabama</option>
+            <option value="AK">Alaska</option>
+            <option value="AZ">Arizona</option>
+            <option value="AR">Arkansas</option>
+            <option value="CA">California</option>
+            <option value="CO">Colorado</option>
+            <option value="CT">Connecticut</option>
+            <option value="DE">Delaware</option>
+            <option value="FL">Florida</option>
+            <option value="GA">Georgia</option>
+            <option value="HI">Hawaii</option>
+            <option value="ID">Idaho</option>
+            <option value="IL">Illinois</option>
+            <option value="IN">Indiana</option>
+            <option value="IA">Iowa</option>
+            <option value="KS">Kansas</option>
+            <option value="KY">Kentucky</option>
+            <option value="LA">Louisiana</option>
+            <option value="ME">Maine</option>
+            <option value="MD">Maryland</option>
+            <option value="MA">Massachusetts</option>
+            <option value="MI">Michigan</option>
+            <option value="MN">Minnesota</option>
+            <option value="MS">Mississippi</option>
+            <option value="MO">Missouri</option>
+            <option value="MT">Montana</option>
+            <option value="NE">Nebraska</option>
+            <option value="NV">Nevada</option>
+            <option value="NH">New Hampshire</option>
+            <option value="NJ">New Jersey</option>
+            <option value="NM">New Mexico</option>
+            <option value="NY">New York</option>
+            <option value="NC">North Carolina</option>
+            <option value="ND">North Dakota</option>
+            <option value="OH">Ohio</option>
+            <option value="OK">Oklahoma</option>
+            <option value="OR">Oregon</option>
+            <option value="PA">Pennsylvania</option>
+            <option value="RI">Rhode Island</option>
+            <option value="SC">South Carolina</option>
+            <option value="SD">South Dakota</option>
+            <option value="TN">Tennessee</option>
+            <option value="TX">Texas</option>
+            <option value="UT">Utah</option>
+            <option value="VT">Vermont</option>
+            <option value="VA">Virginia</option>
+            <option value="WA">Washington</option>
+            <option value="WV">West Virginia</option>
+            <option value="WI">Wisconsin</option>
+            <option value="WY">Wyoming</option>
+          </select>
+        </div>
+
+        <div class="jobs-filter-group">
+          <label for="filterType">Profession</label>
+          <select id="filterType" data-ats-filter="profession">
+            <option value="">All professions</option>
+          </select>
+        </div>
+
+        <div class="jobs-help-card">
+          <small>Not sure what to choose?</small>
+          <h3>Ask a recruiter.</h3>
+          <p>Tell us your profession, preferred location, and timing. We’ll help you understand the options that fit.</p>
+          <a href="mailto:hello@medlivo.com?subject=Help%20Finding%20a%20Healthcare%20Job">Ask a Recruiter →</a>
+        </div>
+      </aside>
+
+      <div class="jobs-results">
+        <div class="jobs-results-head">
+          <div>
+            <div class="eyebrow">Current Jobs</div>
+            <h2 id="resultsTitle">Healthcare jobs across the U.S.</h2>
+            <p id="resultsSummary">Current openings across Medlivo’s healthcare divisions.</p>
+          </div>
+          <div class="jobs-results-tools">
+            <button class="jobs-mobile-filter" id="mobileFilterToggle" type="button" aria-controls="jobsFilters" aria-expanded="false">Filters</button>
+            <span class="jobs-sort-label">Sort</span>
+            <select id="sortJobs" aria-label="Sort jobs">
+              <option value="newest">Newest first</option>
+              <option value="pay-high">Pay: high to low</option>
+              <option value="location">Location</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="jobs-division-switcher">
+          <div class="jobs-division-head">
+            <div>
+              <span class="jobs-category-label">Browse by division</span>
+              <strong>Choose the area that best matches your work.</strong>
+            </div>
+            <button class="jobs-all-button active" data-category="" type="button" aria-pressed="true">All Opportunities</button>
+          </div>
+
+          <div class="jobs-division-grid" role="tablist" aria-label="Medlivo healthcare divisions">
+            <button class="jobs-division-card division-nursing" data-category="Nursing & Allied" type="button" role="tab" aria-selected="false">
+              <span class="division-index">01</span>
+              <span class="division-copy">
+                <strong>Nursing &amp; Allied</strong>
+                <small>RNs, LPNs/LVNs, CNAs &amp; Allied Health</small>
+              </span>
+              <span class="division-arrow" aria-hidden="true">→</span>
+            </button>
+
+            <button class="jobs-division-card division-rehab" data-category="Rehabilitation" type="button" role="tab" aria-selected="false">
+              <span class="division-index">02</span>
+              <span class="division-copy">
+                <strong>Rehabilitation</strong>
+                <small>PTs, OTs, SLPs &amp; Therapy Assistants</small>
+              </span>
+              <span class="division-arrow" aria-hidden="true">→</span>
+            </button>
+
+            <button class="jobs-division-card division-locum" data-category="Locum Tenens" type="button" role="tab" aria-selected="false">
+              <span class="division-index">03</span>
+              <span class="division-copy">
+                <strong>Locum Tenens</strong>
+                <small>Physicians, NPs &amp; PAs</small>
+              </span>
+              <span class="division-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <div class="jobs-division-context" id="divisionContext" data-ats-context="division">
+            <div class="jobs-division-context-copy">
+              <span id="divisionContextEyebrow">Popular Searches</span>
+              <strong id="divisionContextTitle">Start with a common search, or use the filters above.</strong>
+              <p id="divisionContextText">Choose a shortcut below, or leave any field set to All to see more jobs.</p>
+            </div>
+            <div class="jobs-specialty-shortcuts" id="specialtyShortcuts" aria-label="Popular specialty shortcuts"></div>
+          </div>
+        </div>
+
+        <div class="jobs-career-tools" aria-label="Other ways to get started">
+          <div class="jobs-career-tools-copy">
+            <span>More ways to find the right match</span>
+            <strong>Submit your resume, receive alerts for matching jobs, or connect with a Medlivo recruiter.</strong>
+          </div>
+          <div class="jobs-career-tools-actions">
+            <a data-ats-action="quick-apply" href="mailto:hello@medlivo.com?subject=Quick%20Apply%20-%20Healthcare%20Clinician">Submit Resume</a>
+            <a data-ats-action="job-alerts" href="mailto:hello@medlivo.com?subject=Job%20Alert%20Request">Create Job Alert</a>
+            <a href="mailto:hello@medlivo.com?subject=Help%20Finding%20a%20Healthcare%20Job">Talk to a Recruiter</a>
+          </div>
+        </div>
+
+        <div class="job-list" id="jobList" data-ats-results="pending"></div>
+
+        <nav class="jobs-pagination" id="jobsPagination" aria-label="Job results pages" data-ats-pagination="required" hidden>
+          <div class="jobs-pagination-summary" id="paginationSummary"></div>
+          <div class="jobs-pagination-actions">
+            <button type="button" id="jobsPrevPage" aria-label="Previous page">← Previous</button>
+            <span id="paginationPage"></span>
+            <button type="button" id="jobsNextPage" aria-label="Next page">Next →</button>
+          </div>
+        </nav>
+
+        <div class="jobs-no-results" id="noResults" hidden>
+          <span>No jobs match your current search</span>
+          <h3>Adjust your search or stay connected.</h3>
+          <p>Try a broader specialty or location, view all current jobs, or create a job alert to hear about new opportunities that match your preferences.</p>
+          <div class="jobs-no-results-actions">
+            <button class="btn btn-primary" type="button" id="viewAllJobs">View All Jobs</button>
+            <a class="btn btn-outline" data-ats-action="job-alerts" href="mailto:hello@medlivo.com?subject=Job%20Alert%20Request">Create Job Alert</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="jobs-support-strip">
+    <div class="wrap">
+      <div class="jobs-support-head">
+        <div>
+          <div class="eyebrow">Working with Medlivo</div>
+          <h2>What happens after you find a job.</h2>
+        </div>
+        <p>From your first recruiter conversation through your assignment, we keep the next step clear and make sure you know who to contact.</p>
+      </div>
+
+      <div class="jobs-support-grid" aria-label="What to expect when working with Medlivo">
+        <div class="jobs-support-item">
+          <span class="jobs-support-step">01</span>
+          <strong>Review the opportunity</strong>
+          <p>Talk through the role, location, schedule, available pay information, start timing, and requirements before you decide to move forward.</p>
+        </div>
+        <div class="jobs-support-item">
+          <span class="jobs-support-step">02</span>
+          <strong>Complete credentialing</strong>
+          <p>Get help with licenses, documents, compliance items, onboarding, and anything needed to become assignment-ready.</p>
+        </div>
+        <div class="jobs-support-item">
+          <span class="jobs-support-step">03</span>
+          <strong>Get ready to start</strong>
+          <p>Confirm your start details, reporting instructions, assignment contacts, and what to expect on your first day.</p>
+        </div>
+        <div class="jobs-support-item">
+          <span class="jobs-support-step">04</span>
+          <strong>Stay supported</strong>
+          <p>Keep a Medlivo contact throughout your assignment so you know where to go when questions or needs come up.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="jobs-bottom-cta" aria-labelledby="recruiterSupportTitle">
+    <div class="wrap jobs-bottom-shell">
+      <div class="jobs-bottom-copy">
+        <div class="eyebrow">Recruiter Support</div>
+        <h2 id="recruiterSupportTitle">Prefer to talk to someone?</h2>
+        <p>Questions about a job, requirements, location, timing, or what happens next? A Medlivo recruiter can help you work through the details.</p>
+        <div class="jobs-bottom-contact">hello@medlivo.com <span aria-hidden="true">•</span> 855-633-5486</div>
+      </div>
+      <div class="jobs-bottom-actions" aria-label="Contact a Medlivo recruiter">
+        <a class="btn btn-green" href="mailto:hello@medlivo.com?subject=Healthcare%20Job%20Search">Email a Recruiter</a>
+        <a class="btn btn-outline" href="tel:+18556335486">Call 855-633-5486</a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site-footer footer-minimal" id="contact">
+  <div class="wrap footer-main-minimal">
+    <div class="footer-brand-minimal">
+      <a class="footer-logo-minimal" href="index.html" aria-label="Medlivo home">
+        <img src="assets/brand/medlivo-logo-transparent.png?v=20260924b" alt="Medlivo">
+      </a>
+      <p>Healthcare staffing across Nursing &amp; Allied, Rehabilitation, and Locum Tenens.</p>
+      <div class="footer-contact-minimal">
+        <a href="tel:+18556335486">+1 855-633-5486</a>
+        <a href="mailto:hello@medlivo.com">hello@medlivo.com</a>
+        <span>Redmond, Washington</span>
+      </div>
+    </div>
+
+    <div class="footer-links-minimal">
+      <div class="footer-col-minimal">
+        <h4>Specialties</h4>
+        <a href="nursing-allied.html">Nursing &amp; Allied</a>
+        <a href="rehabilitation.html">Rehabilitation</a>
+        <a href="locum-tenens.html">Locum Tenens</a>
+        <a href="workforce-solutions.html">Workforce Solutions</a>
+      </div>
+      <div class="footer-col-minimal">
+        <h4>For Clinicians</h4>
+        <a href="search-jobs.html">Search Jobs</a>
+        <a href="nursing-allied.html#clinicians">Nursing &amp; Allied Jobs</a>
+        <a href="rehabilitation.html#clinicians">Rehabilitation Jobs</a>
+        <a href="locum-tenens.html#clinicians">Locum Tenens Opportunities</a>
+      </div>
+      <div class="footer-col-minimal">
+        <h4>Company</h4>
+        <a href="about.html">About Medlivo</a>
+        <a href="index.html#why">Why Medlivo</a>
+        <a href="leadership.html">Leadership</a>
+        <a href="careers.html">Careers at Medlivo</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom-minimal">
+    <div class="wrap footer-bottom-row">
+      <span>© 2026 Medlivo Inc. All rights reserved.</span>
+      <div>
+        <a href="https://www.medlivo.com/privacy-policy">Privacy Policy</a>
+        <a href="https://www.medlivo.com/terms-of-use">Terms of Use</a>
+        <a href="mailto:hello@medlivo.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/navigation-menu.js"></script>
+
+<script src="assets/js/navigation-dropdowns.js"></script>
+
+
+<script src="assets/js/search-jobs-3.js"></script>
+
+</body>
+</html>
