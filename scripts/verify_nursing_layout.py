@@ -63,6 +63,7 @@ def main():
                 return {width:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth,clipped_text:clipped,
                     grid:rect('.nd-hero-grid'),copy:rect('.nd-hero-copy'),photo:rect('.nd-hero-photo'),
                     sections:[...document.querySelectorAll('main>section')].map(e=>e.className),
+                    care_settings_height:document.querySelector('#care-settings').getBoundingClientRect().height,
                     care_settings:[...document.querySelectorAll('.nd-setting-copy h3')].map(e=>e.textContent.trim()),
                     what_matters:document.querySelectorAll('.nd-setting-factors').length,
                     recruiting_steps:document.querySelectorAll('.nd-process-step').length,
@@ -89,6 +90,8 @@ def main():
             if width<=1040 and row['photo']['y']<row['copy']['bottom']:failures.append(f'Hero stacking failed at {width}')
             if width>1040 and row['photo']['x']<row['copy']['right']-1:failures.append(f'Hero columns overlap at {width}')
             if row['sections']!=SECTIONS or row['care_settings']!=SETTINGS:failures.append('Section order or four care settings changed')
+            if width>=1440 and row['care_settings_height']>810:failures.append('Care Settings desktop spacing expanded')
+            if width==390 and row['care_settings_height']>1320:failures.append('Care Settings mobile spacing expanded')
             if [row['what_matters'],row['recruiting_steps'],row['readiness_checks'],row['opportunity_cards'],row['role_tags']]!=[4,4,4,3,13]:failures.append('Expected content missing')
             if row['hero_photo_width']!=1800 or decode_errors:failures.append('Photo or logo decoding failed')
             if page.locator('.nd-ready-item>span,.nd-family-label>span').count()!=0:failures.append('Repeated decorative numbering returned')
