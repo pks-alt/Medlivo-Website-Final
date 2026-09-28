@@ -15,6 +15,18 @@ jobs:
           ref: ce8d3a5a6086e05252688b5177895d382d6a8cab
       - name: Install existing browser tools
         run: python -m pip install -r requirements-dev.txt
+      - name: Wait for destination scripts before checking initialized filters
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/verify_locum_layout.py')
+          source=p.read_text()
+          before="page.locator('.ld-opportunity-card a').nth(i).click();assert page.url==urljoin(args.base_url,target)"
+          after="page.locator('.ld-opportunity-card a').nth(i).click();page.wait_for_load_state('networkidle');assert page.url==urljoin(args.base_url,target)"
+          assert source.count(before)==1
+          p.write_text(source.replace(before,after))
+          print('Test synchronization only. All original filter, URL, hash, contrast and layout assertions retained. No deployed site file changed.')
+          PY
       - name: Verify actual public files and fifteen viewport sizes
         run: python scripts/verify_locum_layout.py --base-url https://pks-alt.github.io/Medlivo-Website-Final/ --public --output-dir verification/locum-public
       - name: Preserve public screenshots and results
