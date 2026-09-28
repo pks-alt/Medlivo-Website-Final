@@ -91,6 +91,12 @@ def main():
             if row['sections']!=SECTIONS or row['care_settings']!=SETTINGS:failures.append('Section order or four care settings changed')
             if [row['what_matters'],row['recruiting_steps'],row['readiness_checks'],row['opportunity_cards'],row['role_tags']]!=[4,4,4,3,13]:failures.append('Expected content missing')
             if row['hero_photo_width']!=1800 or decode_errors:failures.append('Photo or logo decoding failed')
+            if page.locator('.nd-ready-item>span,.nd-family-label>span').count()!=0:failures.append('Repeated decorative numbering returned')
+            if page.locator('#clinical-perspective-title').inner_text()!='Nursing and allied expertise. One team.':failures.append('Approved introduction missing')
+            if page.locator('.nd-process-step h3').first.inner_text()!='Understand your staffing need':failures.append('Approved recruiting label missing')
+            expected_surfaces=['rgb(16, 38, 65)','rgb(255, 255, 255)','rgb(245, 248, 248)','rgb(255, 255, 255)','rgb(245, 247, 250)','rgb(255, 255, 255)','rgb(255, 255, 255)']
+            if row['backgrounds']!=expected_surfaces:failures.append('White-first surface palette changed')
+
             if not all(row[k] for k in ['extra_nav_absent','removed_closing_absent','therapist_claim_absent','em_dash_absent']):failures.append('Editorial regression')
             if row['overflow'] or row['clipped_text'] or errors or (not offline and status!=200):failures.append(row.copy())
             if width in [390,1041,1440,1920,2560]:
@@ -119,8 +125,11 @@ def main():
                     assert page.locator('#open-positions').is_visible()
                     page.locator('.client-card a.btn').click();page.wait_for_url('**/request-staff.html')
                     assert page.locator('#staffingRequestForm').count()==1
-                    page.goto(url,wait_until='networkidle');page.locator('.clinician-card a.btn').click();page.wait_for_url('**/search-jobs.html')
-                    row['anchor_request_and_jobs']='passed'
+                    page.goto(url,wait_until='networkidle')
+                    recruiter=page.locator('.clinician-card a.btn')
+                    assert recruiter.inner_text()=='Talk to a Recruiter'
+                    assert recruiter.get_attribute('href')=='mailto:hello@medlivo.com?subject=Nursing%20%26%20Allied%20Recruiter%20Inquiry'
+                    row['anchor_request_and_recruiter']='passed; recruiter mailto validated without sending'
             if width==1920 and not offline:
                 for i,target in enumerate(row['opportunity_links']):
                     page.goto(url,wait_until='networkidle');page.locator('.position-card a').nth(i).click()
