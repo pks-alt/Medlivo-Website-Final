@@ -1,0 +1,115 @@
+name: Verify Nursing editorial polish
+on:
+  push:
+    branches: [enhancement/nursing-editorial-polish-20260928]
+    paths: [.github/workflows/prepare-nursing-polish.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install existing verification dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Apply only the agreed Nursing refinements
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,re,subprocess,sys,urllib.request
+          from bs4 import BeautifulSoup
+          root=Path('.');home=root/'nursing-allied.html';css=root/'assets/css/nursing-responsive.css'
+          manifest=json.loads((root/'BUILD.json').read_text())
+          assert manifest['repository']=='pks-alt/Medlivo-Website-Final'
+          assert hashlib.sha256(home.read_bytes()).hexdigest()=='d7d61e8851cec4dfb9a58a226402b673d723dd577162fc7d893a5809f6bd7812'
+          assert hashlib.sha256(css.read_bytes()).hexdigest()=='49d3197ace199db73c7c2f226d8e68aaf62332ff4ed91a6e3fff48aa465518d4'
+          req=urllib.request.Request('https://pks-alt.github.io/Medlivo-Website-Final/nursing-allied.html',headers={'Cache-Control':'no-cache'})
+          with urllib.request.urlopen(req,timeout=40) as response:live=response.read()
+          assert live==home.read_bytes(),'Public starting page differs from the pinned source'
+          before=home.read_text();text=before
+          changes={
+           'nursing-responsive.css?v=20260928-readable-v1':'nursing-responsive.css?v=20260928-refined-v2',
+           'Built around clinical realities':'Nursing &amp; Allied Expertise',
+           'The right match starts beyond the job title.':'Nursing and allied expertise. One team.',
+           'A bedside RN and an imaging technologist may work in the same hospital, but their assignments call for different experience. Our Nursing &amp; Allied team builds the search around the work each person will do.':'We recruit nursing professionals for bedside care, coordination and leadership, and allied professionals for diagnostic, procedural and clinical support roles.',
+           '<div class="nd-family-label"><span>01</span><h3>Nursing</h3></div>':'<div class="nd-family-label"><h3>Nursing</h3></div>',
+           '<div class="nd-family-label"><span>02</span><h3>Allied Health</h3></div>':'<div class="nd-family-label"><h3>Allied Health</h3></div>',
+           '        <p>Bedside care, coordination and leadership.</p>\n':'',
+           '        <p>Diagnostic, procedural and clinical support specialties.</p>\n':'',
+           '<h3>Define the brief</h3>':'<h3>Understand your staffing need</h3>',
+           '<h3>Planning your next move?</h3>':'<h3>Need help finding the right assignment?</h3>',
+           '<p>Find an assignment that fits your experience and the way you want to work.</p>':'<p>Talk with our Nursing &amp; Allied team about your specialty, preferred location and availability.</p>',
+           '<a class="btn nd-button-light" href="search-jobs.html">Search Nursing &amp; Allied Jobs</a>':'<a class="btn nd-button-light" href="mailto:hello@medlivo.com?subject=Nursing%20%26%20Allied%20Recruiter%20Inquiry" aria-label="Email Medlivo to talk to a Nursing and Allied recruiter">Talk to a Recruiter</a>',
+          }
+          for old,new in changes.items():
+              assert text.count(old)==1,repr(old)
+              text=text.replace(old,new)
+          text,n=re.subn(r'(<article class="nd-ready-item">)<span aria-hidden="true">0[1-4]</span>',r'\1',text)
+          assert n==4
+          home.write_text(text)
+          a=BeautifulSoup(before,'html.parser');b=BeautifulSoup(text,'html.parser')
+          for selector in ['header','footer','#care-settings','#open-positions','.nd-hero','.nd-readiness-copy','.client-card']:
+              assert a.select_one(selector).decode()==b.select_one(selector).decode(),selector+' changed'
+          assert [s.get_text() for s in a.select('.role-cloud span')]==[s.get_text() for s in b.select('.role-cloud span')]
+          assert [s.get_text() for s in a.select('.nd-ready-item h3,.nd-ready-item p')]==[s.get_text() for s in b.select('.nd-ready-item h3,.nd-ready-item p')]
+          text=css.read_text()
+          css_changes={
+           'One page-local layer. Flat text surfaces, restrained color, no changes to copy.':'One page-local layer. White reading areas, near-white panels and restrained accents.',
+           '--nd-space:clamp(52px,4.5vw,76px);background:#f3f6f8':'--nd-space:clamp(52px,4.5vw,76px);background:#fff',
+           'main>.nd-perspective{background:#f0f4f7;border-bottom:1px solid #c9d6df}':'main>.nd-perspective{background:#fff;border-bottom:1px solid #e0e7ec}',
+           'background:#e5edf4;border:1px solid #bfccd9;border-radius:16px':'background:#f7f9fb;border:1px solid #dce4eb;border-left:3px solid #24456b;border-radius:12px',
+           '.nd-role-family:nth-child(2){background:#e5efed;border-color:#bdcfcb}':'.nd-role-family:nth-child(2){background:#f6f9f8;border-color:#dce5e2;border-left-color:#21616b}',
+           '.nd-family-label{display:flex;gap:12px;align-items:center}':'.nd-family-label{display:flex;align-items:center}',
+           '.nd-family-label>span{font-size:13px;font-weight:800;color:#235466;padding-right:12px;border-right:1px solid #97b6d2}\n':'',
+           '.nursing-division .nd-role-family>p{font-size:16px;color:var(--nd-body);margin-top:7px}\n':'',
+           'main>.nd-settings{background:#e8f0ee;color:var(--nd-body)}':'main>.nd-settings{background:#f5f8f8;color:var(--nd-body)}',
+           'main>.nd-recruiting{background:#f7f9fb}':'main>.nd-recruiting{background:#fff}',
+           'main>.nd-readiness{background:#eaf0f5;border-top:1px solid #c3d1de;border-bottom:1px solid #c3d1de}':'main>.nd-readiness{background:#f5f7fa;border-top:1px solid #e0e7ee;border-bottom:1px solid #e0e7ee}',
+           '.nd-ready-item{display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px;padding:22px 0;border-top:1px solid #b3c6d5}':'.nd-ready-item{display:block;min-width:0;padding:22px 0;border-top:1px solid #cbd7e2}',
+           '.nd-ready-item>span{font-size:13px;line-height:2;font-weight:800;color:#235466}\n':'',
+           'main>.nd-opportunities{background:#f0f4f7}':'main>.nd-opportunities{background:#fff}',
+           'main>.nd-connect{background:#f7f9fb;padding-top:0}':'main>.nd-connect{background:#fff;padding-top:0}',
+           '.nd-connect-card+.nd-connect-card{background:#e4edf3;border-left:1px solid #c0cfdb}':'.nd-connect-card+.nd-connect-card{background:#f5f7fa;border:1px solid #dde5ed;border-left:0}',
+          }
+          for old,new in css_changes.items():
+              assert text.count(old)==1,repr(old)
+              text=text.replace(old,new)
+          css.write_text(text)
+          p=root/'scripts/verify_nursing_layout.py';v=p.read_text()
+          old="page.goto(url,wait_until='networkidle');page.locator('.clinician-card a.btn').click();page.wait_for_url('**/search-jobs.html')\n                    row['anchor_request_and_jobs']='passed'"
+          new="page.goto(url,wait_until='networkidle')\n                    recruiter=page.locator('.clinician-card a.btn')\n                    assert recruiter.inner_text()=='Talk to a Recruiter'\n                    assert recruiter.get_attribute('href')=='mailto:hello@medlivo.com?subject=Nursing%20%26%20Allied%20Recruiter%20Inquiry'\n                    row['anchor_request_and_recruiter']='passed; recruiter mailto validated without sending'"
+          assert old in v;v=v.replace(old,new)
+          needle="if row['hero_photo_width']!=1800 or decode_errors:failures.append('Photo or logo decoding failed')"
+          addition="\n            if page.locator('.nd-ready-item>span,.nd-family-label>span').count()!=0:failures.append('Repeated decorative numbering returned')\n            if page.locator('#clinical-perspective-title').inner_text()!='Nursing and allied expertise. One team.':failures.append('Approved introduction missing')\n            if page.locator('.nd-process-step h3').first.inner_text()!='Understand your staffing need':failures.append('Approved recruiting label missing')\n            expected_surfaces=['rgb(16, 38, 65)','rgb(255, 255, 255)','rgb(245, 248, 248)','rgb(255, 255, 255)','rgb(245, 247, 250)','rgb(255, 255, 255)','rgb(255, 255, 255)']\n            if row['backgrounds']!=expected_surfaces:failures.append('White-first surface palette changed')\n"
+          assert needle in v;v=v.replace(needle,needle+addition);p.write_text(v)
+          subprocess.run([sys.executable,str(root/'scripts/update_manifest.py'),'--build-id','medlivo-final-nursing-editorial-polish-20260928'],check=True)
+          for name,sha in manifest['files'].items():
+              if name not in ['nursing-allied.html','assets/css/nursing-responsive.css']:
+                  assert hashlib.sha256((root/name).read_bytes()).hexdigest()==sha,name+' changed unexpectedly'
+          expected={'nursing-allied.html':'3b787b2945a6cb3607c2943bbad039a9f9efc3c61101f3817444ef989d6b381c','assets/css/nursing-responsive.css':'9b90db0a18c323e4327153b5621877ba003e7d18219ea63c365cdd62e88b8497','scripts/verify_nursing_layout.py':'7b48bc1dd2fb1e3596a6a14155c223bab7cc5ee3adebe56a506997ebb04f5bae','BUILD.json':'81606dba49b3461815f7d19e140f7c28b9813c08fe8b28f564c81c2ac55c131f'}
+          for name,sha in expected.items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==sha,'Differs from locally inspected candidate: '+name
+          Path('verification').mkdir(exist_ok=True)
+          Path('verification/scope.json').write_text(json.dumps({'public_start_matches':True,'candidate_hashes':expected,'care_settings_opportunities_and_original_assets_preserved':True,'other_ten_pages_unchanged':True},indent=2))
+          PY
+      - name: Test all pages and the revised Nursing page in Chromium
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/nursing-polish-http.log 2>&1 &
+          python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/all-pages
+          python scripts/verify_nursing_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/nursing
+      - name: Save tested source and remove this one-time preparation
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add nursing-allied.html assets/css/nursing-responsive.css BUILD.json scripts/verify_nursing_layout.py
+          git rm .github/workflows/prepare-nursing-polish.yml
+          git commit -m 'Refine Nursing messaging and white-first surfaces after browser and contrast checks'
+          git push origin HEAD:enhancement/nursing-editorial-polish-20260928
+          git rev-parse HEAD
+      - name: Save actual browser review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nursing-polish-review
+          path: verification/
+          retention-days: 14
