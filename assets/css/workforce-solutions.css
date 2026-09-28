@@ -1836,3 +1836,61 @@ footer{
   .final-shell{padding:28px 22px}
 }
 
+
+/* Solutions staffing panel: aligned with the current homepage CTA. */
+.final .solutions-contact-panel{
+  grid-template-columns:minmax(0,1fr) minmax(240px,280px);
+  gap:clamp(28px,4vw,64px);padding:clamp(28px,2.6vw,42px);
+  border:1px solid #213e7a;border-radius:20px;
+  background:linear-gradient(112deg,#0b225f 0%,#102c6b 72%,#163775 100%);
+  box-shadow:0 12px 28px rgba(11,34,95,.06);
+}
+.solutions-contact-panel>.solutions-panel-copy{
+  display:block;min-width:0;padding-left:24px;border-left:3px solid var(--aqua);
+}
+.solutions-contact-panel .solutions-panel-copy h2{
+  margin:0;max-width:24ch;font-size:clamp(28px,2.15vw,38px);line-height:1.16;
+  letter-spacing:-.035em;font-weight:750;color:#fff;text-wrap:balance;
+}
+.solutions-contact-panel .solutions-panel-copy p{
+  margin:12px 0 0;max-width:54ch;color:#dbe6fa;font-size:16px;line-height:1.65;
+}
+.solutions-contact-panel>.solutions-panel-actions{
+  display:flex;flex-direction:column;align-items:stretch;gap:16px;min-width:0;
+  padding-left:32px;border-left:1px solid rgba(215,231,255,.22);
+}
+.solutions-contact-panel .solutions-panel-actions>.btn{
+  width:100%;min-height:54px;padding:0 24px;border-radius:10px;
+  font-size:16px;font-weight:750;gap:14px;
+}
+.solutions-contact-panel .btn span{
+  color:inherit;font-size:20px;line-height:1;letter-spacing:0;text-transform:none;font-weight:500;
+}
+.solutions-contact-panel .solutions-panel-call{text-align:center}
+.solutions-contact-panel .solutions-panel-call p{
+  margin:0 0 4px;font-size:13px;line-height:1.5;color:#dbe6fa;
+}
+.solutions-contact-panel .solutions-panel-phone{
+  display:inline-flex;align-items:center;min-height:28px;font-size:18px;line-height:1.4;
+  font-weight:650;color:#fff;letter-spacing:.01em;text-decoration:underline;
+  text-decoration-color:rgba(215,231,255,.45);text-underline-offset:5px;
+}
+.solutions-contact-panel .solutions-panel-phone:hover{text-decoration-color:#fff}
+.solutions-contact-panel a:focus-visible{outline:3px solid #fff;outline-offset:5px}
+.final#contact{scroll-margin-top:100px}
+@media(max-width:820px){
+  .final .solutions-contact-panel{grid-template-columns:1fr;gap:24px;padding:28px}
+  .solutions-contact-panel>.solutions-panel-copy{padding-left:20px}
+  .solutions-contact-panel>.solutions-panel-actions{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;
+    gap:20px;border-left:0;border-top:1px solid rgba(215,231,255,.22);padding:24px 0 0;
+  }
+}
+@media(max-width:540px){
+  .final .solutions-contact-panel{padding:26px 22px;gap:22px;border-radius:16px}
+  .solutions-contact-panel>.solutions-panel-copy{padding-left:16px}
+  .solutions-contact-panel .solutions-panel-copy h2{font-size:28px;max-width:17ch}
+  .solutions-contact-panel .solutions-panel-copy p{font-size:15px;line-height:1.65}
+  .solutions-contact-panel>.solutions-panel-actions{grid-template-columns:1fr;gap:14px;padding-top:22px}
+  .solutions-contact-panel .solutions-panel-phone{min-height:40px}
+}
