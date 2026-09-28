@@ -1,5 +1,5 @@
 {
-  "build_id": "medlivo-final-solutions-panel-20260928",
+  "build_id": "medlivo-final-solutions-responsive-20260928",
   "repository": "pks-alt/Medlivo-Website-Final",
   "source_policy": "One root version per page, all assets local. No runtime or ongoing build dependency on the old repository.",
   "initial_import_commit": "ec962a7bb7850cd6bfe7805664ca15a4261b508e",
@@ -21,7 +21,7 @@
       "original_revision": "62134bf75c62a5b5b53c2c36ac6f13fc8be1b4dc",
       "original_path": "workforce-solutions-preview/index.html",
       "selection": "20:30 PDT polished Solutions, without repeated enterprise-program section",
-      "sha256": "02c6a8f5edad0478bbdbb08347827c3763ea566b47dc1d71d326e37c49c1cdba"
+      "sha256": "47d0ac6900c4743307741a1aadce1226470cce3b0b0452c5bc1c39fee2dc85c7"
     },
     "nursing-allied.html": {
       "source_page_sha256": "df60d64b1c550001b5c116bf45ff395894c15f21b68a58c8db379187475cd8cf",
@@ -101,6 +101,7 @@
     "assets/css/rehabilitation.css": "989a8651fddfa958ebe84fb12179740bd3f312ec85fa9145e0c81cb57c448f7a",
     "assets/css/request-staff.css": "b6b34355caf5a7093356caa3469c0652f5597b1ceb9cbbcadd9f26523037171d",
     "assets/css/search-jobs.css": "e1fa1e78342fadf892d23dcaf8d7434a0713da2b05719298d1109da3414b32db",
+    "assets/css/solutions-responsive.css": "7b378935d43c6771feb21ac4940b1449cf9686b4115589566769ecd31c86bc06",
     "assets/css/specialties.css": "1bcf770e2c21addbe0174f5468cecb8c46640009301917263df106d72221fcb1",
     "assets/css/workforce-solutions.css": "4cdf11143932fb48825a5011db5625e05a9fcab8c28dc00cc6a7e1f1af3b562c",
     "assets/images/embedded/33c339dc14f5797409bd.webp": "33c339dc14f5797409bda40584735429f17d3dfb52dcacb547cc13905dcee2c2",
@@ -124,6 +125,6 @@
     "request-staff.html": "1793d4b64aede57bbac18bafb5c6fd9d90cf9db62580510809372bffec07ed80",
     "search-jobs.html": "f3151d88c87c531cf1cae41c279a76bdbc3f5c8292ee2136bd918cfee7376b51",
     "specialties.html": "de0eaf4deae7ba9f5d3cb9f4555d21c75946eba38a5e23a145654bf256ba0371",
-    "workforce-solutions.html": "02c6a8f5edad0478bbdbb08347827c3763ea566b47dc1d71d326e37c49c1cdba"
+    "workforce-solutions.html": "47d0ac6900c4743307741a1aadce1226470cce3b0b0452c5bc1c39fee2dc85c7"
   }
 }
