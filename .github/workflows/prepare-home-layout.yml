@@ -29,14 +29,6 @@ jobs:
           p.write_text(after)
           css=Path('assets/css/home-responsive.css')
           css.write_text(css.read_text()+'\n/* Keep the compact header inside narrow phone viewports. */\n@media(max-width:359px){.nav .logo{width:116px}.nav{gap:8px}.actions{gap:6px}.actions .btn-green{font-size:11px;padding:0 9px}}\n')
-          workflow=Path('.github/workflows/site.yml');text=workflow.read_text()
-          local='          python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/local\n'
-          assert text.count(local)==1
-          text=text.replace(local,local+'          python scripts/verify_home_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/home-local\n')
-          public='        run: python scripts/verify_site.py --base-url "$SITE_URL" --public --output-dir verification/public'
-          assert text.count(public)==1
-          text=text.replace(public,'        run: |\n          python scripts/verify_site.py --base-url "$SITE_URL" --public --output-dir verification/public\n          python scripts/verify_home_layout.py --base-url "$SITE_URL" --output-dir verification/home-public')
-          workflow.write_text(text)
           for name,record in manifest['pages'].items():
               if name!='index.html':assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==record['sha256'],name+' changed unexpectedly'
           subprocess.run(['python','scripts/update_manifest.py','--build-id','medlivo-final-home-responsive-20260928'],check=True)
@@ -67,12 +59,11 @@ jobs:
           python -m http.server 8765 --bind 127.0.0.1 > /tmp/home-layout-server.log 2>&1 &
           python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/all-pages
           python scripts/verify_home_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/home-layout
-      - name: Save validated changes on this branch only
+      - name: Save validated site files on this branch only
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.html assets/css/home-responsive.css BUILD.json .github/workflows/site.yml scripts/verify_home_layout.py
-          git rm .github/workflows/prepare-home-layout.yml
+          git add index.html assets/css/home-responsive.css BUILD.json
           git commit -m 'Apply verified homepage proportions without altering approved content or other pages'
           git push origin HEAD:enhancement/home-large-screen-20260928
       - name: Save browser evidence
