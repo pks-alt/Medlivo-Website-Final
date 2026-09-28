@@ -1,0 +1,60 @@
+name: Prepare Nursing care-setting revision
+on:
+  push:
+    branches: [enhancement/nursing-care-settings-20260928]
+    paths: [.github/workflows/prepare-nursing-settings.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install existing verification tools
+        run: python -m pip install -r requirements-dev.txt
+      - name: Assemble only the revised Nursing page
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,subprocess
+          from bs4 import BeautifulSoup
+          p=Path('nursing-allied.html');before=p.read_text();manifest=json.loads(Path('BUILD.json').read_text())
+          assert manifest['repository']=='pks-alt/Medlivo-Website-Final'
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==manifest['files']['nursing-allied.html']
+          assert '<main>' in before and 'nursing-division' not in before
+          after=before[:before.index('<main>')]+Path('scripts/nursing-content.html').read_text()+before[before.index('</main>')+len('</main>'):]
+          after=after.replace('<body>','<body class="nursing-division">').replace('nursing-responsive.css?v=20260928-nursing','nursing-responsive.css?v=20260928-clinical-settings')
+          a=BeautifulSoup(before,'html.parser');b=BeautifulSoup(after,'html.parser')
+          assert str(a.header)==str(b.header) and str(a.footer)==str(b.footer),'Header or footer changed'
+          assert len(b.select('main>section'))==7
+          assert len(b.select('.nd-setting-row'))==4 and len(b.select('.role-cloud span'))==13
+          for name,sha in manifest['files'].items():
+              if name not in ['nursing-allied.html','assets/css/nursing-responsive.css']:
+                  assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==sha,'Out-of-scope change: '+name
+          p.write_text(after)
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='02f858215b1edd6a81dbf5433b438ecf2524a63dc2f4017718387379f354c3db'
+          assert hashlib.sha256(Path('assets/css/nursing-responsive.css').read_bytes()).hexdigest()=='d0be21752e1c33d71973f235cf8c9dcd91ec3af3372791b8d5ed5b4f782920b6'
+          subprocess.run(['python','scripts/update_manifest.py','--build-id','medlivo-final-nursing-care-settings-20260928'],check=True)
+          Path('verification').mkdir(exist_ok=True)
+          Path('verification/scope.json').write_text(json.dumps({'only_nursing_content_and_presentation_changed':True,'other_ten_pages_and_image_bytes_unchanged':True,'header_footer_unchanged':True,'main_words_before':len(a.main.get_text(' ',strip=True).split()),'main_words_after':len(b.main.get_text(' ',strip=True).split()),'care_settings':4},indent=2))
+          PY
+      - name: Check all pages and revised Nursing page
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/medlivo-check.log 2>&1 &
+          python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/all-pages
+          python scripts/verify_nursing_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/nursing
+      - name: Save tested ordinary source files on this branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add nursing-allied.html BUILD.json
+          git commit -m 'Assemble Nursing and Allied care-setting revision after browser tests'
+          git push origin HEAD:enhancement/nursing-care-settings-20260928
+      - name: Save browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nursing-care-settings-review
+          path: verification/
+          retention-days: 14
