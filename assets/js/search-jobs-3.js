@@ -51,7 +51,9 @@
     "Locum Tenens":[
       {value:"Physician",label:"Physician",specialties:["Emergency Medicine","Hospitalist","Family Medicine","Internal Medicine","Cardiology","OB/GYN","Urology","Neurology","Psychiatry","Radiology","Anesthesiology","General Surgery","Gastroenterology","Oncology","Pulmonology","Critical Care","Pediatrics","Urgent Care","ENT / Otolaryngology"]},
       {value:"Nurse Practitioner",label:"Nurse Practitioner (NP)",specialties:["Primary Care","Urgent Care","Emergency Medicine","Hospitalist","Cardiology","OB/GYN","Psychiatry","Pediatrics"]},
-      {value:"Physician Assistant",label:"Physician Assistant (PA)",specialties:["Primary Care","Urgent Care","Emergency Medicine","Hospitalist","Cardiology","Surgery","Orthopedics"]}
+      {value:"Physician Assistant",label:"Physician Assistant (PA)",specialties:["Primary Care","Urgent Care","Emergency Medicine","Hospitalist","Cardiology","Surgery","Orthopedics"]},
+      {value:"Nurse Practitioner / Physician Assistant",label:"Nurse Practitioner / Physician Assistant (NP / PA)",specialties:["Primary Care","Urgent Care","Emergency Medicine","Hospitalist","Cardiology","OB/GYN","Psychiatry","Pediatrics","Surgery","Orthopedics"]},
+      {value:"CRNA",label:"Certified Registered Nurse Anesthetist (CRNA)",specialties:["Anesthesia"]}
     ]
   };
 
@@ -101,7 +103,7 @@
       title:"Locum Tenens jobs.",
       eyebrow:"Popular Locum Tenens Searches",
       contextTitle:"Choose a specialty or provider type.",
-      contextText:"Search physician, nurse practitioner, and physician assistant opportunities.",
+      contextText:"Search physician, nurse practitioner, physician assistant and CRNA opportunities.",
       shortcuts:[
         {label:"Emergency Medicine",kind:"specialty",value:"Emergency Medicine"},
         {label:"Hospitalist",kind:"specialty",value:"Hospitalist"},
@@ -232,6 +234,9 @@
   function professionMatch(job,filter){
     if(!filter)return true;
     const target=norm(filter);
+    // A physician assistant is not a physician. Keep provider routes distinct.
+    if(target==="physician" && /physician assistant|nurse practitioner|crna|nurse anesthetist/.test(norm(job.profession)))return false;
+    if(target==="nurse practitioner physician assistant")return professionMatch(job,"Nurse Practitioner")||professionMatch(job,"Physician Assistant");
     if(norm(job.profession)===target)return true;
     const hay=norm([job.profession,job.type,job.title,job.specialty].filter(Boolean).join(" "));
     const aliases={
@@ -252,7 +257,8 @@
       "speech language pathologist":["speech language pathologist","slp"],
       "physician":["physician"],
       "nurse practitioner":["nurse practitioner"," np "],
-      "physician assistant":["physician assistant"," pa "]
+      "physician assistant":["physician assistant"," pa "],
+      "crna":["crna","nurse anesthetist"]
     };
     const terms=aliases[target]||[target];
     const padded=" "+hay+" ";
