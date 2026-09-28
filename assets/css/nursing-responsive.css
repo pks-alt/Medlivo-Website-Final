@@ -1,102 +1,111 @@
-/* Nursing & Allied division. Page-local design, 2026-09-28.
-   One responsive layer; no effect on the other Medlivo pages. */
+/* Nursing & Allied: readability-first presentation, 2026-09-28.
+   One page-local layer. Flat text surfaces, restrained color, no changes to copy. */
 :root{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
-.nursing-division{--nd-ink:#0b225f;--nd-body:#405674;--nd-line:#bed0e2;--nd-space:clamp(52px,4.5vw,80px);background:#e9eff6}
+.nursing-division{--nd-ink:#102641;--nd-body:#263b50;--nd-line:#bdcdd9;--nd-space:clamp(52px,4.5vw,76px);background:#f3f6f8}
 .nursing-division main>section{padding:var(--nd-space) 0;scroll-margin-top:104px}
 .nursing-division main h2{font-size:clamp(32px,2.7vw,46px);line-height:1.15;letter-spacing:-.035em;color:var(--nd-ink);text-wrap:balance}
 .nursing-division main h3{line-height:1.24;letter-spacing:-.02em}
-.nursing-division main p{font-size:16px;line-height:1.68}
-.nd-eyebrow{font-size:11px;line-height:1.5;letter-spacing:.14em;font-weight:800;text-transform:uppercase;color:#28569e;margin-bottom:14px}
+.nursing-division main p{font-size:17px;line-height:1.7;font-weight:400}
+.nd-eyebrow{font-size:12px;line-height:1.5;letter-spacing:.09em;font-weight:750;text-transform:uppercase;color:#235466;margin-bottom:14px}
 .nursing-division .btn{font-size:15px;min-height:50px;line-height:1.4;padding:13px 23px;text-align:center}
 .nursing-division .btn:hover{transform:translateY(-2px)}
-.nursing-division .nd-button-light{color:#fff;background:transparent;border:1px solid #8299c3;box-shadow:none}
-.nursing-division .nd-button-light:hover{background:#ffffff12;border-color:#fff}
+.nursing-division .nd-button-light{color:#fff;background:#102641;border:1px solid #afc2d4;box-shadow:none}
+.nursing-division .nd-button-light:hover{background:#243f5c;border-color:#fff}
 .nd-section-head{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);gap:clamp(28px,4.5vw,84px);align-items:end;margin-bottom:32px}
 .nd-section-head>p{max-width:58ch;color:var(--nd-body)}
 .nd-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 /* Navy opening with the approved clinical photograph. */
-.nursing-division main>.nd-hero{padding:clamp(40px,3.7vw,66px) 0;background:linear-gradient(112deg,#081a47 8%,#102b62 67%,#173f73 100%);color:#fff}
+.nursing-division main>.nd-hero{padding:clamp(40px,3.7vw,66px) 0;background:#102641;color:#fff}
 .nd-hero-grid{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);gap:clamp(30px,4vw,72px);align-items:center}
 .nd-hero-copy{min-width:0;max-width:750px}
-.nd-hero .nd-eyebrow{color:#91e4e9}
+.nd-hero .nd-eyebrow{color:#d0e7e9}
 .nursing-division .nd-hero h1{font-size:clamp(42px,3.5vw,64px);line-height:1.075;letter-spacing:-.042em;color:#fff;margin:0;max-width:24ch;text-wrap:balance}
-.nursing-division .nd-hero-copy>p{font-size:clamp(16px,1.02vw,18px);color:#dae5f4;max-width:56ch;margin-top:24px}
+.nursing-division .nd-hero-copy>p{font-size:clamp(16px,1.02vw,18px);color:#f1f5fa;max-width:56ch;margin-top:24px}
 .nd-hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
 .nd-hero-photo{position:relative;margin:0;height:clamp(400px,28vw,490px);min-width:0;overflow:hidden;border-radius:20px;border:1px solid #7c9ec633;box-shadow:0 18px 48px #00102b30}
 .nd-hero-photo img{width:100%;height:100%;object-fit:cover;object-position:77% 50%}
-.nd-hero-photo:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,#061b45eb)}
-.nd-hero-photo figcaption{position:absolute;left:26px;right:26px;bottom:24px;z-index:1;font-size:16px;line-height:1.5;color:#fff;max-width:35ch}
-.nd-hero-photo figcaption span{display:block;color:#9ee9ec;text-transform:uppercase;letter-spacing:.13em;font-size:10px;font-weight:800;margin-bottom:6px}
+.nd-hero-photo:after{display:none}
+.nd-hero-photo figcaption{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:17px 24px;font-size:16px;line-height:1.5;color:#fff;background:#102641;max-width:none}
+.nd-hero-photo figcaption span{display:block;color:#d0e7e9;text-transform:uppercase;letter-spacing:.08em;font-size:12px;font-weight:750;margin-bottom:6px}
 /* Perspective, without inventing clinical tenure or founder credentials. */
-.nursing-division main>.nd-perspective{background:#e0eaf4;border-bottom:1px solid #c5d5e5}
+.nursing-division main>.nd-perspective{background:#f0f4f7;border-bottom:1px solid #c9d6df}
 .nd-perspective-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:clamp(32px,5vw,90px);align-items:center}
 .nd-perspective-copy h2{max-width:22ch}
 .nd-perspective-copy>p{max-width:53ch;color:var(--nd-body);margin-top:22px}
 .nd-role-families{display:grid;gap:14px}
-.nd-role-family{padding:23px 26px;background:#d2e1f0;border:1px solid #b8cde2;border-radius:16px;min-width:0}
-.nd-role-family:nth-child(2){background:#cfe3e8;border-color:#b3ced5}
+.nd-role-family{padding:23px 26px;background:#e5edf4;border:1px solid #bfccd9;border-radius:16px;min-width:0}
+.nd-role-family:nth-child(2){background:#e5efed;border-color:#bdcfcb}
 .nd-family-label{display:flex;gap:12px;align-items:center}
-.nd-family-label>span{font-size:11px;font-weight:800;color:#2b5e94;padding-right:12px;border-right:1px solid #97b6d2}
+.nd-family-label>span{font-size:13px;font-weight:800;color:#235466;padding-right:12px;border-right:1px solid #97b6d2}
 .nd-family-label h3{font-size:24px;color:var(--nd-ink)}
-.nursing-division .nd-role-family>p{font-size:15px;color:var(--nd-body);margin-top:7px}
+.nursing-division .nd-role-family>p{font-size:16px;color:var(--nd-body);margin-top:7px}
 .nd-role-family .role-cloud{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0 0}
-.nd-role-family .role-cloud span{font-size:12px;line-height:1.5;font-weight:600;color:#27496f;background:#ffffff68;border:1px solid #a9c0d55c;border-radius:6px;padding:6px 9px}
-/* Four editorial care-setting rows, not another grid of repeated cards. */
-.nursing-division main>.nd-settings{background:#102b57;color:#e1eaf6}
-.nd-settings .nd-eyebrow{color:#8de1e7}
-.nursing-division .nd-settings h2{color:#fff;max-width:26ch}
-.nd-settings .nd-section-head>p{color:#c7d8ef}
-.nd-setting-list{border-top:1px solid #6789b161}
-.nd-setting-row{display:grid;grid-template-columns:46px minmax(0,1.3fr) minmax(0,.85fr);gap:28px;padding:27px 0;border-bottom:1px solid #6789b161;align-items:start}
-.nd-setting-number{display:flex;justify-content:center;align-items:center;width:38px;height:38px;border-radius:10px;background:#215078;color:#9eebeb;font-size:12px;font-weight:800}
-.nd-setting-copy h3{font-size:clamp(22px,1.6vw,27px);color:#fff;max-width:36ch}
-.nd-setting-copy>p{margin-top:10px;color:#c7d8ef;max-width:64ch}
-.nd-setting-factors{align-self:center;padding:2px 0 2px 30px;border-left:1px solid #6789b161;min-width:0}
-.nd-setting-factors h4{margin:0 0 8px;color:#93e2e7;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
-.nursing-division .nd-setting-factors p{font-size:14px;color:#d9e6f8;line-height:1.9}
+.nd-role-family .role-cloud span{font-size:13px;line-height:1.5;font-weight:600;color:#263b50;background:#fff;border:1px solid #c3d0dc;border-radius:6px;padding:6px 9px}
+/* Reading-heavy sections use dark text on quiet, opaque light surfaces. */
+.nursing-division main>.nd-settings{background:#e8f0ee;color:var(--nd-body)}
+.nd-settings .nd-eyebrow{color:#235466}
+.nursing-division .nd-settings h2{color:var(--nd-ink);max-width:26ch}
+.nd-settings .nd-section-head>p{color:var(--nd-body)}
+.nd-setting-list{border-top:1px solid #b7cac6}
+.nd-setting-row{display:grid;grid-template-columns:46px minmax(0,1.3fr) minmax(0,.85fr);gap:28px;padding:30px 0;border-bottom:1px solid #b7cac6;align-items:start}
+.nd-setting-number{display:flex;justify-content:center;align-items:center;width:38px;height:38px;border-radius:10px;background:#d0dfdc;color:#164b56;font-size:14px;font-weight:800}
+.nd-setting-copy h3{font-size:clamp(23px,1.6vw,28px);color:var(--nd-ink);max-width:36ch}
+.nd-setting-copy>p{margin-top:10px;color:var(--nd-body);max-width:64ch}
+.nd-setting-factors{align-self:center;padding:2px 0 2px 30px;border-left:1px solid #b7cac6;min-width:0}
+.nd-setting-factors h4{margin:0 0 8px;color:#235466;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.nursing-division .nd-setting-factors p{font-size:16px;color:var(--nd-body);font-weight:500;line-height:1.8}
 /* Recruiting is a sequence. Readiness below owns onboarding requirements. */
-.nursing-division main>.nd-recruiting{background:#e8edf4}
+.nursing-division main>.nd-recruiting{background:#f7f9fb}
 .nd-process-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--nd-line);gap:0}
 .nd-process-step{padding:26px 26px 0;border-right:1px solid var(--nd-line);min-width:0}
 .nd-process-step:first-child{padding-left:0}.nd-process-step:last-child{border-right:0;padding-right:0}
-.nd-step-number{display:grid;place-items:center;width:38px;height:38px;background:#244b7a;color:#fff;border-radius:50%;font-weight:800;font-size:12px;margin-bottom:19px}
+.nd-step-number{display:grid;place-items:center;width:38px;height:38px;background:#24456b;color:#fff;border-radius:50%;font-weight:800;font-size:14px;margin-bottom:19px}
 .nd-process-step h3{font-size:22px;color:var(--nd-ink);max-width:20ch}
 .nd-process-step p{color:var(--nd-body);margin-top:12px;max-width:35ch}
-.nursing-division main>.nd-readiness{background:#cee3e7;border-top:1px solid #b5d1d7;border-bottom:1px solid #b5d1d7}
+.nursing-division main>.nd-readiness{background:#eaf0f5;border-top:1px solid #c3d1de;border-bottom:1px solid #c3d1de}
 .nd-readiness-layout{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);gap:clamp(32px,5vw,88px);align-items:start}
 .nd-readiness-copy>p{margin-top:20px;color:var(--nd-body);max-width:42ch}
-.nd-support-note{margin-top:26px;padding:14px 0 14px 17px;border-left:3px solid #26808b;font-size:14px;line-height:1.6;color:#1a5069;font-weight:650;max-width:37ch}
+.nd-support-note{margin-top:26px;padding:14px 0 14px 17px;border-left:3px solid #21616b;font-size:16px;line-height:1.6;color:#243f53;font-weight:650;max-width:37ch}
 .nd-readiness-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:30px}
-.nd-ready-item{display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px;padding:22px 0;border-top:1px solid #92b9c4}
-.nd-ready-item>span{font-size:11px;line-height:2.2;font-weight:800;color:#28717c}
+.nd-ready-item{display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px;padding:22px 0;border-top:1px solid #b3c6d5}
+.nd-ready-item>span{font-size:13px;line-height:2;font-weight:800;color:#235466}
 .nd-ready-item h3{font-size:21px;color:var(--nd-ink)}
-.nd-ready-item p{margin-top:9px;color:#3d596e;max-width:38ch}
+.nd-ready-item p{margin-top:9px;color:var(--nd-body);max-width:38ch}
 /* Curated paths into job search, not invented job listings. */
-.nursing-division main>.nd-opportunities{background:#dce6f2}
+.nursing-division main>.nd-opportunities{background:#f0f4f7}
 .nd-opportunity-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
-.nursing-division .nd-opportunity-card{display:flex;flex-direction:column;align-items:flex-start;min-width:0;min-height:0;padding:28px;background:#1b3b69;border:1px solid #294d7c;border-radius:17px;box-shadow:none}
-.nursing-division .nd-opportunity-card small{color:#9ce2e7;letter-spacing:.11em;font-size:10px;line-height:1.5;font-weight:800;text-transform:uppercase}
-.nursing-division .nd-opportunity-card h3{color:#fff;font-size:25px;line-height:1.2;min-height:0;max-width:24ch;margin:15px 0 0;letter-spacing:-.02em}
-.nursing-division .nd-opportunity-card p{color:#d4e2f5;max-width:41ch;margin:15px 0 20px;font-size:16px}
-.nursing-division .nd-opportunity-card a{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;margin-top:auto;min-height:44px;border-top:1px solid #7998bf61;padding:17px 0 0;color:#a2f0e5;font-size:14px;line-height:1.5;font-weight:700}
+.nursing-division .nd-opportunity-card{display:flex;flex-direction:column;align-items:flex-start;min-width:0;min-height:0;padding:28px;background:#fff;border:1px solid #c0cdda;border-top:3px solid #21616b;border-radius:14px;box-shadow:none}
+.nursing-division .nd-opportunity-card small{color:#235466;letter-spacing:.08em;font-size:12px;line-height:1.5;font-weight:800;text-transform:uppercase}
+.nursing-division .nd-opportunity-card h3{color:var(--nd-ink);font-size:25px;line-height:1.2;min-height:0;max-width:24ch;margin:15px 0 0;letter-spacing:-.02em}
+.nursing-division .nd-opportunity-card p{color:var(--nd-body);max-width:41ch;margin:15px 0 20px;font-size:17px}
+.nursing-division .nd-opportunity-card a{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;margin-top:auto;min-height:44px;border-top:1px solid #c0cdda;padding:17px 0 0;color:#164c6d;font-size:16px;line-height:1.5;font-weight:700}
 .nursing-division .nd-opportunity-card a span{font-size:20px}
 .nursing-division .nd-opportunity-card a:hover{text-decoration:underline;text-underline-offset:5px}
 /* A compact, division-specific employer / clinician close. */
-.nursing-division main>.nd-connect{background:#e8edf4;padding-top:0}
-.nd-connect-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;background:#0b225f;border-radius:18px;overflow:hidden}
+.nursing-division main>.nd-connect{background:#f7f9fb;padding-top:0}
+.nd-connect-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;background:#102641;border-radius:18px;overflow:hidden}
 .nursing-division .nd-connect-card{display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:clamp(27px,2.8vw,44px);background:none;box-shadow:none;border-radius:0;border:0}
-.nursing-division .nd-connect-card+.nd-connect-card{background:#1a3b70;border-left:1px solid #6583b142}
-.nd-connect-card .nd-eyebrow{color:#a1e8ea;font-size:10px}
+.nursing-division .nd-connect-card+.nd-connect-card{background:#e4edf3;border-left:1px solid #c0cfdb}
+.nd-connect-card .nd-eyebrow{color:#d0e7e9;font-size:12px}
 .nursing-division .nd-connect-card h3{color:#fff;font-size:clamp(26px,1.9vw,32px);line-height:1.2;margin:0;max-width:28ch}
-.nursing-division .nd-connect-card p{color:#d6e3f5;margin:14px 0 24px;max-width:51ch}
+.nursing-division .nd-connect-card p{color:#f1f5fa;margin:14px 0 24px;max-width:51ch}
 .nd-connect-actions{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin-top:auto}
 .nd-phone{color:#fff;min-height:44px;display:inline-flex;align-items:center;font-weight:700;font-size:15px;text-decoration:underline;text-underline-offset:5px}
 /* Existing shared header and footer, aligned to this division's canvas. */
 .nursing-division .footer-main-minimal{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(40px,5vw,88px);padding:52px 0 44px}
-.nursing-division .footer-brand-minimal>p,.nursing-division .footer-col-minimal a{font-size:14px;line-height:1.65}
-.nursing-division .footer-col-minimal h4{font-size:11px}
+.nursing-division .footer-brand-minimal>p,.nursing-division .footer-col-minimal a{font-size:15px;line-height:1.65;color:#32475b}
+.nursing-division .footer-col-minimal h4{font-size:12px}
 .nursing-division a:focus-visible,.nursing-division button:focus-visible{outline:3px solid #2671bf;outline-offset:5px}
-.nd-hero a:focus-visible,.nd-settings a:focus-visible,.nd-opportunity-card a:focus-visible,.nd-connect a:focus-visible{outline-color:#a2f0e5}
+.nd-hero a:focus-visible,.nd-connect .client-card a:focus-visible{outline-color:#fff}
+/* Opaque caption and card surfaces avoid gradient-dependent readability. */
+.nursing-division .nd-connect-card::before,.nursing-division .nd-connect-card::after{display:none}
+.nursing-division .nd-connect-card.clinician-card h3{color:var(--nd-ink)}
+.nursing-division .nd-connect-card.clinician-card p{color:var(--nd-body)}
+.nursing-division .nd-connect-card.clinician-card .nd-eyebrow{color:#235466}
+.nursing-division .nd-connect-card.clinician-card .nd-button-light{color:var(--nd-ink);background:#fff;border-color:#8fa6bc}
+.nursing-division .nd-connect-card.clinician-card .nd-button-light:hover{background:#f2f6f9;border-color:#365778}
+.nursing-division .footer-contact-minimal a,.nursing-division .footer-contact-minimal span,.nursing-division .footer-bottom-row,.nursing-division .footer-bottom-row a{color:#32475b;font-size:13px}
+.nursing-division .nav-drop-desc{color:#40536a}
 @media(min-width:1200px){.nursing-division .nav{height:86px;gap:24px}.nursing-division .links,.nursing-division .nav-drop-trigger{font-size:15px}.nursing-division .links{gap:22px}.nursing-division .actions .btn{font-size:15px;min-height:50px}}
 @media(max-width:1199px){.nd-hero-grid{gap:30px;grid-template-columns:1.08fr .92fr}.nursing-division .nd-hero h1{font-size:44px}.nd-hero-actions{gap:10px}.nursing-division .nd-hero-actions .btn{font-size:14px;padding:12px 16px}.nd-readiness-layout{grid-template-columns:1fr 1.4fr;gap:32px}.nd-setting-row{gap:20px;grid-template-columns:40px minmax(0,1.25fr) minmax(0,.8fr)}.nd-setting-factors{padding-left:20px}.nd-process-step{padding-right:18px;padding-left:18px}.nd-process-step h3{font-size:20px}}
 @media(max-width:1040px){
@@ -109,13 +118,13 @@
 @media(max-width:820px){
  .nd-role-families{grid-template-columns:1fr}.nd-setting-row{grid-template-columns:38px minmax(0,1fr);gap:12px 18px;padding:24px 0}.nd-setting-factors{grid-column:2;padding:0;border:0}.nd-setting-factors h4{margin-bottom:3px}.nd-setting-copy>p{max-width:none}
  .nd-process-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:25px 0}.nd-process-step:nth-child(2){border:0;padding-right:0}.nd-process-step:nth-child(3){padding-left:0}.nd-process-step:nth-child(4){padding-right:0}.nd-process-step h3{font-size:22px}
- .nd-opportunity-grid{grid-template-columns:1fr;gap:15px}.nursing-division .nd-opportunity-card p{max-width:65ch}.nd-connect-grid{grid-template-columns:1fr}.nursing-division .nd-connect-card+.nd-connect-card{border-left:0;border-top:1px solid #6583b142}
+ .nd-opportunity-grid{grid-template-columns:1fr;gap:15px}.nursing-division .nd-opportunity-card p{max-width:65ch}.nd-connect-grid{grid-template-columns:1fr}.nursing-division .nd-connect-card+.nd-connect-card{border-left:0;border-top:1px solid #c0cfdb}
 }
 @media(max-width:540px){
- .nursing-division main{--nd-space:46px}.nursing-division main h2{font-size:31px;line-height:1.17}.nd-eyebrow{font-size:10px;letter-spacing:.1em}
- .nursing-division main>.nd-hero{padding:34px 0}.nursing-division .nd-hero h1{font-size:36px;line-height:1.12;letter-spacing:-.035em}.nursing-division .nd-hero-copy>p{font-size:16px;margin-top:20px}.nd-hero-actions{display:grid;grid-template-columns:1fr}.nd-hero-photo{height:300px;border-radius:15px}.nd-hero-photo figcaption{left:21px;right:21px;font-size:15px}
- .nd-role-family{padding:22px}.nd-role-family .role-cloud span{font-size:11px}.nd-family-label h3{font-size:24px}
- .nd-setting-copy h3{font-size:22px}.nd-setting-number{width:32px;height:32px;font-size:11px;border-radius:8px}.nd-setting-row{grid-template-columns:32px minmax(0,1fr);column-gap:14px}.nursing-division .nd-setting-factors p{font-size:13px}.nd-setting-copy p{font-size:15px}
+ .nursing-division main{--nd-space:46px}.nursing-division main h2{font-size:31px;line-height:1.17}.nd-eyebrow{font-size:12px;letter-spacing:.08em}
+ .nursing-division main>.nd-hero{padding:34px 0}.nursing-division .nd-hero h1{font-size:36px;line-height:1.12;letter-spacing:-.035em}.nursing-division .nd-hero-copy>p{font-size:16px;margin-top:20px}.nd-hero-actions{display:grid;grid-template-columns:1fr}.nd-hero-photo{height:300px;border-radius:15px}.nd-hero-photo figcaption{left:0;right:0;font-size:16px;padding:14px 18px}
+ .nd-role-family{padding:22px}.nd-role-family .role-cloud span{font-size:13px}.nd-family-label h3{font-size:24px}
+ .nd-setting-copy h3{font-size:22px}.nd-setting-number{width:32px;height:32px;font-size:13px;border-radius:8px}.nd-setting-row{grid-template-columns:32px minmax(0,1fr);column-gap:14px}.nursing-division .nd-setting-factors p{font-size:16px}.nursing-division main p{font-size:16px}
  .nd-process-grid{grid-template-columns:1fr;gap:0}.nd-process-step,.nd-process-step:first-child,.nd-process-step:last-child{display:grid;grid-template-columns:38px minmax(0,1fr);gap:0 15px;padding:22px 0;border-right:0;border-bottom:1px solid var(--nd-line)}.nd-step-number{grid-row:1/3;margin-bottom:0}.nd-process-step p{grid-column:2;margin-top:8px;max-width:none}.nd-process-step:last-child{border-bottom:0}
  .nd-readiness-grid{grid-template-columns:1fr;gap:0}.nd-ready-item{padding:20px 0}.nd-ready-item p{max-width:none}
  .nursing-division .nd-opportunity-card{padding:25px}.nursing-division .nd-opportunity-card h3{font-size:25px}.nursing-division .nd-connect-card{padding:28px 24px}.nd-connect-actions{width:100%;align-items:flex-start;flex-direction:column;gap:10px}.nd-connect-actions .btn{width:100%;font-size:14px}

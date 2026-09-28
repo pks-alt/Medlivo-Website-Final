@@ -1,0 +1,87 @@
+name: Check Nursing text readability
+on:
+  push:
+    branches: [fix/nursing-text-readability-20260928]
+    paths: [.github/workflows/prepare-nursing-readability.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install the existing verification dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Preserve content and add explicit text contrast checks
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,subprocess,urllib.request
+          root=Path('.');manifest=json.loads(Path('BUILD.json').read_text())
+          assert manifest['repository']=='pks-alt/Medlivo-Website-Final'
+          home=Path('nursing-allied.html');before=home.read_text()
+          assert hashlib.sha256(home.read_bytes()).hexdigest()==manifest['files']['nursing-allied.html']
+          req=urllib.request.Request('https://pks-alt.github.io/Medlivo-Website-Final/nursing-allied.html',headers={'Cache-Control':'no-cache'})
+          with urllib.request.urlopen(req,timeout=40) as r:published=r.read()
+          assert hashlib.sha256(published).hexdigest()==manifest['files']['nursing-allied.html'],'Starting page no longer matches production'
+          assert '20260928-clinical-settings' in before
+          after=before.replace('20260928-clinical-settings','20260928-readable-v1')
+          assert before[before.index('<body'):]==after[after.index('<body'):]
+          home.write_text(after)
+          p=Path('scripts/verify_nursing_layout.py');s=p.read_text()
+          assert 'CONTRAST_AUDIT' not in s
+          s=s.replace("PHOTO='assets/images/embedded/fef3061a52147602be64.webp'", "PHOTO='assets/images/embedded/fef3061a52147602be64.webp'\nCONTRAST_AUDIT=(ROOT/'scripts/nursing_contrast_audit.js').read_text()")
+          old='            row.update(status=status,errors=errors,image_decode_errors=decode_errors)'
+          assert old in s
+          new="\n".join([
+              "            contrast=page.evaluate(CONTRAST_AUDIT)",
+              "            (out/f'contrast-{width}.json').write_text(json.dumps(contrast,indent=2))",
+              "            if contrast['failures'] or contrast['unknown']:",
+              "                failures.append({'width':width,'contrast_failures':contrast['failures'],'unresolved_backgrounds':contrast['unknown']})",
+              "            if any(item['font_size']<16 for item in contrast['results'] if item['required']==7):",
+              "                failures.append({'width':width,'error':'Body text smaller than 16px'})",
+              "            row.update(status=status,errors=errors,image_decode_errors=decode_errors,",
+              "                contrast={'checked':contrast['text_elements'],'minimum_ratio':contrast['minimum_ratio'],'paragraph_minimum':contrast['paragraph_minimum'],'passed':not contrast['failures'] and not contrast['unknown']})"
+          ])
+          s=s.replace(old,new)
+          old="                trigger.click();assert trigger.get_attribute('aria-expanded')=='true'"
+          assert old in s
+          s=s.replace(old,old+"\n                expanded=page.evaluate(CONTRAST_AUDIT)\n                assert not expanded['failures'] and not expanded['unknown'], 'Expanded menu contrast failed'")
+          old="                row['menu_keyboard']='passed'"
+          assert old in s
+          new="\n".join([old,
+              "                for selector in ['.nd-hero a.nd-button-light','.nd-opportunity-card a','.nd-connect .clinician-card a']:",
+              "                    page.locator(selector).first.hover();page.locator(selector).first.focus()",
+              "                    page.wait_for_timeout(250)",
+              "                    interaction=page.evaluate(CONTRAST_AUDIT)",
+              "                    assert not interaction['failures'] and not interaction['unknown'], 'Hover/focus contrast failed'",
+              "                row['interactive_text_contrast']='passed'"
+          ])
+          s=s.replace(old,new);p.write_text(s)
+          for name,sha in manifest['files'].items():
+              if name not in ['nursing-allied.html','assets/css/nursing-responsive.css']:
+                  assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==sha,name+' changed unexpectedly'
+          subprocess.run(['python','scripts/update_manifest.py','--build-id','medlivo-final-nursing-readable-20260928'],check=True)
+          Path('verification').mkdir(exist_ok=True)
+          Path('verification/scope.json').write_text(json.dumps({'starting_public_html_matches':True,'body_html_unchanged':True,'other_ten_pages_and_all_image_bytes_unchanged':True,'readability':'Flat light surfaces for long reading sections; dark text; high-contrast navy hero and employer CTA; larger labels and descriptions'},indent=2))
+          PY
+      - name: Test layout, contrast, links and image decoding
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/medlivo-readability.log 2>&1 &
+          python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/all-pages
+          python scripts/verify_nursing_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/nursing
+      - name: Save only verified changes to this branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add nursing-allied.html BUILD.json scripts/verify_nursing_layout.py
+          git commit -m 'Verify Nursing readability and preserve all approved content'
+          git push origin HEAD:fix/nursing-text-readability-20260928
+      - name: Save browser and contrast evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nursing-readability-review
+          path: verification/
+          retention-days: 14
