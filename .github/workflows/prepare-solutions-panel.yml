@@ -1,0 +1,166 @@
+name: Prepare Solutions staffing panel
+on:
+  push:
+    branches: [enhancement/solutions-request-panel-20260928]
+    paths: [.github/workflows/prepare-solutions-panel.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install current verification tools
+        run: python -m pip install -r requirements-dev.txt
+      - name: Update only the Solutions closing panel
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,re,subprocess
+          from bs4 import BeautifulSoup
+          manifest=json.loads(Path('BUILD.json').read_text())
+          assert manifest['repository']=='pks-alt/Medlivo-Website-Final'
+          for name,sha in manifest['files'].items():
+              assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==sha,'Source mismatch: '+name
+          p=Path('workforce-solutions.html');before=p.read_text()
+          start=before.index('<section class="final" id="contact">')
+          end=before.index('</section>',start)+len('</section>')
+          new='''<section class="final" id="contact" aria-labelledby="solutions-staffing-title">
+            <div class="wrap final-shell solutions-contact-panel">
+              <div class="solutions-panel-copy">
+                <h2 id="solutions-staffing-title">Need healthcare talent?</h2>
+                <p>Share the roles, location and start date. We’ll connect you with the right staffing team.</p>
+              </div>
+              <div class="solutions-panel-actions">
+                <a class="btn btn-green" href="request-staff.html">Request Staff <span aria-hidden="true">→</span></a>
+                <div class="solutions-panel-call">
+                  <p>Prefer to speak with us?</p>
+                  <a class="solutions-panel-phone" href="tel:+18556335486" aria-label="Call Medlivo at 855-633-5486">855-633-5486</a>
+                </div>
+              </div>
+            </div>
+          </section>'''
+          after=before[:start]+new+before[end:]
+          original='<link rel="stylesheet" href="assets/css/workforce-solutions.css">'
+          assert after.count(original)==1
+          after=after.replace(original,'<link rel="stylesheet" href="assets/css/workforce-solutions.css?v=solutions-panel-20260928">')
+          a=BeautifulSoup(before,'html.parser');b=BeautifulSoup(after,'html.parser')
+          a.select_one('section.final').decompose();b.select_one('section.final').decompose()
+          assert a.body.decode()==b.body.decode(),'Unexpected change outside Solutions CTA'
+          p.write_text(after)
+          css=Path('assets/css/workforce-solutions.css');text=css.read_text()
+          assert 'Solutions staffing panel: aligned' not in text
+          text+='''
+          /* Solutions staffing panel: aligned with the current homepage CTA. */
+          .final .solutions-contact-panel{
+            grid-template-columns:minmax(0,1fr) minmax(240px,280px);
+            gap:clamp(28px,4vw,64px);padding:clamp(28px,2.6vw,42px);
+            border:1px solid #213e7a;border-radius:20px;
+            background:linear-gradient(112deg,#0b225f 0%,#102c6b 72%,#163775 100%);
+            box-shadow:0 12px 28px rgba(11,34,95,.06);
+          }
+          .solutions-contact-panel>.solutions-panel-copy{
+            display:block;min-width:0;padding-left:24px;border-left:3px solid var(--aqua);
+          }
+          .solutions-contact-panel .solutions-panel-copy h2{
+            margin:0;max-width:24ch;font-size:clamp(28px,2.15vw,38px);line-height:1.16;
+            letter-spacing:-.035em;font-weight:750;color:#fff;text-wrap:balance;
+          }
+          .solutions-contact-panel .solutions-panel-copy p{
+            margin:12px 0 0;max-width:54ch;color:#dbe6fa;font-size:16px;line-height:1.65;
+          }
+          .solutions-contact-panel>.solutions-panel-actions{
+            display:flex;flex-direction:column;align-items:stretch;gap:16px;min-width:0;
+            padding-left:32px;border-left:1px solid rgba(215,231,255,.22);
+          }
+          .solutions-contact-panel .solutions-panel-actions>.btn{
+            width:100%;min-height:54px;padding:0 24px;border-radius:10px;
+            font-size:16px;font-weight:750;gap:14px;
+          }
+          .solutions-contact-panel .btn span{
+            color:inherit;font-size:20px;line-height:1;letter-spacing:0;text-transform:none;font-weight:500;
+          }
+          .solutions-contact-panel .solutions-panel-call{text-align:center}
+          .solutions-contact-panel .solutions-panel-call p{
+            margin:0 0 4px;font-size:13px;line-height:1.5;color:#dbe6fa;
+          }
+          .solutions-contact-panel .solutions-panel-phone{
+            display:inline-flex;align-items:center;min-height:28px;font-size:18px;line-height:1.4;
+            font-weight:650;color:#fff;letter-spacing:.01em;text-decoration:underline;
+            text-decoration-color:rgba(215,231,255,.45);text-underline-offset:5px;
+          }
+          .solutions-contact-panel .solutions-panel-phone:hover{text-decoration-color:#fff}
+          .solutions-contact-panel a:focus-visible{outline:3px solid #fff;outline-offset:5px}
+          .final#contact{scroll-margin-top:100px}
+          @media(max-width:820px){
+            .final .solutions-contact-panel{grid-template-columns:1fr;gap:24px;padding:28px}
+            .solutions-contact-panel>.solutions-panel-copy{padding-left:20px}
+            .solutions-contact-panel>.solutions-panel-actions{
+              display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;
+              gap:20px;border-left:0;border-top:1px solid rgba(215,231,255,.22);padding:24px 0 0;
+            }
+          }
+          @media(max-width:540px){
+            .final .solutions-contact-panel{padding:26px 22px;gap:22px;border-radius:16px}
+            .solutions-contact-panel>.solutions-panel-copy{padding-left:16px}
+            .solutions-contact-panel .solutions-panel-copy h2{font-size:28px;max-width:17ch}
+            .solutions-contact-panel .solutions-panel-copy p{font-size:15px;line-height:1.65}
+            .solutions-contact-panel>.solutions-panel-actions{grid-template-columns:1fr;gap:14px;padding-top:22px}
+            .solutions-contact-panel .solutions-panel-phone{min-height:40px}
+          }
+          '''
+          css.write_text(text)
+          subprocess.run(['python','scripts/update_manifest.py','--build-id','medlivo-final-solutions-panel-20260928'],check=True)
+          for name,sha in manifest['files'].items():
+              if name not in ['workforce-solutions.html','assets/css/workforce-solutions.css']:
+                  assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==sha,'Out-of-scope file change: '+name
+          Path('verification').mkdir(exist_ok=True)
+          Path('verification/scope.json').write_text(json.dumps({'repository':manifest['repository'],'solutions_body_outside_cta_unchanged':True,'homepage_unchanged':True,'other_pages_unchanged':True,'all_images_unchanged':True},indent=2))
+          PY
+      - name: Run existing all-page regression checks
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/solutions-panel-server.log 2>&1 &
+          python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/all-pages
+      - name: Check the Solutions panel at desktop and mobile widths
+        run: |
+          python - <<'PY'
+          import pathlib,json,shutil
+          from playwright.sync_api import sync_playwright
+          out=pathlib.Path('verification/panel');out.mkdir(exist_ok=True);results=[];failures=[]
+          with sync_playwright() as p:
+              exe=shutil.which('google-chrome') or shutil.which('chromium')
+              browser=p.chromium.launch(headless=True,args=['--no-sandbox'],**({'executable_path':exe} if exe else {}))
+              for width in [320,390,540,768,820,1024,1440,1920,2560,3440]:
+                  page=browser.new_page(viewport={'width':width,'height':1000 if width>=1024 else 844},device_scale_factor=1)
+                  errors=[];page.on('pageerror',lambda e,b=errors:b.append(str(e)))
+                  response=page.goto('http://127.0.0.1:8765/workforce-solutions.html',wait_until='networkidle')
+                  page.evaluate('document.fonts.ready')
+                  panel=page.locator('.solutions-contact-panel')
+                  assert panel.count()==1
+                  panel.screenshot(path=str(out/('solutions-panel-'+str(width)+'.png')),animations='disabled')
+                  row=panel.evaluate('''e=>{const r=e.getBoundingClientRect();return {panel_width:r.width,panel_height:r.height,panel_outside_viewport:r.left<0||r.right>innerWidth+1,clipped_children:[...e.querySelectorAll('h2,p,a')].filter(x=>{const b=x.getBoundingClientRect();return b.left<r.left-1||b.right>r.right+1||b.bottom>r.bottom+1||x.scrollWidth>x.clientWidth+1}).map(x=>x.textContent),button_height:e.querySelector('.btn').getBoundingClientRect().height,heading:getComputedStyle(e.querySelector('h2')).fontSize,background:getComputedStyle(e).backgroundImage}}''')
+                  row.update(width=width,status=response.status,errors=errors,request_href=panel.locator('.btn').get_attribute('href'),phone_href=panel.locator('.solutions-panel-phone').get_attribute('href'))
+                  if response.status!=200 or errors or row['panel_outside_viewport'] or row['clipped_children'] or row['button_height']<44 or row['request_href']!='request-staff.html' or row['phone_href']!='tel:+18556335486':failures.append(row)
+                  if width in [390,1920]:page.screenshot(path=str(out/('solutions-full-'+str(width)+'.png')),full_page=True,animations='disabled')
+                  if width==1920:
+                      panel.locator('.btn').click();page.wait_for_url('**/request-staff.html');assert page.locator('#staffingRequestForm').count()==1
+                  results.append(row);page.close()
+              browser.close()
+          (out/'checks.json').write_text(json.dumps({'results':results,'failures':failures,'passed':not failures},indent=2));print(json.dumps({'results':results,'failures':failures},indent=2))
+          assert not failures,'Panel verification failed. No source commit will occur.'
+          PY
+      - name: Commit tested page changes to the enhancement branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add workforce-solutions.html assets/css/workforce-solutions.css BUILD.json
+          git commit -m 'Match Solutions staffing panel to the current homepage design'
+          git push origin HEAD:enhancement/solutions-request-panel-20260928
+      - name: Save review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: solutions-panel-review
+          path: verification/
+          retention-days: 14
