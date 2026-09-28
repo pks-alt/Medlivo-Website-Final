@@ -1,0 +1,3 @@
+# Verification tools only. The website itself has no package dependencies.
+beautifulsoup4==4.15.0
+playwright==1.63.0
