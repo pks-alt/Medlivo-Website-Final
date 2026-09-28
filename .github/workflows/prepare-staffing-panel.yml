@@ -23,17 +23,6 @@ jobs:
           manifest=json.loads((root/'BUILD.json').read_text())
           assert manifest['repository']=='pks-alt/Medlivo-Website-Final'
           assert hashlib.sha256(home.read_bytes()).hexdigest()==manifest['files']['index.html']
-          old='''    <div class="workforce-v2-cta">
-                <div>
-                  <span>Need healthcare talent?</span>
-                  <strong>Tell us the role, location, and timing. We’ll take it from there.</strong>
-                </div>
-                <div class="workforce-v2-actions">
-                  <a class="btn btn-green" href="request-staff.html">Request Staff →</a>
-                  <a href="tel:+18556335486">855-633-5486</a>
-                </div>
-              </div>'''
-          # Keep matching independent of YAML indentation, without serializing the page.
           start=before.index('    <div class="workforce-v2-cta">')
           end=before.index('\n  </div>\n</section>',start)
           old=before[start:end]
@@ -52,7 +41,6 @@ jobs:
                   </div>
                 </div>
               </div>'''
-          lines=new.splitlines();new=lines[0]+'\n'+'\n'.join(line[10:] for line in lines[1:])
           after=before[:start]+new+before[end:]
           a=BeautifulSoup(before,'html.parser');b=BeautifulSoup(after,'html.parser')
           a.select_one('.workforce-v2-cta').decompose();b.select_one('.workforce-v2-cta').decompose()
