@@ -1,0 +1,178 @@
+name: Prepare staffing request panel
+on:
+  push:
+    branches: [enhancement/staffing-request-panel-20260928]
+    paths: [.github/workflows/prepare-staffing-panel.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install existing verification tools
+        run: python -m pip install -r requirements-dev.txt
+      - name: Refine only the requested panel
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,subprocess
+          from bs4 import BeautifulSoup
+          root=Path('.');home=root/'index.html';before=home.read_text()
+          manifest=json.loads((root/'BUILD.json').read_text())
+          assert manifest['repository']=='pks-alt/Medlivo-Website-Final'
+          assert hashlib.sha256(home.read_bytes()).hexdigest()==manifest['files']['index.html']
+          old='''    <div class="workforce-v2-cta">
+                <div>
+                  <span>Need healthcare talent?</span>
+                  <strong>Tell us the role, location, and timing. We’ll take it from there.</strong>
+                </div>
+                <div class="workforce-v2-actions">
+                  <a class="btn btn-green" href="request-staff.html">Request Staff →</a>
+                  <a href="tel:+18556335486">855-633-5486</a>
+                </div>
+              </div>'''
+          # Keep matching independent of YAML indentation, without serializing the page.
+          start=before.index('    <div class="workforce-v2-cta">')
+          end=before.index('\n  </div>\n</section>',start)
+          old=before[start:end]
+          assert 'Tell us the role, location, and timing. We’ll take it from there.' in old
+          assert old.count('workforce-v2-cta')==1
+          new='''    <div class="workforce-v2-cta staffing-request-panel" id="staffing-support" role="region" aria-labelledby="staffing-support-title">
+                <div class="staffing-request-copy">
+                  <h3 id="staffing-support-title">Need healthcare talent?</h3>
+                  <p>Share the roles, location and start date. We’ll connect you with the right staffing team.</p>
+                </div>
+                <div class="workforce-v2-actions staffing-request-actions">
+                  <a class="btn btn-green" href="request-staff.html">Request Staff <span aria-hidden="true">→</span></a>
+                  <div class="staffing-request-call">
+                    <p>Prefer to speak with us?</p>
+                    <a class="staffing-request-phone" href="tel:+18556335486" aria-label="Call Medlivo at 855-633-5486">855-633-5486</a>
+                  </div>
+                </div>
+              </div>'''
+          lines=new.splitlines();new=lines[0]+'\n'+'\n'.join(line[10:] for line in lines[1:])
+          after=before[:start]+new+before[end:]
+          a=BeautifulSoup(before,'html.parser');b=BeautifulSoup(after,'html.parser')
+          a.select_one('.workforce-v2-cta').decompose();b.select_one('.workforce-v2-cta').decompose()
+          assert a.body.decode()==b.body.decode(),'Out-of-scope body changes'
+          home.write_text(after)
+          css=Path('assets/css/home-responsive.css');text=css.read_text()
+          assert 'Staffing request panel' not in text
+          for rule in ['.workforce-v2-cta{padding:28px 30px}\n','.workforce-v2-cta span{font-size:11px}\n','.workforce-v2-cta strong{font-size:19px}\n','.workforce-v2-actions>a:last-child{font-size:14px}\n',' .workforce-v2-cta{padding:24px}\n',' .workforce-v2-cta strong{font-size:18px}\n']:
+              assert rule in text,'Existing CTA styles changed'
+              text=text.replace(rule,'')
+          text+='''
+          /* Staffing request panel: one clear request path inside Organizations. */
+          .workforce-v2-cta.staffing-request-panel{
+            grid-template-columns:minmax(0,1fr) minmax(240px,280px);
+            gap:clamp(28px,4vw,64px);margin-top:32px;padding:clamp(28px,2.6vw,42px);
+            border:1px solid #213e7a;border-radius:20px;
+            background:linear-gradient(112deg,#0b225f 0%,#102c6b 72%,#163775 100%);
+            box-shadow:0 12px 28px rgba(11,34,95,.06);scroll-margin-top:120px;
+          }
+          .staffing-request-panel>.staffing-request-copy{
+            display:block;min-width:0;padding-left:24px;border-left:3px solid var(--aqua);
+          }
+          .staffing-request-panel h3{
+            margin:0;max-width:24ch;font-size:clamp(28px,2.15vw,38px);line-height:1.16;
+            letter-spacing:-.035em;font-weight:750;color:#fff;text-wrap:balance;
+          }
+          .staffing-request-panel .staffing-request-copy p{
+            margin-top:12px;max-width:54ch;color:#dbe6fa;font-size:16px;line-height:1.65;
+          }
+          .staffing-request-panel>.staffing-request-actions{
+            display:flex;flex-direction:column;align-items:stretch;gap:16px;min-width:0;
+            padding-left:32px;border-left:1px solid rgba(215,231,255,.22);
+          }
+          .staffing-request-panel .staffing-request-actions>.btn{
+            width:100%;min-height:54px;padding:0 24px;border-radius:10px;
+            font-size:16px;font-weight:750;gap:14px;
+          }
+          .staffing-request-panel .btn span{
+            color:inherit;font-size:20px;line-height:1;letter-spacing:0;text-transform:none;font-weight:500;
+          }
+          .staffing-request-panel .staffing-request-call{text-align:center}
+          .staffing-request-panel .staffing-request-call p{
+            margin:0 0 4px;font-size:13px;line-height:1.5;color:#dbe6fa;
+          }
+          .staffing-request-panel .staffing-request-phone{
+            display:inline-flex;align-items:center;min-height:28px;font-size:18px;line-height:1.4;
+            font-weight:650;color:#fff;letter-spacing:.01em;text-decoration:underline;
+            text-decoration-color:rgba(215,231,255,.45);text-underline-offset:5px;
+          }
+          .staffing-request-panel .staffing-request-phone:hover{text-decoration-color:#fff}
+          .staffing-request-panel a:focus-visible{outline:3px solid #fff;outline-offset:5px}
+          @media(max-width:820px){
+            .workforce-v2-cta.staffing-request-panel{grid-template-columns:1fr;gap:24px;padding:28px}
+            .staffing-request-panel>.staffing-request-copy{padding-left:20px}
+            .staffing-request-panel>.staffing-request-actions{
+              display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;
+              gap:20px;border-left:0;border-top:1px solid rgba(215,231,255,.22);padding:24px 0 0;
+            }
+          }
+          @media(max-width:540px){
+            .workforce-v2-cta.staffing-request-panel{padding:26px 22px;gap:22px;border-radius:16px}
+            .staffing-request-panel>.staffing-request-copy{padding-left:16px}
+            .staffing-request-panel h3{font-size:28px;max-width:17ch}
+            .staffing-request-panel .staffing-request-copy p{font-size:15px;line-height:1.65}
+            .staffing-request-panel>.staffing-request-actions{grid-template-columns:1fr;gap:14px;padding-top:22px}
+            .staffing-request-panel .staffing-request-phone{min-height:40px}
+          }
+          '''
+          css.write_text(text)
+          subprocess.run(['python','scripts/update_manifest.py','--build-id','medlivo-final-staffing-cta-20260928'],check=True)
+          for name,sha in manifest['files'].items():
+              if name not in ['index.html','assets/css/home-responsive.css']:
+                  assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==sha,name+' changed unexpectedly'
+          Path('verification').mkdir(exist_ok=True)
+          Path('verification/scope.json').write_text(json.dumps({'scope':'Only the requested staffing panel','all_other_body_content_unchanged':True,'other_pages_and_image_bytes_unchanged':True},indent=2))
+          PY
+      - name: Check all pages and homepage screen sizes
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/staffing-panel-server.log 2>&1 &
+          python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/all-pages
+          python scripts/verify_home_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/home
+      - name: Capture and test the new panel
+        run: |
+          python - <<'PY'
+          from playwright.sync_api import sync_playwright
+          from pathlib import Path
+          import json,shutil
+          out=Path('verification/panel');out.mkdir(parents=True,exist_ok=True);results=[]
+          with sync_playwright() as p:
+              exe=shutil.which('google-chrome') or shutil.which('chromium')
+              browser=p.chromium.launch(headless=True,args=['--no-sandbox'],**({'executable_path':exe} if exe else {}))
+              for w in [320,390,540,768,820,1024,1440,1920,2560,3440]:
+                  page=browser.new_page(viewport={'width':w,'height':1000});page.emulate_media(reduced_motion='reduce')
+                  response=page.goto('http://127.0.0.1:8765/',wait_until='networkidle')
+                  pane=page.locator('#staffing-support');pane.scroll_into_view_if_needed()
+                  assert pane.get_by_role('heading',name='Need healthcare talent?',exact=True).count()==1
+                  assert pane.get_by_role('link',name='Request Staff',exact=False).get_attribute('href')=='request-staff.html'
+                  assert pane.locator('.staffing-request-phone').get_attribute('href')=='tel:+18556335486'
+                  assert pane.locator('.btn').bounding_box()['height']>=44
+                  assert not page.evaluate('document.documentElement.scrollWidth>innerWidth')
+                  clipped=pane.locator('*').evaluate_all('(es)=>es.filter(e=>e.getBoundingClientRect().width>0&&e.scrollWidth>e.clientWidth+2).map(e=>e.className)')
+                  assert not clipped,clipped
+                  pane.screenshot(path=str(out/f'panel-{w}.png'),animations='disabled')
+                  if w in [390,1440,1920]:page.locator('#workforce').screenshot(path=str(out/f'workforce-{w}.png'),animations='disabled')
+                  results.append({'width':w,'status':response.status,'panel_height':pane.bounding_box()['height'],'passed':True})
+                  page.close()
+              browser.close()
+          (out/'checks.json').write_text(json.dumps(results,indent=2));print(json.dumps(results,indent=2))
+          PY
+      - name: Commit only tested page files on the enhancement branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html assets/css/home-responsive.css BUILD.json
+          git commit -m 'Improve staffing-request headline, contact hierarchy and responsive panel'
+          git push origin HEAD:enhancement/staffing-request-panel-20260928
+      - name: Save browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: staffing-panel-review
+          path: verification/
+          retention-days: 14
