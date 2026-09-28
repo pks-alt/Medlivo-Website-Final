@@ -30,6 +30,7 @@ jobs:
         run: |
           python -m http.server 8765 --bind 127.0.0.1 > /tmp/medlivo-http.log 2>&1 &
           python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/local
+          python scripts/verify_home_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/home-local
       - name: Package only deployable site files
         run: |
           python - <<'PY'
@@ -74,7 +75,9 @@ jobs:
         if: steps.pages.outputs.enabled == 'true'
         env:
           SITE_URL: ${{ steps.pages.outputs.url }}
-        run: python scripts/verify_site.py --base-url "$SITE_URL" --public --output-dir verification/public
+        run: |
+          python scripts/verify_site.py --base-url "$SITE_URL" --public --output-dir verification/public
+          python scripts/verify_home_layout.py --base-url "$SITE_URL" --output-dir verification/home-public
       - name: Save verification evidence
         if: always()
         uses: actions/upload-artifact@v4
