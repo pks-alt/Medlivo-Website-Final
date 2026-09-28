@@ -1,0 +1,62 @@
+name: Prepare Nursing and Allied layout
+on:
+  push:
+    branches: [enhancement/nursing-allied-responsive-20260928]
+    paths: [.github/workflows/prepare-nursing-layout.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install existing verification tools
+        run: python -m pip install -r requirements-dev.txt
+      - name: Apply only the reviewed Nursing page changes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          import hashlib,json,subprocess,urllib.request
+          m=json.loads(Path('BUILD.json').read_text());p=Path('nursing-allied.html');before=p.read_text()
+          assert m['repository']=='pks-alt/Medlivo-Website-Final'
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==m['files']['nursing-allied.html']
+          url='https://pks-alt.github.io/Medlivo-Website-Final/nursing-allied.html'
+          with urllib.request.urlopen(url,timeout=40) as response:public=response.read()
+          assert public==p.read_bytes(),'Public starting page differs. Stop for review.'
+          style='<link rel="stylesheet" href="assets/css/nursing-allied.css">'
+          assert before.count(style)==1 and 'nursing-responsive.css' not in before
+          old='assets/images/home/nursing-allied.webp';new='assets/images/embedded/fef3061a52147602be64.webp'
+          assert before.count(old)==1 and Path(new).is_file()
+          after=before.replace(style,style+'\n<link rel="stylesheet" href="assets/css/nursing-responsive.css?v=20260928-nursing">').replace(old,new)
+          a=BeautifulSoup(before,'html.parser');b=BeautifulSoup(after,'html.parser')
+          b.select_one('.na-hero-image img')['src']=old
+          assert a.body.decode()==b.body.decode(),'Body changed beyond the approved image reference'
+          p.write_text(after)
+          for name,expected in m['files'].items():
+              if name!='nursing-allied.html':assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==expected,name+' changed unexpectedly'
+          data=Path(old).read_bytes();out=Path('verification');out.mkdir(exist_ok=True)
+          report={'scope':'Nursing and Allied layout only','copy_order_and_links_unchanged':True,'other_ten_pages_unchanged':True,'existing_image_bytes_unchanged':True,'photo_reference':new,'replaced_copy_bytes':len(data),'replaced_copy_riff_declared_bytes':int.from_bytes(data[4:8],'little')+8,'public_starting_source_matched':True}
+          (out/'scope.json').write_text(json.dumps(report,indent=2))
+          subprocess.run(['python','scripts/update_manifest.py','--build-id','medlivo-final-nursing-responsive-20260928'],check=True)
+          PY
+      - name: Check all pages and fifteen Nursing viewport widths
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/nursing-layout-server.log 2>&1 &
+          python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/all-pages
+          python scripts/verify_nursing_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/nursing
+      - name: Save tested page changes on this branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add nursing-allied.html BUILD.json
+          git commit -m 'Apply tested Nursing layout and reference the existing approved high-resolution photo'
+          git push origin HEAD:enhancement/nursing-allied-responsive-20260928
+      - name: Save browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nursing-layout-review
+          path: verification/
+          retention-days: 14
