@@ -119,3 +119,6 @@ main>section{scroll-margin-top:100px}
  html{scroll-behavior:auto}
  .spec,.spec img,.btn,.career-more a{transition:none}
 }
+
+/* Keep the compact header inside narrow phone viewports. */
+@media(max-width:359px){.nav .logo{width:116px}.nav{gap:8px}.actions{gap:6px}.actions .btn-green{font-size:11px;padding:0 9px}}
