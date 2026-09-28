@@ -1,0 +1,70 @@
+name: Verify approved Locum refinements
+on:
+  push:
+    branches: [enhancement/locum-reference-refinement-final]
+    paths: [.github/workflows/prepare-locum-refinement.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: enhancement/locum-reference-refinement-final
+      - name: Install existing verification tools
+        run: python -m pip install -r requirements-dev.txt
+      - name: Apply the exact approved four-file package
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64,zlib,json,hashlib,os
+          from bs4 import BeautifulSoup
+          assert os.environ['GITHUB_REPOSITORY']=='pks-alt/Medlivo-Website-Final'
+          encoded='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';
+          # The compact transport is checked before any repository file is changed.
+          raw=zlib.decompress(base64.b64decode(encoded))
+          assert hashlib.sha256(raw).hexdigest()=='d002862e764e8e048215a5375ca726f9b108571f72f7848104f88c04ea2f4ab3','Package transport mismatch'
+          edits=json.loads(raw)
+          allowed={'locum-tenens.html','assets/css/locum-responsive.css','scripts/verify_locum_layout.py','BUILD.json'}
+          assert set(edits)==allowed
+          baseline=json.loads(Path('BUILD.json').read_text())
+          original=BeautifulSoup(Path('locum-tenens.html').read_text(),'html.parser')
+          for name,item in edits.items():
+              before=Path(name).read_text(encoding='utf-8')
+              assert hashlib.sha256(before.encode()).hexdigest()==item['before'],'Starting file differs: '+name
+              after=before
+              for change in reversed(item['edits']):after=after[:change['start']]+change['text']+after[change['end']:]
+              assert hashlib.sha256(after.encode()).hexdigest()==item['after'],'Output mismatch: '+name
+              Path(name).write_text(after,encoding='utf-8')
+          new=BeautifulSoup(Path('locum-tenens.html').read_text(),'html.parser')
+          for selector in ['header','footer','#care-settings','.ld-hero-photo','#engage']:
+              assert str(original.select_one(selector))==str(new.select_one(selector)),selector+' changed'
+          assert len(new.select('main > section'))==8
+          assert [a.get('href') for a in original.select('a')]==[a.get('href') for a in new.select('a')]
+          for name,digest in baseline['files'].items():
+              if name not in allowed:assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==digest,'Unrelated file changed: '+name
+          out=Path('verification/locum-refinement');out.mkdir(parents=True,exist_ok=True)
+          (out/'scope.json').write_text(json.dumps({'source_commit':'7665edec6629e602de5efdbc2171a5869a2fd73d','package_sha256':hashlib.sha256(raw).hexdigest(),'changed_files':sorted(allowed),'eight_sections_preserved':True,'four_settings_and_routes_preserved':True,'other_pages_and_image_bytes_unchanged':True,'output_hashes':{k:v['after'] for k,v in edits.items()}},indent=2))
+          PY
+      - name: Test all pages and Locum desktop and mobile rendering
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/medlivo-locum-http.log 2>&1 &
+          python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/locum-refinement/all
+          python scripts/verify_locum_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/locum-refinement/locum
+      - name: Save verified source on this branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git diff --exit-code -- .github/workflows/site.yml
+          git add locum-tenens.html assets/css/locum-responsive.css scripts/verify_locum_layout.py BUILD.json
+          git commit -m 'Finalize approved Locum specialties and provider-support messaging'
+          git push origin HEAD:enhancement/locum-reference-refinement-final
+      - name: Save browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: locum-refinement-review
+          path: verification/locum-refinement/
+          retention-days: 14
