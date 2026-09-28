@@ -1,5 +1,5 @@
 {
-  "build_id": "medlivo-final-specialties-responsive-20260928",
+  "build_id": "medlivo-final-nursing-responsive-20260928",
   "repository": "pks-alt/Medlivo-Website-Final",
   "source_policy": "One root version per page, all assets local. No runtime or ongoing build dependency on the old repository.",
   "initial_import_commit": "ec962a7bb7850cd6bfe7805664ca15a4261b508e",
@@ -28,7 +28,7 @@
       "original_revision": "794f81e033b74151d0c169185121bbcd500e8bb5",
       "original_path": "nursing-allied-preview/index.html",
       "selection": "Approved Nursing and Allied page with openings and final spacing pass",
-      "sha256": "6b721d801a9112fa2785ab12940b231538eb0b1dd01d91d48f2e24f97f191b57"
+      "sha256": "66f5bff6821855f43476ece26a733db3e64fd03d6a5f7ea176470f801a463f2a"
     },
     "rehabilitation.html": {
       "source_page_sha256": "882a045fa8eecbff20ee1b6e928d76eda0c1f466efca45d51023be1d3d6753c8",
@@ -98,6 +98,7 @@
     "assets/css/leadership.css": "58ce3cf34fc787d393f1313c804a9ea14ebc32c840d04c456d5e2d90d4b88fed",
     "assets/css/locum-tenens.css": "6d0e89e4d478284c2a67904578b04477b085046375d3df1ba30976a0fbeffdc6",
     "assets/css/nursing-allied.css": "ed83466ef722af34f0af495821278136ce284eaf733e290a5433f05dadb2e46b",
+    "assets/css/nursing-responsive.css": "6f08101ac1778bddcd877556c7c4a383fb5385f394b28a5f4cdacdb5732fb54d",
     "assets/css/rehabilitation.css": "989a8651fddfa958ebe84fb12179740bd3f312ec85fa9145e0c81cb57c448f7a",
     "assets/css/request-staff.css": "b6b34355caf5a7093356caa3469c0652f5597b1ceb9cbbcadd9f26523037171d",
     "assets/css/search-jobs.css": "e1fa1e78342fadf892d23dcaf8d7434a0713da2b05719298d1109da3414b32db",
@@ -121,7 +122,7 @@
     "index.html": "0fde87788951f80cdc294ac56daea8e63fd3ec51d586c18acb7571eb2d604f4d",
     "leadership.html": "ece3791c8578d8ecb20d613da7ccec3346cae32a1b5a6527190af10bab91aa08",
     "locum-tenens.html": "1017d293964b24a3c98b585a3d2cb488f5c1456e9195ba15e28121bbf9566dbe",
-    "nursing-allied.html": "6b721d801a9112fa2785ab12940b231538eb0b1dd01d91d48f2e24f97f191b57",
+    "nursing-allied.html": "66f5bff6821855f43476ece26a733db3e64fd03d6a5f7ea176470f801a463f2a",
     "rehabilitation.html": "cb3ef28bc94910b738c0b967f9f94ddc94fa53f439709d52e9b42bc847535e70",
     "request-staff.html": "1793d4b64aede57bbac18bafb5c6fd9d90cf9db62580510809372bffec07ed80",
     "search-jobs.html": "f3151d88c87c531cf1cae41c279a76bdbc3f5c8292ee2136bd918cfee7376b51",
