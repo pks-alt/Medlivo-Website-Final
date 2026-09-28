@@ -1,0 +1,72 @@
+name: Prepare Specialties overview
+on:
+  push:
+    branches: [enhancement/specialties-overview-20260928]
+    paths: [.github/workflows/prepare-specialties.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install current verification tools
+        run: python -m pip install -r requirements-dev.txt
+      - name: Refine current overview without changing its copy or other pages
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          import re,json,hashlib,subprocess,urllib.request
+          p=Path('specialties.html');c=p.read_text();before=c
+          manifest=json.loads(Path('BUILD.json').read_text())
+          assert manifest['repository']=='pks-alt/Medlivo-Website-Final'
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==manifest['files']['specialties.html']
+          public=urllib.request.urlopen('https://pks-alt.github.io/Medlivo-Website-Final/specialties.html',timeout=40).read()
+          assert hashlib.sha256(public).hexdigest()==manifest['files']['specialties.html'],'Public starting page differs; stop for review'
+          a='<link rel="stylesheet" href="assets/css/specialties.css">'
+          assert c.count(a)==1
+          c=c.replace(a,a+'\n<link rel="stylesheet" href="assets/css/specialties-responsive.css?v=20260928-01">')
+          pattern=r'<div class="map-row">[\s\S]*?(?=\n      <div class="map-row">|\n    </div>\n  </div>\n</section>)'
+          rows=list(re.finditer(pattern,c));assert len(rows)==3
+          pages=['nursing-allied.html','rehabilitation.html','locum-tenens.html']
+          labels=['Nursing and Allied','Rehabilitation','Locum Tenens']
+          for match,page,label in reversed(list(zip(rows,pages,labels))):
+              old=match.group();last=old.rfind('</div>');new=old[:last]+'</a>'+old[last+6:]
+              new=new.replace('<div class="map-row">',f'<a class="map-row" href="{page}" aria-label="Explore {label}">',1)
+              c=c[:match.start()]+new+c[match.end():]
+          old='href="mailto:hello@medlivo.com?subject=Staffing%20Request"'
+          assert c.count(old)==1;c=c.replace(old,'href="request-staff.html"')
+          old='<a class="btn btn-outline" href="index.html#clinicians">Search Jobs</a>'
+          i=c.index('<section class="final"');assert c[i:].count(old)==1
+          c=c[:i]+c[i:].replace(old,'<a class="btn btn-outline" href="search-jobs.html">Search Jobs</a>')
+          a=BeautifulSoup(before,'html.parser');b=BeautifulSoup(c,'html.parser')
+          assert a.body.get_text(' ',strip=True)==b.body.get_text(' ',strip=True),'Visible wording changed'
+          assert [s['class'] for s in a.select('main>section')]==[s['class'] for s in b.select('main>section')]
+          p.write_text(c)
+          for name,expected in manifest['files'].items():
+              if name!='specialties.html':assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==expected,name+' changed unexpectedly'
+          subprocess.run(['python','scripts/update_manifest.py','--build-id','medlivo-final-specialties-responsive-20260928'],check=True)
+          Path('verification').mkdir(exist_ok=True)
+          Path('verification/scope.json').write_text(json.dumps({'current_published_start_confirmed':True,'copy_and_section_order_unchanged':True,'other_ten_pages_unchanged':True,'existing_styles_and_images_unchanged':True,'changed_routes':['Three summary rows now link to their divisions','Closing Request Staff opens request-staff.html','Closing Search Jobs opens search-jobs.html']},indent=2))
+          PY
+      - name: Check all pages and fifteen Specialties widths
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/specialties-server.log 2>&1 &
+          python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/all-pages
+          python scripts/verify_specialties_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/specialties
+      - name: Save tested changes to this branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add specialties.html BUILD.json
+          git commit -m 'Apply tested Specialties layout and direct division and request routes'
+          git push origin HEAD:enhancement/specialties-overview-20260928
+      - name: Save browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: specialties-overview-review
+          path: verification/
+          retention-days: 14
