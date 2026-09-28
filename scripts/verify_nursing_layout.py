@@ -9,6 +9,7 @@ WIDTHS=[320,390,540,768,820,1024,1040,1041,1100,1200,1280,1440,1920,2560,3440]
 SECTIONS=['nd-hero','nd-perspective','nd-settings','nd-recruiting','nd-readiness','open-positions nd-opportunities','nd-connect']
 SETTINGS=['Acute & Inpatient','Procedural, Diagnostic & Technical Care','Ambulatory, Clinic & Specialty Practice','Post-Acute, Long-Term & Home-Based Care']
 PHOTO='assets/images/embedded/fef3061a52147602be64.webp'
+CONTRAST_AUDIT=(ROOT/'scripts/nursing_contrast_audit.js').read_text()
 
 def inline_html():
     soup=BeautifulSoup((ROOT/'nursing-allied.html').read_text(),'html.parser')
@@ -76,7 +77,14 @@ def main():
                     therapist_claim_absent:!/20\\+|firsthand therapist|founder.*therapist/i.test(document.querySelector('main').innerText),
                     em_dash_absent:!document.querySelector('main').innerText.includes('—')};
             }''')
-            row.update(status=status,errors=errors,image_decode_errors=decode_errors)
+            contrast=page.evaluate(CONTRAST_AUDIT)
+            (out/f'contrast-{width}.json').write_text(json.dumps(contrast,indent=2))
+            if contrast['failures'] or contrast['unknown']:
+                failures.append({'width':width,'contrast_failures':contrast['failures'],'unresolved_backgrounds':contrast['unknown']})
+            if any(item['font_size']<16 for item in contrast['results'] if item['required']==7):
+                failures.append({'width':width,'error':'Body text smaller than 16px'})
+            row.update(status=status,errors=errors,image_decode_errors=decode_errors,
+                contrast={'checked':contrast['text_elements'],'minimum_ratio':contrast['minimum_ratio'],'paragraph_minimum':contrast['paragraph_minimum'],'passed':not contrast['failures'] and not contrast['unknown']})
             if width>=1920 and abs(row['grid']['width']-1560)>2:failures.append(f'Unexpected content width at {width}')
             if width<=1040 and row['photo']['y']<row['copy']['bottom']:failures.append(f'Hero stacking failed at {width}')
             if width>1040 and row['photo']['x']<row['copy']['right']-1:failures.append(f'Hero columns overlap at {width}')
@@ -95,9 +103,17 @@ def main():
                 if width==390:page.locator('button.menu').click()
                 trigger=page.get_by_role('button',name='Specialties',exact=False).first
                 trigger.click();assert trigger.get_attribute('aria-expanded')=='true'
+                expanded=page.evaluate(CONTRAST_AUDIT)
+                assert not expanded['failures'] and not expanded['unknown'], 'Expanded menu contrast failed'
                 page.keyboard.press('Escape');assert trigger.get_attribute('aria-expanded')=='false'
                 if width==390:page.locator('button.menu').click()
                 row['menu_keyboard']='passed'
+                for selector in ['.nd-hero a.nd-button-light','.nd-opportunity-card a','.nd-connect .clinician-card a']:
+                    page.locator(selector).first.hover();page.locator(selector).first.focus()
+                    page.wait_for_timeout(250)
+                    interaction=page.evaluate(CONTRAST_AUDIT)
+                    assert not interaction['failures'] and not interaction['unknown'], 'Hover/focus contrast failed'
+                row['interactive_text_contrast']='passed'
                 if not offline:
                     page.locator('.nd-hero-actions a[href="#open-positions"]').click();page.wait_for_url('**/#open-positions') if url.endswith('/') else page.wait_for_url('**/nursing-allied.html#open-positions')
                     assert page.locator('#open-positions').is_visible()
