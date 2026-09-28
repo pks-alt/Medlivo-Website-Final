@@ -33,6 +33,7 @@ jobs:
           python scripts/verify_home_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/home-local
           python scripts/verify_solutions_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/solutions-local
           python scripts/verify_specialties_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/specialties-local
+          python scripts/verify_nursing_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/nursing-local
       - name: Package only deployable site files
         run: |
           python - <<'PY'
@@ -82,6 +83,7 @@ jobs:
           python scripts/verify_home_layout.py --base-url "$SITE_URL" --output-dir verification/home-public
           python scripts/verify_solutions_layout.py --base-url "$SITE_URL" --public --output-dir verification/solutions-public
           python scripts/verify_specialties_layout.py --base-url "$SITE_URL" --public --output-dir verification/specialties-public
+          python scripts/verify_nursing_layout.py --base-url "$SITE_URL" --public --output-dir verification/nursing-public
       - name: Save verification evidence
         if: always()
         uses: actions/upload-artifact@v4
