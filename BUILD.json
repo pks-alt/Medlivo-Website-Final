@@ -1,5 +1,5 @@
 {
-  "build_id": "medlivo-locum-final-20260928",
+  "build_id": "medlivo-locum-specialty-review-20260928",
   "repository": "pks-alt/Medlivo-Website-Final",
   "source_policy": "One root version per page, all assets local. No runtime or ongoing build dependency on the old repository.",
   "initial_import_commit": "ec962a7bb7850cd6bfe7805664ca15a4261b508e",
@@ -49,7 +49,7 @@
       "original_revision": "8ad7bb331a03c987d0bcced4b2161dc90fd8f6f9",
       "original_path": "v2/locum-tenens.html",
       "selection": "Preserved supporting page; no new design changes",
-      "sha256": "d9ab7146ea5de19a1d8804de2fd583000f54faf2a9acbc32e7a0ce4c037301d9"
+      "sha256": "d16a52e007793ab21b6c95feabd41b2e2b5952aeb371b7079c715c2421547181"
     },
     "search-jobs.html": {
       "source_page_sha256": "0797657fdf89de78133cf49cd433619814108cad90655c89799300a28e62e40e",
@@ -96,7 +96,7 @@
     "assets/css/home-responsive.css": "48baed5e6fb8fca7d45fb6a37012dc3d9a1a471877bb47416c2e96d9c880d711",
     "assets/css/index.css": "b5da58eed6194097a05beb54b34c055053a87bbb5d7de73a2beccd41638c9fce",
     "assets/css/leadership.css": "58ce3cf34fc787d393f1313c804a9ea14ebc32c840d04c456d5e2d90d4b88fed",
-    "assets/css/locum-responsive.css": "262e683364f69698e7d7d3ecbe6c976bfe4cca3563538e508cc352d61e42aba6",
+    "assets/css/locum-responsive.css": "17c7b839bb69b2dac4b4652507126bc9fc5fb1b9998f2d8e98eef5f51f5907e9",
     "assets/css/locum-tenens.css": "6d0e89e4d478284c2a67904578b04477b085046375d3df1ba30976a0fbeffdc6",
     "assets/css/nursing-allied.css": "ed83466ef722af34f0af495821278136ce284eaf733e290a5433f05dadb2e46b",
     "assets/css/nursing-responsive.css": "0152fc5dc527fc873094d65195923bf341db344796f4b4683bc549584da16ab8",
@@ -123,7 +123,7 @@
     "careers.html": "461a07a10ee4cdab200fec6ab3b2301a331ec4662553cd5ade18bf5586cd3367",
     "index.html": "0fde87788951f80cdc294ac56daea8e63fd3ec51d586c18acb7571eb2d604f4d",
     "leadership.html": "ece3791c8578d8ecb20d613da7ccec3346cae32a1b5a6527190af10bab91aa08",
-    "locum-tenens.html": "d9ab7146ea5de19a1d8804de2fd583000f54faf2a9acbc32e7a0ce4c037301d9",
+    "locum-tenens.html": "d16a52e007793ab21b6c95feabd41b2e2b5952aeb371b7079c715c2421547181",
     "nursing-allied.html": "c31ea2985642e09f0df18c46a307fafdbd95a5baa4abf3488a33f117642be848",
     "rehabilitation.html": "c4ab4da627a9131c9ed526a4256418d285fd7f46c54b5cdc6e266012726fbe88",
     "request-staff.html": "457f1a2e991167135a522d1ad6bf41f15760160d511c720c6858e4c1ee54a8f0",

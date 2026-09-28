@@ -55,7 +55,7 @@ def main():
             decode=page.evaluate('''async()=>{const bad=[];await Promise.all([...document.images].map(async e=>{try{await e.decode()}catch(err){bad.push(e.alt)}}));return bad}''')
             row=page.evaluate('''()=>{
               const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height}};
-              const clipped=[];document.querySelectorAll('main h1,main h2,main h3,main h4,main p,main a.btn,.ld-role-tag').forEach(e=>{if(e.classList.contains('ld-sr-only'))return;const r=e.getBoundingClientRect();if(r.width>2&&(e.scrollWidth>e.clientWidth+2||r.right>innerWidth+2||r.left< -2))clipped.push(e.textContent.trim())});
+              const clipped=[];document.querySelectorAll('main h1,main h2,main h3,main h4,main p,main a.btn,.ld-role-tag,.ld-specialty-list li').forEach(e=>{if(e.classList.contains('ld-sr-only'))return;const r=e.getBoundingClientRect();if(r.width>2&&(e.scrollWidth>e.clientWidth+2||r.right>innerWidth+2||r.left< -2))clipped.push(e.textContent.trim())});
               return {width:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth,clipped_text:clipped,grid:rect('.ld-hero-grid'),copy:rect('.ld-hero-copy'),photo:rect('.ld-hero-photo'),sections:[...document.querySelectorAll('main>section')].map(e=>e.className),section_heights:[...document.querySelectorAll('main>section')].map(e=>e.getBoundingClientRect().height),care_settings:[...document.querySelectorAll('.ld-setting-row h3')].map(e=>e.textContent.trim()),settings_height:document.querySelector('#care-settings').getBoundingClientRect().height,models:[...document.querySelectorAll('.ld-coverage-card h3')].map(e=>e.textContent.trim()),role_tags:[...document.querySelectorAll('.ld-role-tag')].map(e=>e.textContent.trim()),what_matters:document.querySelectorAll('.ld-setting-factors').length,recruiting_steps:document.querySelectorAll('.ld-process-step').length,readiness_items:document.querySelectorAll('.ld-ready-item').length,opportunity_cards:document.querySelectorAll('.ld-opportunity-card').length,opportunity_links:[...document.querySelectorAll('.ld-opportunity-card a')].map(e=>e.getAttribute('href')),photo_width:document.querySelector('.ld-hero-photo img').naturalWidth,em_dash_absent:!document.querySelector('main').innerText.includes('—'),no_unrelated_claim:!document.querySelector('main').innerText.includes('20+'),extra_nav_absent:!document.querySelector('.section-nav,.page-nav')};
             }''')
             contrast=page.evaluate(CONTRAST);(out/f'contrast-{width}.json').write_text(json.dumps(contrast,indent=2))
@@ -67,6 +67,10 @@ def main():
               'correct_sections':row['sections']==SECTIONS,'three_models':row['models']==MODELS,'four_settings':row['care_settings']==SETTINGS,
               'content_counts':[row['what_matters'],row['recruiting_steps'],row['readiness_items'],row['opportunity_cards']]==[4,4,4,3],
               'four_provider_groups':row['role_tags']==['MD / DO','NP','PA','CRNA'],
+              'specialty_coverage':page.locator('.ld-specialty-list li').all_text_contents()==['Primary Care','Hospitalist Medicine','Emergency Medicine','Behavioral Health','Surgery','Critical Care','Urgent Care','Women’s Health','Cardiology','Orthopedics','Anesthesia'],
+              'ongoing_support': 'schedule changes, extensions and assignment questions' in page.locator('.ld-support-note').inner_text(),
+              'provider_clarity': 'before you commit' in page.locator('.ld-opportunities .ld-section-head').inner_text(),
+              'program_support': 'MSP and VMS' in page.locator('.ld-recruiting .ld-section-head').inner_text(),
               'permanent_is_direct_hire':'join your organization directly' in page.locator('.ld-coverage-card').nth(2).inner_text(),
               'readable_image':row['photo_width']==1800 and not decode,
               'wide_canvas':width<1920 or abs(row['grid']['width']-1560)<2,
