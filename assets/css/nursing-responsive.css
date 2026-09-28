@@ -1,0 +1,124 @@
+/* Nursing & Allied, current Final build. Page-local responsive refinement. */
+:root{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)));--na-section-space:clamp(48px,4vw,72px)}
+main>section{scroll-margin-top:104px}
+/* Keep the approved photo, copy and clinical cards on one bounded canvas. */
+.na-premium-hero,.na-hero-stage{min-height:0}
+.na-hero-stage{background:#071744}
+.na-premium-grid{position:relative;z-index:1;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(28px,3.8vw,64px);min-height:620px;padding:58px 0 64px}
+.na-premium-copy{min-width:0;max-width:760px}
+.na-premium-copy h1{max-width:23ch;font-size:clamp(44px,3.6vw,66px);line-height:1.07;letter-spacing:-.045em;text-wrap:balance;margin-top:20px}
+.na-premium-copy .hero-copy{max-width:59ch;font-size:clamp(16px,1vw,18px);line-height:1.68;margin-top:22px;color:#d5def0}
+.na-premium-copy .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.na-premium-copy .hero-actions .btn{min-height:52px;font-size:14px;padding:12px 20px;line-height:1.45;text-align:center}
+.hero-signals{gap:8px;margin-top:22px}
+.hero-signals span{font-size:12px;padding:8px 12px;line-height:1.4}
+.na-hero-image{z-index:0;left:auto;right:max(0px,calc((100vw - 1560px)/2));top:0;bottom:0;width:min(54vw,880px)}
+.na-hero-image img{width:100%;height:100%;object-fit:cover;object-position:100% 38%;transform:none}
+.na-hero-overlay{background:linear-gradient(90deg,#071744 0%,rgba(7,23,68,.84) 17%,rgba(7,23,68,.14) 55%,rgba(7,23,68,.08) 80%,#071744 100%),linear-gradient(180deg,rgba(7,23,68,.05) 25%,rgba(7,23,68,.74) 100%)}
+.na-hero-stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;min-height:0;width:100%;max-width:430px;justify-self:end;align-self:end;transform:none;margin:138px 0 0;position:relative}
+.na-hero-stack .stack-card{position:relative;top:auto;right:auto;left:auto;width:auto;min-width:0;box-shadow:0 12px 30px rgba(0,0,0,.12);backdrop-filter:blur(8px)}
+.na-hero-stack .stack-main{grid-column:1/-1;padding:24px;border-radius:18px;background:rgba(8,31,86,.94)}
+.stack-main small{font-size:11px;line-height:1.5;letter-spacing:.11em}
+.stack-main strong{font-size:clamp(24px,1.5vw,26px);line-height:1.22;letter-spacing:-.025em;max-width:29ch;margin-top:12px}
+.na-hero-stack .stack-nursing,.na-hero-stack .stack-allied{grid-template-columns:30px minmax(0,1fr);gap:10px;padding:20px 16px;border-radius:14px;align-items:start;background:rgba(255,255,255,.97)}
+.stack-nursing>span,.stack-allied>span{width:30px;height:30px;font-size:11px}
+.stack-card b{font-size:18px;line-height:1.3}
+.stack-card div small{font-size:12px;line-height:1.55;color:#53617a;margin-top:6px}
+.na-hero-wordmark{right:max(0px,calc((100vw - 1560px)/2));bottom:-8px;font-size:clamp(48px,6.4vw,104px);opacity:.35;max-width:100%;overflow:hidden;pointer-events:none}
+/* Consistent hierarchy and line lengths across all six approved sections. */
+.market.na-market-premium,.signals,.clinical-ready,.open-positions,.engage{padding:var(--na-section-space) 0}
+.title,.na-market-head .title,.positions-head .title{font-size:clamp(34px,2.75vw,48px);line-height:1.13;letter-spacing:-.035em;text-wrap:balance}
+.eyebrow,.kicker{font-size:12px;line-height:1.5}
+.lead,.positions-head .lead{font-size:clamp(16px,1vw,18px);line-height:1.65;max-width:58ch}
+.na-market-head{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:12px clamp(28px,4.4vw,80px);max-width:none;text-align:left;margin:0 0 30px}
+.na-market-head .eyebrow{grid-column:1}
+.na-market-head .title{grid-column:1;max-width:26ch;margin:0}
+.na-market-head .lead{grid-column:2;grid-row:1/span 2;align-self:end;margin:0;max-width:56ch;font-size:clamp(16px,1vw,18px);line-height:1.65}
+.na-market-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.na-market-card{display:flex;flex-direction:column;min-width:0;padding:clamp(26px,2.2vw,36px);border-radius:20px;box-shadow:0 8px 24px rgba(9,25,79,.035)}
+.na-market-card-top{gap:16px}
+.na-market-card-top small{font-size:12px;letter-spacing:.1em}
+.na-market-badge{font-size:11px;line-height:1.4;padding:8px 11px;white-space:nowrap}
+.market-num{font-size:11px;line-height:1.4}
+.na-market-card h3{max-width:33ch;font-size:clamp(25px,1.8vw,30px);line-height:1.2;letter-spacing:-.025em;margin-top:20px;text-wrap:balance}
+.na-market-card>p{max-width:65ch;font-size:16px;line-height:1.65;margin-top:14px;margin-bottom:22px}
+.role-cloud{margin-top:auto;gap:8px}
+.role-cloud span{font-size:12px;line-height:1.45;padding:9px 12px}
+.signals-head,.ready-head,.positions-head,.engage-head{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(28px,4.4vw,80px);margin-bottom:30px}
+.signals-head .title,.ready-head .title,.positions-head .title,.engage-head .title{max-width:25ch;margin-top:12px}
+.signals-head>*,.ready-head>*,.positions-head>*,.engage-head>*{min-width:0}
+.signals .signal-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;background:transparent}
+.signals .signal-card{min-height:0;padding:26px 24px;border-radius:16px;min-width:0;box-shadow:none}
+.signal-card>span,.ready-card>span{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#eef4ff;color:var(--blue);font-size:12px;letter-spacing:.02em;font-weight:800}
+.signals .signal-card h3,.ready-card h3{font-size:22px;line-height:1.28;letter-spacing:-.02em;margin-top:18px}
+.signals .signal-card p,.ready-card p{font-size:16px;line-height:1.65;margin-top:10px;max-width:42ch;color:#53617a}
+.ready-grid{grid-template-columns:repeat(4,minmax(0,1fr));border-radius:18px;background:#fff;gap:0;box-shadow:none}
+.ready-card{padding:26px 24px;min-width:0}
+.ready-bar{grid-template-columns:auto minmax(0,1fr);gap:20px;margin-top:20px;padding:19px 24px;border-radius:12px}
+.ready-bar strong{font-size:12px;line-height:1.5}
+.ready-bar span{font-size:16px;line-height:1.6}
+/* Open Positions remains an easy-to-scan set of three opportunity paths. */
+.positions-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.position-card{padding:28px;min-width:0;min-height:0;border-radius:18px;box-shadow:0 8px 24px rgba(9,25,79,.035)}
+.position-card small{font-size:11px;line-height:1.5;letter-spacing:.11em}
+.position-card h3{font-size:24px;line-height:1.25;letter-spacing:-.025em;margin-top:14px;min-height:2.5em;max-width:26ch}
+.position-meta{gap:7px;margin-top:16px}
+.position-meta span{font-size:11px;line-height:1.5;padding:7px 10px}
+.position-card p{font-size:16px;line-height:1.65;margin-top:16px;margin-bottom:12px;max-width:47ch}
+.position-card a{font-size:14px;line-height:1.5;min-height:44px;padding-top:16px;align-self:flex-start}
+.position-card a:hover{text-decoration:underline;text-underline-offset:5px}
+.positions-foot{margin-top:22px;gap:20px}
+.positions-foot p{font-size:14px;line-height:1.6}
+.positions-foot .btn{font-size:14px;line-height:1.5;padding:12px 20px;text-align:center}
+.engage-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.engage-card{display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:clamp(28px,2.4vw,40px);border-radius:20px;box-shadow:0 8px 24px rgba(9,25,79,.04)}
+.engage-card small{font-size:11px;line-height:1.5;letter-spacing:.12em}
+.engage-card h3{font-size:clamp(27px,1.95vw,34px);line-height:1.18;letter-spacing:-.03em;margin-top:16px;max-width:28ch;text-wrap:balance}
+.engage-card>p{font-size:16px;line-height:1.65;max-width:58ch;margin-top:14px}
+.engage-fields{gap:8px;margin:20px 0 24px}
+.engage-fields span{font-size:12px;line-height:1.4;padding:9px 12px}
+.engage-card .btn{margin-top:auto;min-height:50px;font-size:15px;padding:12px 24px;line-height:1.45;text-align:center}
+.client-card{background:linear-gradient(112deg,#0b225f 0%,#102c6b 72%,#163775 100%)}
+.client-card>p{color:#dbe6fa}
+.footer-main-minimal{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(40px,5vw,88px);padding:52px 0 44px}
+.footer-brand-minimal>p,.footer-col-minimal a{font-size:14px;line-height:1.65}
+.footer-col-minimal h4{font-size:11px}
+a:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offset:5px}
+.na-premium-hero a:focus-visible,.client-card a:focus-visible{outline-color:#fff}
+@media(min-width:1200px){.nav{height:86px;gap:24px}.links,.nav-drop-trigger{font-size:15px}.links{gap:22px}.actions .btn{font-size:15px;min-height:50px}}
+@media(max-width:1199px){.na-premium-grid{gap:30px}.na-premium-copy h1{font-size:44px}.na-premium-copy .hero-actions{flex-direction:column;align-items:flex-start}.na-hero-stack{grid-template-columns:1fr;max-width:400px}.na-hero-stack .stack-main{grid-column:auto}.signals .signal-grid,.ready-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ready-card:nth-child(2){border-right:0}.ready-card:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+@media(max-width:1040px){
+ .nav{height:76px;gap:18px}.nav .actions{margin-left:auto}
+ .na-premium-grid{grid-template-columns:1fr;gap:32px;padding:42px 0 44px}
+ .na-premium-copy{max-width:800px}.na-premium-copy h1{font-size:clamp(40px,5.8vw,60px);max-width:26ch}
+ .na-premium-copy .hero-actions{flex-direction:row}.na-premium-copy .hero-copy{max-width:68ch}
+ .na-hero-image{width:100%;left:0;right:0;top:35%;bottom:0}
+ .na-hero-overlay{background:linear-gradient(180deg,#071744 0%,rgba(7,23,68,.6) 30%,rgba(7,23,68,.28) 64%,rgba(7,23,68,.8) 100%)}
+ .na-hero-stack{grid-template-columns:repeat(2,minmax(0,1fr));max-width:680px;justify-self:center;min-height:0;margin-top:80px}
+ .na-hero-stack .stack-main{grid-column:1/-1}
+ .na-market-head,.signals-head,.ready-head,.positions-head,.engage-head{grid-template-columns:1fr;gap:18px;margin-bottom:26px}
+ .na-market-head .lead{grid-column:1;grid-row:auto;max-width:70ch}.na-market-head .title{max-width:30ch}
+ .footer-main-minimal{grid-template-columns:1fr;gap:32px}
+ .position-card{padding:24px}.position-card h3{font-size:22px}
+}
+@media(max-width:820px){.na-market-grid,.positions-grid,.engage-grid{grid-template-columns:1fr}.position-card h3{min-height:0;max-width:none}.position-card p{max-width:70ch}.na-market-card h3{max-width:36ch}}
+@media(max-width:720px){
+ .na-premium-grid{padding:34px 0 38px;gap:28px}.na-premium-copy h1{font-size:clamp(33px,8.8vw,44px);line-height:1.12;letter-spacing:-.035em;max-width:25ch;margin-top:18px}
+ .na-premium-copy .hero-copy{font-size:16px;margin-top:20px}.na-premium-copy .hero-actions{display:grid;grid-template-columns:1fr;gap:10px}.na-premium-copy .hero-actions .btn{font-size:14px;width:100%}
+ .hero-signals span{font-size:11px;padding:7px 10px}.hero-signals{gap:7px;margin-top:18px}
+ .na-hero-stack{grid-template-columns:1fr;max-width:440px;margin-top:28px;gap:10px}
+ .na-hero-stack .stack-main{padding:23px}.stack-main strong{font-size:24px}.stack-main small{font-size:10px}
+ .na-hero-stack .stack-nursing,.na-hero-stack .stack-allied{padding:17px 20px;grid-template-columns:32px minmax(0,1fr);gap:14px}
+ .na-hero-image{top:47%}.na-hero-wordmark{display:none}
+ .kicker,.eyebrow{font-size:10px}.title,.na-market-head .title,.positions-head .title{font-size:32px;line-height:1.16}
+ .na-market-card{padding:26px 22px}.na-market-card h3{font-size:26px}.na-market-card>p{font-size:16px}
+ .signals .signal-grid,.ready-grid{grid-template-columns:1fr}.signals .signal-card,.ready-card{padding:24px}.signals .signal-card h3,.ready-card h3{margin-top:14px;font-size:22px}
+ .ready-card,.ready-card:nth-child(2){border-right:0;border-bottom:1px solid var(--line)}.ready-card:last-child{border-bottom:0}
+ .ready-bar{grid-template-columns:1fr;gap:7px;padding:18px 22px}
+ .positions-grid{gap:16px}.positions-foot{align-items:flex-start;flex-direction:column}.positions-foot .btn{width:100%}
+ .engage-card{padding:28px 24px}.engage-card h3{font-size:28px}.engage-card .btn{width:100%}.engage-fields span{font-size:11px}
+ .footer-main-minimal{padding:40px 0 32px}
+}
+@media(max-width:480px){.nav .logo{width:145px}.nav{gap:12px}.nav .actions{gap:8px}.nav .actions .btn-green{white-space:nowrap;font-size:12px;padding:0 12px;min-height:42px}}
+@media(max-width:359px){.nav .logo{width:116px}.nav{gap:8px}.nav .actions{gap:6px}.nav .actions .btn-green{font-size:11px;padding:0 9px}.na-market-badge{white-space:normal;text-align:center;font-size:10px;padding:7px}.role-cloud span{font-size:11px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}a,button{transition:none}}
