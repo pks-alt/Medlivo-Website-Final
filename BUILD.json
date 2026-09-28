@@ -1,5 +1,5 @@
 {
-  "build_id": "medlivo-final-home-responsive-20260928",
+  "build_id": "medlivo-final-staffing-cta-20260928",
   "repository": "pks-alt/Medlivo-Website-Final",
   "source_policy": "One root version per page, all assets local. No runtime or ongoing build dependency on the old repository.",
   "initial_import_commit": "ec962a7bb7850cd6bfe7805664ca15a4261b508e",
@@ -14,7 +14,7 @@
       "original_revision": "874b820c1b81d9233bb02ddda9a331734646aaf8",
       "original_path": "index.html",
       "selection": "19:58 PDT homepage V2, confirmed by FINAL_HOME_BUILD.md at 20:06",
-      "sha256": "783e2a675bf3fda62db651dda1b0211e235842c38d7f4a876fd1ff2fbbda3e9e"
+      "sha256": "721bb134ceae60e9d5e117c5da2ba28b8dc0c96a4308cbfd14038dadab3711ce"
     },
     "workforce-solutions.html": {
       "source_page_sha256": "5222fc2717bf3a614923b9bf4be872a73fa75cd65d5c73b38ebbf18ec989507d",
@@ -93,7 +93,7 @@
     "assets/brand/medlivo-logo.png": "a1ebff3756154b1ed8bdf1c50002012dd8650f8754117abdd1afe3e8eda5a445",
     "assets/css/about.css": "58ce3cf34fc787d393f1313c804a9ea14ebc32c840d04c456d5e2d90d4b88fed",
     "assets/css/careers.css": "58ce3cf34fc787d393f1313c804a9ea14ebc32c840d04c456d5e2d90d4b88fed",
-    "assets/css/home-responsive.css": "a265fecfe69e3cc4394412215e9e19b44c77cb88aa32597c0bf332efc8a262e6",
+    "assets/css/home-responsive.css": "48baed5e6fb8fca7d45fb6a37012dc3d9a1a471877bb47416c2e96d9c880d711",
     "assets/css/index.css": "b5da58eed6194097a05beb54b34c055053a87bbb5d7de73a2beccd41638c9fce",
     "assets/css/leadership.css": "58ce3cf34fc787d393f1313c804a9ea14ebc32c840d04c456d5e2d90d4b88fed",
     "assets/css/locum-tenens.css": "6d0e89e4d478284c2a67904578b04477b085046375d3df1ba30976a0fbeffdc6",
@@ -116,7 +116,7 @@
     "assets/js/request-staff-1.js": "30b4ed934f7c8951e77c8d3d88adba63128089105a21314856669e0f74fd8f2c",
     "assets/js/search-jobs-3.js": "dcd2bf1b41321a984d0a1d377c868a68168f8fee549d69795afa6e668a08e2e2",
     "careers.html": "461a07a10ee4cdab200fec6ab3b2301a331ec4662553cd5ade18bf5586cd3367",
-    "index.html": "783e2a675bf3fda62db651dda1b0211e235842c38d7f4a876fd1ff2fbbda3e9e",
+    "index.html": "721bb134ceae60e9d5e117c5da2ba28b8dc0c96a4308cbfd14038dadab3711ce",
     "leadership.html": "ece3791c8578d8ecb20d613da7ccec3346cae32a1b5a6527190af10bab91aa08",
     "locum-tenens.html": "1017d293964b24a3c98b585a3d2cb488f5c1456e9195ba15e28121bbf9566dbe",
     "nursing-allied.html": "6b721d801a9112fa2785ab12940b231538eb0b1dd01d91d48f2e24f97f191b57",

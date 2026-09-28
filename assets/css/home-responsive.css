@@ -52,10 +52,6 @@ main>section{scroll-margin-top:100px}
 .workforce-v2-card h3,.why-v2-item h3{font-size:23px;line-height:1.25}
 .workforce-v2-card p,.why-v2-item p{max-width:46ch;font-size:16px;line-height:1.65}
 .workforce-v2-card>span,.why-v2-item>span{font-size:12px;margin-bottom:16px}
-.workforce-v2-cta{padding:28px 30px}
-.workforce-v2-cta span{font-size:11px}
-.workforce-v2-cta strong{font-size:19px}
-.workforce-v2-actions>a:last-child{font-size:14px}
 .why-v2-head{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:12px clamp(28px,4.4vw,80px);max-width:none;margin-bottom:30px}
 .why-v2-head .eyebrow{grid-column:1;margin-bottom:0}
 .why-v2-head .title{grid-column:1;max-width:660px}
@@ -104,8 +100,6 @@ main>section{scroll-margin-top:100px}
  .career-home-refined .career-photo{height:340px}
  .career-more>div{display:flex}
  .career-more a{width:auto}
- .workforce-v2-cta{padding:24px}
- .workforce-v2-cta strong{font-size:18px}
  .heritage-v2-proof>div{padding:18px 0}
  .footer-links-minimal{gap:28px 20px}
 }
@@ -122,3 +116,60 @@ main>section{scroll-margin-top:100px}
 
 /* Keep the compact header inside narrow phone viewports. */
 @media(max-width:359px){.nav .logo{width:116px}.nav{gap:8px}.actions{gap:6px}.actions .btn-green{font-size:11px;padding:0 9px}}
+
+/* Staffing request panel: one clear request path inside Organizations. */
+.workforce-v2-cta.staffing-request-panel{
+  grid-template-columns:minmax(0,1fr) minmax(240px,280px);
+  gap:clamp(28px,4vw,64px);margin-top:32px;padding:clamp(28px,2.6vw,42px);
+  border:1px solid #213e7a;border-radius:20px;
+  background:linear-gradient(112deg,#0b225f 0%,#102c6b 72%,#163775 100%);
+  box-shadow:0 12px 28px rgba(11,34,95,.06);scroll-margin-top:120px;
+}
+.staffing-request-panel>.staffing-panel-copy{
+  display:block;min-width:0;padding-left:24px;border-left:3px solid var(--aqua);
+}
+.staffing-request-panel h3{
+  margin:0;max-width:24ch;font-size:clamp(28px,2.15vw,38px);line-height:1.16;
+  letter-spacing:-.035em;font-weight:750;color:#fff;text-wrap:balance;
+}
+.staffing-request-panel .staffing-panel-copy p{
+  margin-top:12px;max-width:54ch;color:#dbe6fa;font-size:16px;line-height:1.65;
+}
+.staffing-request-panel>.staffing-request-actions{
+  display:flex;flex-direction:column;align-items:stretch;gap:16px;min-width:0;
+  padding-left:32px;border-left:1px solid rgba(215,231,255,.22);
+}
+.staffing-request-panel .staffing-request-actions>.btn{
+  width:100%;min-height:54px;padding:0 24px;border-radius:10px;
+  font-size:16px;font-weight:750;gap:14px;
+}
+.staffing-request-panel .btn span{
+  color:inherit;font-size:20px;line-height:1;letter-spacing:0;text-transform:none;font-weight:500;
+}
+.staffing-request-panel .staffing-request-call{text-align:center}
+.staffing-request-panel .staffing-request-call p{
+  margin:0 0 4px;font-size:13px;line-height:1.5;color:#dbe6fa;
+}
+.staffing-request-panel .staffing-request-phone{
+  display:inline-flex;align-items:center;min-height:28px;font-size:18px;line-height:1.4;
+  font-weight:650;color:#fff;letter-spacing:.01em;text-decoration:underline;
+  text-decoration-color:rgba(215,231,255,.45);text-underline-offset:5px;
+}
+.staffing-request-panel .staffing-request-phone:hover{text-decoration-color:#fff}
+.staffing-request-panel a:focus-visible{outline:3px solid #fff;outline-offset:5px}
+@media(max-width:820px){
+  .workforce-v2-cta.staffing-request-panel{grid-template-columns:1fr;gap:24px;padding:28px}
+  .staffing-request-panel>.staffing-panel-copy{padding-left:20px}
+  .staffing-request-panel>.staffing-request-actions{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;
+    gap:20px;border-left:0;border-top:1px solid rgba(215,231,255,.22);padding:24px 0 0;
+  }
+}
+@media(max-width:540px){
+  .workforce-v2-cta.staffing-request-panel{padding:26px 22px;gap:22px;border-radius:16px}
+  .staffing-request-panel>.staffing-panel-copy{padding-left:16px}
+  .staffing-request-panel h3{font-size:28px;max-width:17ch}
+  .staffing-request-panel .staffing-panel-copy p{font-size:15px;line-height:1.65}
+  .staffing-request-panel>.staffing-request-actions{grid-template-columns:1fr;gap:14px;padding-top:22px}
+  .staffing-request-panel .staffing-request-phone{min-height:40px}
+}
