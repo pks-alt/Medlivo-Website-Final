@@ -2,7 +2,7 @@
 .contact-hero{
   background:#102641;
   color:#fff;
-  padding:58px 0 56px;
+  padding:56px 0 54px;
 }
 .contact-hero .eyebrow{
   color:#a9d8dd;
@@ -16,73 +16,91 @@
   letter-spacing:-.04em;
 }
 .contact-hero p{
-  margin:18px 0 0;
-  max-width:62ch;
+  margin:17px 0 0;
+  max-width:60ch;
   color:rgba(255,255,255,.8);
   font-size:17px;
-  line-height:1.7;
+  line-height:1.68;
 }
 .contact-main{
-  padding:64px 0 70px;
+  padding:60px 0 66px;
   background:#fff;
 }
 .contact-grid{
   display:grid;
-  grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
-  gap:clamp(44px,5vw,84px);
+  grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr);
+  gap:clamp(42px,5vw,82px);
   align-items:start;
 }
 .contact-info h2{
   margin:0;
-  max-width:18ch;
+  max-width:17ch;
   color:#102641;
-  font-size:clamp(30px,3vw,44px);
+  font-size:clamp(30px,3vw,43px);
   line-height:1.14;
   letter-spacing:-.03em;
 }
 .contact-info>p{
-  margin:16px 0 0;
-  max-width:46ch;
+  margin:15px 0 0;
+  max-width:43ch;
   color:#334a5d;
-  font-size:17px;
-  line-height:1.7;
+  font-size:16.5px;
+  line-height:1.68;
 }
 .contact-details{
-  margin-top:28px;
-  display:grid;
-  gap:16px;
-}
-.contact-detail{
-  padding-top:16px;
+  margin-top:26px;
   border-top:1px solid #dfe7ed;
 }
+.contact-detail{
+  display:grid;
+  grid-template-columns:82px minmax(0,1fr);
+  gap:14px;
+  padding:14px 0;
+  border-bottom:1px solid #dfe7ed;
+  align-items:start;
+}
 .contact-detail strong{
-  display:block;
-  margin-bottom:5px;
-  color:#102641;
-  font-size:13px;
-  letter-spacing:.04em;
+  color:#235466;
+  font-size:11px;
+  line-height:1.45;
+  letter-spacing:.09em;
   text-transform:uppercase;
 }
 .contact-detail a,
 .contact-detail span{
   color:#334a5d;
-  font-size:16px;
-  line-height:1.6;
+  font-size:15.5px;
+  line-height:1.55;
 }
 .contact-paths{
-  display:grid;
-  gap:16px;
+  border-top:1px solid #cbd7e2;
 }
 .contact-path{
-  padding:24px 26px;
-  border:1px solid #dfe7ed;
-  border-radius:14px;
-  background:#f7f9fb;
+  display:grid;
+  grid-template-columns:52px minmax(0,1fr) auto;
+  gap:20px;
+  align-items:start;
+  padding:24px 0;
+  border-bottom:1px solid #cbd7e2;
+  background:transparent;
+}
+.contact-path-number{
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#24456b;
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+}
+.contact-path-copy{
+  min-width:0;
 }
 .contact-path .contact-path-label{
   display:block;
-  margin-bottom:8px;
+  margin-bottom:6px;
   color:#235466;
   font-size:11px;
   font-weight:800;
@@ -96,33 +114,75 @@
   line-height:1.25;
 }
 .contact-path p{
-  margin:9px 0 18px;
+  margin:8px 0 0;
+  max-width:58ch;
   color:#42586b;
   font-size:15.5px;
-  line-height:1.65;
+  line-height:1.64;
 }
 .contact-path-actions{
   display:flex;
-  flex-wrap:wrap;
-  gap:10px 14px;
   align-items:center;
+  align-self:center;
+  white-space:nowrap;
 }
-.contact-path-link{
+.contact-general{
+  margin-top:28px;
+  padding-top:20px;
+  border-top:1px solid #dfe7ed;
+  display:flex;
+  justify-content:space-between;
+  gap:24px;
+  align-items:flex-start;
+}
+.contact-general-copy strong{
+  display:block;
+  color:#102641;
+  font-size:16px;
+  line-height:1.4;
+}
+.contact-general-copy p{
+  margin:5px 0 0;
+  max-width:54ch;
+  color:#55697a;
+  font-size:14.5px;
+  line-height:1.6;
+}
+.contact-general-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 18px;
+  justify-content:flex-end;
+}
+.contact-general-links a{
   color:#102641;
   font-size:14px;
   font-weight:700;
 }
-.contact-path-link:hover{
+.contact-general-links a:hover{
   text-decoration:underline;
 }
 @media(max-width:960px){
   .contact-grid{
     grid-template-columns:1fr;
-    gap:36px;
+    gap:34px;
   }
 }
-@media(max-width:720px){
+@media(max-width:760px){
   .contact-hero{padding:44px 0 42px}
   .contact-main{padding:46px 0 54px}
-  .contact-path{padding:21px 20px}
+  .contact-path{
+    grid-template-columns:44px 1fr;
+    gap:14px;
+  }
+  .contact-path-actions{
+    grid-column:2;
+    justify-self:start;
+  }
+  .contact-general{
+    flex-direction:column;
+  }
+  .contact-general-links{
+    justify-content:flex-start;
+  }
 }
