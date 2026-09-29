@@ -47,17 +47,18 @@ header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.97);backdro
 
 .eyebrow{font-size:12px;line-height:1.5;letter-spacing:.09em;font-weight:750;text-transform:uppercase;color:#235466;margin-bottom:14px}
 
-/* Hero matches the light, editorial Medlivo rhythm rather than a standalone blue application screen. */
-.request-hero{padding:clamp(54px,5vw,78px) 0;background:#fff;border-bottom:1px solid #e0e7ec}
-.request-hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.45fr);gap:clamp(48px,7vw,120px);align-items:end}
+/* Compact navy hero aligned with Medlivo division-page opening sections. */
+.request-hero{padding:clamp(48px,4vw,66px) 0;background:#102641;color:#fff;border-bottom:0}
+.request-hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.45fr);gap:clamp(48px,7vw,120px);align-items:center}
 .request-hero-copy{max-width:900px}
-.request-hero h1{font-size:clamp(46px,4vw,66px);line-height:1.075;letter-spacing:-.045em;color:var(--ink);max-width:17ch;text-wrap:balance}
-.request-hero-copy>p{margin-top:22px;font-size:clamp(16px,1.05vw,18px);line-height:1.7;color:#263b50;max-width:62ch}
-.request-hero-contact{padding-left:26px;border-left:2px solid #21616b;display:grid;gap:7px;align-self:center}
-.request-hero-contact span{font-size:12px;color:#65758a}
-.request-hero-contact>a{width:max-content;font-weight:800;color:var(--deep)}
+.request-hero .eyebrow{color:#d0e7e9}
+.request-hero h1{font-size:clamp(46px,3.7vw,64px);line-height:1.075;letter-spacing:-.045em;color:#fff;max-width:17ch;text-wrap:balance}
+.request-hero-copy>p{margin-top:22px;font-size:clamp(16px,1.05vw,18px);line-height:1.7;color:#f1f5fa;max-width:62ch}
+.request-hero-contact{padding-left:26px;border-left:2px solid #7ea8b0;display:grid;gap:7px;align-self:center}
+.request-hero-contact span{font-size:12px;color:#d0dce8}
+.request-hero-contact>a{width:max-content;font-weight:800;color:#fff}
 .request-hero-contact>a:first-of-type{font-size:22px}
-.request-hero-contact .email-link{font-size:14px;color:#35516c}
+.request-hero-contact .email-link{font-size:14px;color:#dbe8f1}
 
 /* Main request area uses the same quiet light panel language as readiness/settings sections. */
 .request-form-section{padding:clamp(58px,5vw,82px) 0;background:var(--soft)}
@@ -148,7 +149,7 @@ header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.97);backdro
   .request-hero{padding:38px 0 42px}
   .request-hero h1{font-size:39px;line-height:1.1}
   .request-hero-copy>p{font-size:16px;margin-top:18px}
-  .request-hero-contact{margin-top:4px;padding-left:18px}
+  .request-hero-contact{margin-top:4px;padding-left:18px;border-left-color:#7ea8b0}
   .request-form-section{padding:44px 0}
   .request-layout{gap:30px}
   .request-context h2{font-size:31px}
