@@ -1,0 +1,73 @@
+name: Verify Request Staff conversion page
+on:
+  push:
+    branches: [enhancement/request-staff-conversion]
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: enhancement/request-staff-conversion
+      - name: Install verification tools
+        run: python -m pip install -r requirements-dev.txt
+      - name: Refresh manifest
+        run: python scripts/update_manifest.py --build-id medlivo-request-staff-conversion-20260928
+      - name: Verify source and browser layout
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/medlivo-http.log 2>&1 &
+          python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/site
+          python - <<'PY'
+          from pathlib import Path
+          import json, shutil
+          from playwright.sync_api import sync_playwright
+          out=Path('verification/request'); out.mkdir(parents=True,exist_ok=True)
+          widths=[320,390,540,768,1024,1440,1920,2560,3440]
+          rows=[]
+          with sync_playwright() as pw:
+              exe=shutil.which('google-chrome') or shutil.which('chromium')
+              browser=pw.chromium.launch(headless=True,args=['--no-sandbox'],**({'executable_path':exe} if exe else {}))
+              for w in widths:
+                  p=browser.new_page(viewport={'width':w,'height':900 if w<1040 else 1080})
+                  errors=[]; p.on('pageerror',lambda e,b=errors:b.append(str(e)))
+                  r=p.goto('http://127.0.0.1:8765/request-staff.html?division=Locum%20Tenens',wait_until='networkidle')
+                  p.evaluate('document.fonts.ready')
+                  data=p.evaluate("""()=>({
+                    overflow:document.documentElement.scrollWidth>innerWidth,
+                    h1:document.querySelector('h1').innerText,
+                    form:!!document.querySelector('#staffingRequestForm'),
+                    division:document.querySelector('#division').value,
+                    fields:[...document.querySelectorAll('#staffingRequestForm input,#staffingRequestForm select,#staffingRequestForm textarea')].length,
+                    button:document.querySelector('#staffingRequestForm button[type=submit]').innerText,
+                    mailtoNote:document.body.innerText.includes('email app will open'),
+                    heroBottom:document.querySelector('.hero').getBoundingClientRect().bottom,
+                    formTop:document.querySelector('.form').getBoundingClientRect().top,
+                    clipped:[...document.querySelectorAll('main h1,main h2,main p,main label,main button')].filter(e=>e.scrollWidth>e.clientWidth+2).map(e=>e.innerText)
+                  })""")
+                  assert r.status==200 and not data['overflow'] and not data['clipped'] and data['form']
+                  assert data['division']=='Locum Tenens' and data['fields']==10 and data['mailtoNote']
+                  assert 'Request healthcare staff.'==data['h1']
+                  rows.append({'width':w,**data,'errors':errors})
+                  if w in [390,1920]:
+                      p.screenshot(path=str(out/f'request-{w}-full.png'),full_page=True)
+                      p.locator('.shell').screenshot(path=str(out/f'request-{w}-shell.png'))
+                  p.close()
+              browser.close()
+          (out/'request-layout.json').write_text(json.dumps(rows,indent=2))
+          PY
+      - name: Commit refreshed manifest only
+        run: |
+          git config user.name pks-alt
+          git config user.email pk.s@medlivo.com
+          git add BUILD.json
+          git diff --cached --quiet || git commit -m "Refresh build manifest for Request Staff redesign"
+          git push origin HEAD:enhancement/request-staff-conversion
+      - name: Save evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: request-staff-review
+          path: verification/
+          retention-days: 14
