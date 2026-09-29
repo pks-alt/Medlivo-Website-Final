@@ -67,3 +67,47 @@
   .legal-hero{padding:42px 0 40px}
   .legal-body{padding:42px 0 54px}
 }
+
+
+/* === Final legal-page spacing refinement === */
+.legal-body{
+  padding-top:52px;
+  padding-bottom:64px;
+}
+.legal-shell{
+  max-width:900px;
+}
+.legal-body h2{
+  margin-top:30px;
+  margin-bottom:8px;
+}
+.legal-body p{
+  margin-bottom:10px;
+}
+.legal-note{
+  margin-bottom:24px;
+}
+.legal-contact{
+  margin-top:34px;
+  padding:20px 0 0;
+  background:transparent;
+  border:0;
+  border-top:1px solid #dfe7ed;
+  border-radius:0;
+}
+.legal-contact h2{
+  margin-top:0;
+  margin-bottom:8px;
+}
+@media(max-width:720px){
+  .legal-body{
+    padding-top:40px;
+    padding-bottom:50px;
+  }
+  .legal-body h2{
+    margin-top:26px;
+  }
+  .legal-contact{
+    margin-top:28px;
+  }
+}
