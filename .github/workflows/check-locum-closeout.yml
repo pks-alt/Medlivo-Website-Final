@@ -1,0 +1,60 @@
+name: Check published Locum closeout
+on:
+  push:
+    branches: [polish/locum-final-heading-order]
+    paths: [.github/workflows/check-locum-closeout.yml]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 89b316a3a095f9b28171d5cea92c150b40517e5a
+      - name: Install existing browser tools
+        run: python -m pip install -r requirements-dev.txt
+      - name: Wait for the exact published page
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,urllib.request,time
+          expected=hashlib.sha256(Path('locum-tenens.html').read_bytes()).hexdigest()
+          url='https://pks-alt.github.io/Medlivo-Website-Final/locum-tenens.html'
+          for attempt in range(18):
+              with urllib.request.urlopen(urllib.request.Request(url,headers={'Cache-Control':'no-cache'}),timeout=30) as r:data=r.read()
+              if hashlib.sha256(data).hexdigest()==expected:break
+              time.sleep(5)
+          else:raise SystemExit('Published page has not matched the final source')
+          PY
+      - name: Verify published layout and existing destination routes
+        run: python scripts/verify_locum_layout.py --base-url https://pks-alt.github.io/Medlivo-Website-Final/ --public --output-dir verification/locum-public
+      - name: Capture actual published provider and next-page views
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from playwright.sync_api import sync_playwright
+          import json,shutil
+          out=Path('verification');report=[]
+          with sync_playwright() as p:
+              exe=shutil.which('google-chrome') or shutil.which('chromium')
+              browser=p.chromium.launch(headless=True,args=['--no-sandbox'],**({'executable_path':exe} if exe else {}))
+              for width in [1920,390]:
+                  page=browser.new_page(viewport={'width':width,'height':1080 if width==1920 else 844})
+                  page.goto('https://pks-alt.github.io/Medlivo-Website-Final/locum-tenens.html',wait_until='networkidle')
+                  page.locator('#providers').screenshot(path=str(out/f'locum-final-providers-live-{width}.png'))
+                  page.goto('https://pks-alt.github.io/Medlivo-Website-Final/search-jobs.html',wait_until='networkidle')
+                  page.screenshot(path=str(out/f'next-search-jobs-live-{width}.png'),full_page=True)
+                  report.append(page.evaluate('''()=>({width:innerWidth,heading:document.querySelector('h1').innerText,states:document.querySelectorAll('#filterState option').length-1,divisions:[...document.querySelectorAll('.jobs-division-card strong')].map(x=>x.innerText),firstJobTop:document.querySelector('.job-card')?.getBoundingClientRect().top,overflow:document.documentElement.scrollWidth>innerWidth})'''))
+                  page.close()
+              browser.close()
+          (out/'next-page-public-review.json').write_text(json.dumps(report,indent=2))
+          PY
+      - name: Save actual public evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: locum-closeout-public
+          path: verification/
+          retention-days: 14
