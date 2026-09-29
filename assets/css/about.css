@@ -4414,3 +4414,90 @@ body{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* === The Market Is Changing: editorial story treatment === */
+.about-change{
+  background:#fff!important;
+  padding:64px 0 66px!important;
+  border-top:1px solid #e2e8ee;
+  border-bottom:1px solid #e2e8ee;
+}
+.about-change-grid-final{
+  display:grid;
+  grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+  gap:clamp(38px,4.8vw,78px);
+  align-items:start;
+}
+.about-change-intro h2{
+  margin:0;
+  max-width:18ch;
+  font-size:clamp(32px,2.8vw,46px);
+  line-height:1.13;
+  letter-spacing:-.035em;
+  color:#102641;
+}
+.about-change-intro>p{
+  margin-top:17px;
+  max-width:44ch;
+  color:#334a5d!important;
+  font-size:17px!important;
+  line-height:1.68!important;
+}
+.about-change-points{
+  border-top:1px solid #cbd7e2;
+}
+.about-change-points article{
+  padding:21px 0 22px;
+  border-bottom:1px solid #cbd7e2;
+}
+.about-change-points h3{
+  margin:0;
+  color:#102641;
+  font-size:21px;
+  line-height:1.28;
+  letter-spacing:-.02em;
+}
+.about-change-points p{
+  margin:8px 0 0;
+  max-width:64ch;
+  color:#2b4054!important;
+  font-size:16px!important;
+  line-height:1.68!important;
+}
+.about-change-final-note{
+  margin-top:20px;
+  padding:12px 0 12px 16px;
+  border-left:3px solid #21616b;
+  max-width:48ch;
+  color:#29475a;
+  font-size:15px;
+  line-height:1.6;
+  font-weight:650;
+}
+
+/* Retire previous market layout elements */
+.about-change-head,
+.about-change-grid,
+.about-change-copy,
+.about-change-statement{
+  display:none!important;
+}
+
+@media(max-width:1040px){
+  .about-change-grid-final{
+    grid-template-columns:1fr;
+    gap:24px;
+  }
+  .about-change-intro>p{
+    max-width:68ch;
+  }
+}
+@media(max-width:540px){
+  .about-change{
+    padding:46px 0 48px!important;
+  }
+  .about-change-intro h2{
+    font-size:31px;
+  }
+}
