@@ -1,0 +1,128 @@
+
+.contact-hero{
+  background:#102641;
+  color:#fff;
+  padding:58px 0 56px;
+}
+.contact-hero .eyebrow{
+  color:#a9d8dd;
+  margin-bottom:10px;
+}
+.contact-hero h1{
+  margin:0;
+  max-width:14ch;
+  font-size:clamp(40px,5vw,62px);
+  line-height:1.05;
+  letter-spacing:-.04em;
+}
+.contact-hero p{
+  margin:18px 0 0;
+  max-width:62ch;
+  color:rgba(255,255,255,.8);
+  font-size:17px;
+  line-height:1.7;
+}
+.contact-main{
+  padding:64px 0 70px;
+  background:#fff;
+}
+.contact-grid{
+  display:grid;
+  grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+  gap:clamp(44px,5vw,84px);
+  align-items:start;
+}
+.contact-info h2{
+  margin:0;
+  max-width:18ch;
+  color:#102641;
+  font-size:clamp(30px,3vw,44px);
+  line-height:1.14;
+  letter-spacing:-.03em;
+}
+.contact-info>p{
+  margin:16px 0 0;
+  max-width:46ch;
+  color:#334a5d;
+  font-size:17px;
+  line-height:1.7;
+}
+.contact-details{
+  margin-top:28px;
+  display:grid;
+  gap:16px;
+}
+.contact-detail{
+  padding-top:16px;
+  border-top:1px solid #dfe7ed;
+}
+.contact-detail strong{
+  display:block;
+  margin-bottom:5px;
+  color:#102641;
+  font-size:13px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.contact-detail a,
+.contact-detail span{
+  color:#334a5d;
+  font-size:16px;
+  line-height:1.6;
+}
+.contact-paths{
+  display:grid;
+  gap:16px;
+}
+.contact-path{
+  padding:24px 26px;
+  border:1px solid #dfe7ed;
+  border-radius:14px;
+  background:#f7f9fb;
+}
+.contact-path .contact-path-label{
+  display:block;
+  margin-bottom:8px;
+  color:#235466;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.contact-path h3{
+  margin:0;
+  color:#102641;
+  font-size:22px;
+  line-height:1.25;
+}
+.contact-path p{
+  margin:9px 0 18px;
+  color:#42586b;
+  font-size:15.5px;
+  line-height:1.65;
+}
+.contact-path-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 14px;
+  align-items:center;
+}
+.contact-path-link{
+  color:#102641;
+  font-size:14px;
+  font-weight:700;
+}
+.contact-path-link:hover{
+  text-decoration:underline;
+}
+@media(max-width:960px){
+  .contact-grid{
+    grid-template-columns:1fr;
+    gap:36px;
+  }
+}
+@media(max-width:720px){
+  .contact-hero{padding:44px 0 42px}
+  .contact-main{padding:46px 0 54px}
+  .contact-path{padding:21px 20px}
+}
