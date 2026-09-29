@@ -41,12 +41,13 @@ jobs:
                     h1:document.querySelector('h1').innerText,
                     division:document.querySelector('#division').value,
                     formTop:document.querySelector('.form').getBoundingClientRect().top,
-                    copyTop:document.querySelector('.request-copy').getBoundingClientRect().top,
+                    introTop:document.querySelector('.request-intro').getBoundingClientRect().top,
+                    supportTop:document.querySelector('.request-support').getBoundingClientRect().top,
                     clipped:[...document.querySelectorAll('main h1,main h2,main p,main label,main button,main a')].filter(e=>e.scrollWidth>e.clientWidth+2).map(e=>e.innerText.trim())
                   })""")
                   assert r.status==200 and not d['overflow'] and not d['clipped'] and not d['blueHero']
                   assert d['division']=='Rehabilitation' and d['h1']=='Tell us where you need coverage.'
-                  if w<=720: assert d['formTop']<d['copyTop']
+                  if w<=720: assert d['introTop']<d['formTop']<d['supportTop']
                   if w in [390,1920]:
                       p.screenshot(path=str(out/f'request-{w}-full.png'),full_page=True)
                       p.locator('.request-grid').screenshot(path=str(out/f'request-{w}-stage.png'))
