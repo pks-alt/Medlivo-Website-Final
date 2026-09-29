@@ -3493,3 +3493,236 @@ body{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
   .about-standard-grid article{padding:25px}
   .about-standard-grid strong{font-size:24px}
 }
+
+
+/* === Rethink three About sections without changing palette === */
+
+/* Our Story: one continuous editorial narrative, no card feel */
+.about-story-layout{
+  display:grid;
+  grid-template-columns:minmax(270px,.7fr) 1px minmax(0,1.3fr);
+  gap:48px;
+  align-items:start;
+}
+.about-story-heading{
+  position:sticky;
+  top:110px;
+}
+.about-story-heading h2{
+  margin:0;
+  max-width:16ch;
+  font-size:clamp(34px,2.8vw,46px);
+  line-height:1.14;
+  letter-spacing:-.035em;
+}
+.about-story-line{
+  align-self:stretch;
+  background:#d6e0e7;
+  min-height:100%;
+}
+.about-story-narrative{
+  max-width:720px;
+}
+.about-story-narrative p{
+  margin:0;
+  color:#2f4659!important;
+  font-size:17px!important;
+  line-height:1.75!important;
+}
+.about-story-narrative p+p{
+  margin-top:20px;
+}
+.about-story-narrative .about-story-lead{
+  font-size:21px!important;
+  line-height:1.62!important;
+  color:#102641!important;
+}
+.about-story-narrative .about-story-close{
+  margin-top:28px!important;
+  padding:0 0 0 18px;
+  border-left:3px solid #21616b;
+  font-weight:700;
+  color:#1f3f56!important;
+}
+
+/* What Medlivo Stands For: statement + disciplined list, not value cards */
+.about-standards-layout{
+  display:grid;
+  grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+  gap:clamp(36px,5vw,84px);
+  align-items:start;
+}
+.about-standards-intro{
+  max-width:520px;
+}
+.about-standards-intro h2{
+  margin:0;
+  max-width:16ch;
+  font-size:clamp(34px,2.8vw,46px);
+  line-height:1.14;
+  letter-spacing:-.035em;
+}
+.about-standards-intro>p{
+  margin-top:20px;
+  color:#344b60!important;
+  font-size:16px!important;
+  line-height:1.7!important;
+}
+.about-standard-list{
+  border-top:1px solid #c4d1da;
+}
+.about-standard-list article{
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr);
+  gap:16px;
+  padding:21px 0;
+  border-bottom:1px solid #c4d1da;
+}
+.about-standard-list article>span{
+  color:#235466;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.06em;
+  padding-top:3px;
+}
+.about-standard-list strong{
+  display:block;
+  color:#102641;
+  font-size:22px;
+  line-height:1.25;
+}
+.about-standard-list p{
+  margin:8px 0 0;
+  color:#344b60!important;
+  font-size:16px!important;
+  line-height:1.65!important;
+}
+
+/* Connect: one unified band with two clear paths */
+.about-connect{
+  padding:0 0 var(--ab-space);
+  background:#fff;
+}
+.about-connect-shell{
+  display:grid;
+  grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);
+  gap:0;
+  overflow:hidden;
+  border-radius:18px;
+  background:#102641;
+}
+.about-connect-copy{
+  padding:clamp(30px,3vw,46px);
+  color:#fff;
+}
+.about-connect-copy .about-eyebrow{
+  color:#d0e7e9;
+}
+.about-connect-copy h2{
+  margin:0;
+  color:#fff!important;
+  max-width:13ch;
+  font-size:clamp(30px,2.4vw,38px);
+  line-height:1.18;
+}
+.about-connect-copy>p{
+  margin-top:14px;
+  max-width:40ch;
+  color:#eef4f8!important;
+  font-size:16px!important;
+  line-height:1.65!important;
+}
+.about-connect-paths{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:#fff;
+}
+.about-connect-path{
+  position:relative;
+  min-height:100%;
+  padding:clamp(28px,2.8vw,40px);
+  border:1px solid #dce5eb;
+  border-left:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.about-connect-path + .about-connect-path{
+  border-left:1px solid #dce5eb;
+}
+.about-connect-path>span{
+  color:#235466;
+  font-size:12px;
+  line-height:1.5;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  font-weight:800;
+}
+.about-connect-path strong{
+  margin-top:12px;
+  color:#102641;
+  font-size:27px;
+  line-height:1.2;
+  letter-spacing:-.025em;
+}
+.about-connect-path small{
+  margin-top:8px;
+  color:#42596b;
+  font-size:15px;
+  line-height:1.55;
+}
+.about-connect-path b{
+  margin-top:auto;
+  padding-top:28px;
+  color:#21616b;
+  font-size:24px;
+  font-weight:500;
+}
+.about-connect-path:hover{
+  background:#f6f9fa;
+}
+
+/* neutralize previous versions for these sections */
+.about-standard-grid,
+.about-standard-close,
+.about-connect-grid,
+.about-connect-card,
+.about-connect-actions,
+.about-phone{
+  display:none!important;
+}
+
+@media(max-width:1040px){
+  .about-story-layout,
+  .about-standards-layout,
+  .about-connect-shell{
+    grid-template-columns:1fr;
+  }
+  .about-story-heading{
+    position:static;
+  }
+  .about-story-line{
+    display:none;
+  }
+  .about-story-layout{
+    gap:24px;
+  }
+  .about-connect-paths{
+    border-top:1px solid rgba(255,255,255,.12);
+  }
+}
+@media(max-width:720px){
+  .about-connect-paths{
+    grid-template-columns:1fr;
+  }
+  .about-connect-path + .about-connect-path{
+    border-left:0;
+    border-top:0;
+  }
+  .about-connect-path{
+    min-height:190px;
+  }
+  .about-story-narrative .about-story-lead{
+    font-size:18px!important;
+  }
+}
