@@ -281,7 +281,7 @@
     addOptions([
       {label:'I need staff',onClick:startClient},
       {label:'Find a job',onClick:startClinician},
-      {label:'Contact Medlivo',onClick:()=>addCard('Contact Medlivo','',{label:'Contact Medlivo',href:'contact.html'})}
+      {label:'Contact Medlivo',onClick:()=>addCard('Contact Medlivo','',[{label:'Contact Medlivo',href:'contact.html'}])}
     ]);
   }
 
