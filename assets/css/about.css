@@ -3883,3 +3883,22 @@ body{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
     width:100%;
   }
 }
+
+
+/* === Our Story lead-width correction === */
+.about-story-layout{
+  grid-template-columns:minmax(250px,.62fr) 1px minmax(0,1.38fr);
+}
+.about-story-narrative{
+  max-width:820px;
+}
+.about-story-narrative .about-story-lead{
+  max-width:760px;
+  font-size:20px!important;
+  line-height:1.58!important;
+}
+@media(max-width:1040px){
+  .about-story-narrative .about-story-lead{
+    max-width:820px;
+  }
+}
