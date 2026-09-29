@@ -12,21 +12,11 @@
     ---------------------------
     Production ATS integration must be server/API paginated. Do NOT load thousands
     of jobs into the browser. Request one page at a time and return totalCount,
-    page, pageSize, and jobs. The preview below uses client-side paging only because
-    it contains a small static sample.
+    page, pageSize, and jobs. The static sample inventory has been removed. Connect this page to the live ATS before production job inventory is enabled.
 
     Replace the temporary Quick Apply and Job Alert email actions with existing ATS workflows.
   */
-  const jobs=[
-    {id:"26-38997",title:"Neurology",category:"Locum Tenens",profession:"Physician",specialty:"Neurology",type:"Physician",state:"AZ",city:"Prescott",pay:"$110.00 – $130.00 / Hour",start:"A.S.A.P",posted:"09/22/2026",applyUrl:"https://www.medlivo.com/search-jobs"},
-    {id:"26-38892",title:"OB/GYN Physician",category:"Locum Tenens",profession:"Physician",specialty:"OB/GYN",type:"Physician",state:"CO",city:"Fort Morgan",pay:"$315.00 – $365.00 / Hour",start:"A.S.A.P",posted:"09/21/2026",applyUrl:"https://www.medlivo.com/search-jobs"},
-    {id:"26-38883",title:"ENT Physician",category:"Locum Tenens",profession:"Physician",specialty:"ENT / Otolaryngology",type:"Physician",state:"CA",city:"Sacramento",pay:"$315.00 – $345.00 / Hour",start:"A.S.A.P",posted:"09/21/2026",applyUrl:"https://www.medlivo.com/search-jobs"},
-    {id:"26-38946",title:"Emergency Medicine",category:"Locum Tenens",profession:"Physician",specialty:"Emergency Medicine",type:"Physician",state:"CA",city:"Fortuna",pay:"$250.00 – $300.00 / Hour",start:"A.S.A.P",posted:"09/21/2026",applyUrl:"https://www.medlivo.com/search-jobs"},
-    {id:"26-38740",title:"Nurse Practitioner (NP)",category:"Locum Tenens",profession:"Nurse Practitioner",specialty:"",type:"Advanced Practice",state:"NM",city:"Deming",pay:"$90.00 – $110.00 / Hour",start:"A.S.A.P",posted:"09/18/2026",applyUrl:"https://www.medlivo.com/search-jobs"},
-    {id:"26-38617",title:"Physician Assistant - Cardiology, Nurse Practitioner - Cardiology",category:"Locum Tenens",profession:"Nurse Practitioner / Physician Assistant",specialty:"Cardiology",type:"Advanced Practice",state:"WA",city:"Everett",pay:"$100.00 – $120.00 / Hour",start:"A.S.A.P",posted:"09/17/2026",applyUrl:"https://www.medlivo.com/search-jobs"},
-    {id:"26-38616",title:"Obstetrics and Gynecology",category:"Locum Tenens",profession:"Physician",specialty:"OB/GYN",type:"Physician",state:"OR",city:"Hood River",pay:"$150.00 – $200.00 / Hour",start:"A.S.A.P",posted:"09/17/2026",applyUrl:"https://www.medlivo.com/search-jobs"},
-    {id:"26-38524",title:"Audiologist",category:"Nursing & Allied",profession:"Audiology",specialty:"Audiology",type:"Allied Health",state:"WA",city:"Yakima",pay:"$80.00 – $90.00 / Hour",start:"A.S.A.P",posted:"09/16/2026",applyUrl:"https://www.medlivo.com/search-jobs"}
-  ];
+  const jobs=[];
 
   const careerTaxonomy={
     "Nursing & Allied":[
