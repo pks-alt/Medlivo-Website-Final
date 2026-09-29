@@ -11,14 +11,14 @@
 .jobs-refined .btn{font-size:15px;min-height:48px;font-weight:700;box-shadow:none}
 .jobs-refined a:focus-visible,.jobs-refined button:focus-visible,.jobs-refined select:focus-visible,.jobs-refined input:focus-visible,.jobs-refined summary:focus-visible{outline:3px solid #2671bf;outline-offset:4px}
 /* Keep the approved image on desktop without letting the hero delay search. */
-.jobs-refined .jobs-hero{background:#102641;padding:28px 0;border:0;overflow:hidden}
+.jobs-refined .jobs-hero{background:#102641;padding:clamp(38px,3.2vw,52px) 0;border:0;overflow:hidden}
 .jobs-refined .jobs-hero:before,.jobs-refined .jobs-hero:after{display:none}
 .jobs-refined .jobs-hero-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,.6fr);gap:48px;align-items:center;min-height:0;padding:0}
 .jobs-refined .jobs-hero-copy{padding:0;min-width:0}
 .jobs-refined .jobs-hero .kicker{color:#d0e7e9;margin:0 0 12px}
 .jobs-refined .jobs-hero h1{font-size:clamp(36px,3vw,50px);line-height:1.1;letter-spacing:-.038em;color:#fff;margin:0;max-width:27ch}
 .jobs-refined .jobs-hero p{max-width:67ch;margin:16px 0 0;color:#f1f5fa;font-size:17px;line-height:1.55}
-.jobs-refined .jobs-hero-photo{height:160px;min-height:0;border-radius:14px;overflow:hidden;border:0;box-shadow:none;position:relative;transform:none}
+.jobs-refined .jobs-hero-photo{height:190px;min-height:0;border-radius:14px;overflow:hidden;border:0;box-shadow:none;position:relative;transform:none}
 .jobs-refined .jobs-hero-photo:before,.jobs-refined .jobs-hero-photo:after{display:none}
 .jobs-refined .jobs-hero-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 43%;filter:none}
 /* One search area: division, fields, and optional shortcuts. */
