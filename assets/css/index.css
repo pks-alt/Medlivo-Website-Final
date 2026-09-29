@@ -3452,3 +3452,52 @@ body{background:#fff}
   .heritage-v2-proof>div:last-child{border-bottom:0}
 }
 
+
+
+/* === Final sitewide navigation refinement === */
+@media(min-width:961px){
+  .nav{
+    height:84px;
+    gap:24px;
+  }
+  .links{
+    gap:26px;
+    font-size:16px!important;
+    line-height:1;
+    font-weight:720;
+    letter-spacing:-.012em;
+  }
+  .links>a,
+  .nav-drop-trigger{
+    min-height:44px;
+    font-size:16px!important;
+  }
+  .actions{
+    gap:10px;
+  }
+  .actions .btn{
+    min-height:48px;
+    padding-left:18px;
+    padding-right:18px;
+    font-size:14px!important;
+  }
+}
+
+@media(min-width:961px) and (max-width:1180px){
+  .nav{
+    gap:16px;
+  }
+  .links{
+    gap:18px;
+    font-size:15px!important;
+  }
+  .links>a,
+  .nav-drop-trigger{
+    font-size:15px!important;
+  }
+  .actions .btn{
+    padding-left:14px;
+    padding-right:14px;
+    font-size:13px!important;
+  }
+}
