@@ -2879,3 +2879,62 @@ body{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
     justify-content:center;
   }
 }
+
+
+/* === About Medlivo final palette and section rhythm === */
+.about-hero{
+  background:
+    radial-gradient(circle at 82% 14%,rgba(95,223,229,.12),transparent 25%),
+    linear-gradient(135deg,#0d2346 0%,#102641 58%,#173b70 100%);
+}
+.about-story{
+  background:#ffffff;
+}
+.about-specialization{
+  background:#f3f7f9;
+  border-top:0;
+  border-bottom:0;
+}
+.about-change{
+  background:#ffffff;
+}
+.about-building{
+  background:
+    radial-gradient(circle at 85% 18%,rgba(95,223,229,.10),transparent 26%),
+    linear-gradient(135deg,#0f2747 0%,#102641 58%,#173b70 100%);
+  border-top:0;
+  border-bottom:0;
+}
+.about-standards{
+  background:#f8f9fa;
+}
+.about-connect{
+  background:#ffffff;
+}
+
+/* Softer separators: rely on spacing and color, not dashboard-like lines */
+.about-story + .about-specialization,
+.about-specialization + .about-change,
+.about-change + .about-building,
+.about-building + .about-standards{
+  border-top:0;
+}
+.about-model-rows{
+  border-top:1px solid #c6d4dc;
+}
+.about-model-rows article{
+  border-bottom:1px solid #c6d4dc;
+}
+.about-standard-grid article{
+  border-color:#d8e1e7;
+  background:#ffffff;
+}
+.about-change-statement{
+  background:#f6f8fa;
+}
+.about-outcomes span{
+  border-color:rgba(255,255,255,.18);
+}
+.about-connect-clinician{
+  background:#f5f7fa;
+}
