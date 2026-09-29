@@ -375,8 +375,8 @@
       ? (profession.options[profession.selectedIndex]?.text||profession.value)
       : specialty.value||activeCategory;
     summary.textContent=count
-      ? `${count.toLocaleString("en-US")} preview listing${count===1?"":"s"} found${scope?` for ${scope}`:""}`
-      : "No preview listings match these selections. A recruiter can check current availability.";
+      ? `${count.toLocaleString("en-US")} job${count===1?"":"s"} found${scope?` for ${scope}`:""}`
+      : "No jobs match these selections. A recruiter can help check current availability.";
 
     const showPagination=count>PAGE_SIZE;
     pagination.hidden=!showPagination;
