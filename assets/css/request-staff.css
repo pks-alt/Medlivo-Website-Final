@@ -108,7 +108,8 @@ header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.98);border-
   .hero-contact a{font-size:19px}
   .page{padding:38px 0 48px}
   .shell{gap:24px}
-  .intro{display:block}
+  .form{order:1}
+  .intro{display:block;order:2}
   .intro h2{font-size:32px}
   .intro>p{font-size:15px}
   .points{margin-top:22px}
