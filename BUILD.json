@@ -1,5 +1,5 @@
 {
-  "build_id": "medlivo-jobs-results-first-20260928",
+  "build_id": "medlivo-request-staff-conversion-20260928",
   "repository": "pks-alt/Medlivo-Website-Final",
   "source_policy": "One root version per page, all assets local. No runtime or ongoing build dependency on the old repository.",
   "initial_import_commit": "ec962a7bb7850cd6bfe7805664ca15a4261b508e",
@@ -42,7 +42,7 @@
       "original_revision": "780d3fc3bd125e5d1aae1960ed23f340e8c80b39",
       "original_path": "request-staff.html",
       "selection": "20:50 PDT dedicated request page aligned with final Medlivo design",
-      "sha256": "457f1a2e991167135a522d1ad6bf41f15760160d511c720c6858e4c1ee54a8f0"
+      "sha256": "dcf22168a6e48f371857a9cbf2b4dfe9bfcba029eb6b31813b1794050d4eb5a4"
     },
     "locum-tenens.html": {
       "source_page_sha256": "b47e98d312a7bde40c8790258e810a4dd8bf30440d31bd651125e1cd6cc55663",
@@ -103,7 +103,7 @@
     "assets/css/nursing-responsive.css": "0152fc5dc527fc873094d65195923bf341db344796f4b4683bc549584da16ab8",
     "assets/css/rehab-responsive.css": "8dc689fc0a9efef8b9033fa9183efa4699dee1a020ddcfbc18446f87a2f46136",
     "assets/css/rehabilitation.css": "989a8651fddfa958ebe84fb12179740bd3f312ec85fa9145e0c81cb57c448f7a",
-    "assets/css/request-staff.css": "b6b34355caf5a7093356caa3469c0652f5597b1ceb9cbbcadd9f26523037171d",
+    "assets/css/request-staff.css": "650a217dc1ca981531d55c996f16db7fd0529e96f343f3f2a5baebdb8e3691df",
     "assets/css/search-jobs.css": "e1fa1e78342fadf892d23dcaf8d7434a0713da2b05719298d1109da3414b32db",
     "assets/css/solutions-responsive.css": "7b378935d43c6771feb21ac4940b1449cf9686b4115589566769ecd31c86bc06",
     "assets/css/specialties-responsive.css": "07c295346a4c073917524ad0923698ab1237aaec1aa7eac7d52de20c0c92c4d9",
@@ -127,7 +127,7 @@
     "locum-tenens.html": "0020916bfa1405d99335b06f619a07bf96321a26f7c4dbb49c0a623ad07f2d8e",
     "nursing-allied.html": "c31ea2985642e09f0df18c46a307fafdbd95a5baa4abf3488a33f117642be848",
     "rehabilitation.html": "c4ab4da627a9131c9ed526a4256418d285fd7f46c54b5cdc6e266012726fbe88",
-    "request-staff.html": "457f1a2e991167135a522d1ad6bf41f15760160d511c720c6858e4c1ee54a8f0",
+    "request-staff.html": "dcf22168a6e48f371857a9cbf2b4dfe9bfcba029eb6b31813b1794050d4eb5a4",
     "search-jobs.html": "8bfd7664db46450486b2c6a0269fcd80ff974b8578af7d4904afd7c3ff9e2276",
     "specialties.html": "7c5ec26689db824d27dd68f081ae3a4cf41fa90e6f4735e8a335bb22ed82085d",
     "workforce-solutions.html": "47d0ac6900c4743307741a1aadce1226470cce3b0b0452c5bc1c39fee2dc85c7"
