@@ -9,29 +9,85 @@
 <meta property="og:title" content="Request Healthcare Staff | Medlivo">
 <meta property="og:description" content="Tell Medlivo the role, location, timing, and number of professionals you need.">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="assets/css/request-staff.css">
+<link rel="stylesheet" href="assets/css/request-staff.css?v=20260928-conversion">
 </head>
 <body>
-<header><div class="wrap nav"><a href="index.html"><img class="logo" src="assets/brand/medlivo-logo.png" alt="Medlivo"></a><div class="spacer"></div><a class="back" href="index.html">← Back to Home</a></div></header>
-<section class="hero"><div class="wrap"><div class="eyebrow">Healthcare Organizations</div><h1>Request healthcare staff.</h1><p>Tell us the role, location, start timing, and number of professionals you need. We’ll route your request to the right Medlivo team across Nursing &amp; Allied, Rehabilitation, or Locum Tenens.</p></div></section>
-<main class="page"><div class="wrap shell">
-<div class="intro"><div class="eyebrow" style="color:var(--blue)">Built for faster follow-up</div><h2>Share the need. We’ll take it from there.</h2><p>For travel, temporary, and other healthcare staffing needs, keep the first request simple. Our team can work through schedule, credentialing, and assignment details with you directly.</p><div class="points"><div class="point"><b>01</b>Role and specialty</div><div class="point"><b>02</b>Location and start timing</div><div class="point"><b>03</b>Number of professionals needed</div></div><div class="contact">Prefer to talk? <a href="tel:+18556335486">855-633-5486</a> · <a href="mailto:hello@medlivo.com">hello@medlivo.com</a></div></div>
-<form class="form" id="staffingRequestForm">
-<div class="grid">
-<div class="field"><label for="division">Division</label><select id="division" name="division" required><option value="">Select division</option><option>Rehabilitation</option><option>Locum Tenens</option><option>Nursing & Allied</option></select></div>
-<div class="field"><label for="role">Role / Specialty</label><input id="role" name="role" required placeholder="e.g. PT, ICU RN, Urologist"></div>
-<div class="field"><label for="organization">Organization / Facility</label><input id="organization" name="organization" required placeholder="Facility or organization"></div>
-<div class="field"><label for="location">Location</label><input id="location" name="location" required placeholder="City, state"></div>
-<div class="field"><label for="start">Start Timing</label><input id="start" name="start" placeholder="ASAP, date, or timeframe"></div>
-<div class="field"><label for="count">Number Needed</label><input id="count" name="count" type="number" min="1" placeholder="1"></div>
-<div class="field"><label for="contact">Contact Name</label><input id="contact" name="contact" required autocomplete="name"></div>
-<div class="field"><label for="email">Work Email</label><input id="email" name="email" type="email" required autocomplete="email"></div>
-<div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
-<div class="field wide"><label for="details">Additional Details (optional)</label><textarea id="details" name="details" placeholder="Anything else we should know?"></textarea></div>
-</div>
-<div class="foot"><div><p>By submitting, you’re asking Medlivo to contact you about this staffing request.</p><p class="form-status" id="formStatus" role="status" aria-live="polite"></p></div><button class="btn" type="submit">Submit Staffing Request →</button></div>
-</form>
-</div></main>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="Medlivo home"><img class="logo" src="assets/brand/medlivo-logo.png" alt="Medlivo"></a>
+    <div class="spacer"></div>
+    <a class="back" href="index.html">Back to Medlivo</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="request-title">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">Healthcare Organizations</div>
+        <h1 id="request-title">Request healthcare staff.</h1>
+        <p>Share the role, location, timing and number needed. We’ll connect your request with the right Medlivo team across Nursing &amp; Allied, Rehabilitation or Locum Tenens.</p>
+      </div>
+      <div class="hero-contact" aria-label="Contact Medlivo directly">
+        <span>Prefer to speak with us?</span>
+        <a href="tel:+18556335486">855-633-5486</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="wrap shell">
+      <aside class="intro" aria-labelledby="request-guide-title">
+        <div class="eyebrow intro-eyebrow">A simple first step</div>
+        <h2 id="request-guide-title">Tell us the need. We’ll take it from there.</h2>
+        <p>Start with the essentials. Our staffing team can work through schedule, credentialing, coverage and assignment details with you directly.</p>
+        <div class="points" aria-label="What to include">
+          <div class="point"><b>01</b><span><strong>Role &amp; specialty</strong><small>What kind of clinician or provider do you need?</small></span></div>
+          <div class="point"><b>02</b><span><strong>Location &amp; timing</strong><small>Where is the need and when should coverage begin?</small></span></div>
+          <div class="point"><b>03</b><span><strong>Number needed</strong><small>One position or a broader staffing requirement.</small></span></div>
+        </div>
+        <div class="direct-contact">
+          <span>Prefer direct contact?</span>
+          <a href="tel:+18556335486">855-633-5486</a>
+          <a href="mailto:hello@medlivo.com">hello@medlivo.com</a>
+        </div>
+      </aside>
+
+      <form class="form" id="staffingRequestForm" aria-labelledby="form-title">
+        <div class="form-head">
+          <div>
+            <div class="eyebrow form-eyebrow">Staffing Request</div>
+            <h2 id="form-title">What do you need?</h2>
+          </div>
+          <p>Required fields are marked *</p>
+        </div>
+
+        <div class="grid">
+          <div class="field"><label for="division">Division *</label><select id="division" name="division" required><option value="">Select division</option><option>Rehabilitation</option><option>Locum Tenens</option><option>Nursing & Allied</option></select></div>
+          <div class="field"><label for="role">Role / Specialty *</label><input id="role" name="role" required placeholder="e.g. PT, ICU RN, Urologist"></div>
+          <div class="field"><label for="organization">Organization / Facility *</label><input id="organization" name="organization" required placeholder="Facility or organization"></div>
+          <div class="field"><label for="location">Location *</label><input id="location" name="location" required placeholder="City, state"></div>
+          <div class="field"><label for="start">Start Timing</label><input id="start" name="start" placeholder="ASAP, date, or timeframe"></div>
+          <div class="field"><label for="count">Number Needed</label><input id="count" name="count" type="number" min="1" placeholder="1"></div>
+          <div class="field"><label for="contact">Contact Name *</label><input id="contact" name="contact" required autocomplete="name"></div>
+          <div class="field"><label for="email">Work Email *</label><input id="email" name="email" type="email" required autocomplete="email"></div>
+          <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field wide"><label for="details">Additional Details</label><textarea id="details" name="details" placeholder="Schedule, coverage dates, shift or call expectations, or anything else we should know."></textarea></div>
+        </div>
+
+        <div class="foot">
+          <div class="form-note">
+            <p>By continuing, you’re asking Medlivo to contact you about this staffing request.</p>
+            <p class="handoff-note">Your email app will open with the request prepared. Send the email to complete your request.</p>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          </div>
+          <button class="btn" type="submit">Continue to Send Request</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
 <footer class="site-mini-footer">
   <div class="wrap">
     <span>© 2026 Medlivo Inc. All rights reserved.</span>
@@ -44,4 +100,5 @@
   </div>
 </footer>
 <script src="assets/js/request-staff-1.js?v=20260928-locum"></script>
-</body></html>
+</body>
+</html>
