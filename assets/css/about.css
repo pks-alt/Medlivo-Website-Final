@@ -3902,3 +3902,15 @@ body{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
     max-width:820px;
   }
 }
+
+
+/* === Fix stale Our Story lead constraint === */
+.about-story-narrative{
+  max-width:900px!important;
+}
+.about-story-narrative .about-story-lead{
+  max-width:none!important;
+  width:100%;
+  font-size:20px!important;
+  line-height:1.55!important;
+}
