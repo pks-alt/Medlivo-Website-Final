@@ -1,0 +1,51 @@
+name: Check published Request Staff
+on:
+  push:
+    branches: [enhancement/request-staff-conversion]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 3357e20d81a850b891370a96003758ba9f16057d
+      - name: Install browser tools
+        run: python -m pip install -r requirements-dev.txt
+      - name: Check actual public page
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import shutil, json, urllib.request, hashlib
+          from playwright.sync_api import sync_playwright
+          base='https://pks-alt.github.io/Medlivo-Website-Final/'
+          out=Path('verification/request-public'); out.mkdir(parents=True,exist_ok=True)
+          for name in ['request-staff.html','assets/css/request-staff.css','assets/js/request-staff-1.js']:
+              data=urllib.request.urlopen(base+name+'?v=3357e20d',timeout=40).read()
+              expected=hashlib.sha256(Path(name).read_bytes()).hexdigest()
+              actual=hashlib.sha256(data).hexdigest()
+              assert actual==expected,(name,actual,expected)
+          with sync_playwright() as pw:
+              exe=shutil.which('google-chrome') or shutil.which('chromium')
+              browser=pw.chromium.launch(headless=True,args=['--no-sandbox'],**({'executable_path':exe} if exe else {}))
+              rows=[]
+              for w in [390,1920]:
+                  p=browser.new_page(viewport={'width':w,'height':1080 if w>1000 else 900})
+                  errors=[];p.on('pageerror',lambda e,b=errors:b.append(str(e)))
+                  r=p.goto(base+'request-staff.html?division=Locum%20Tenens&v=3357e20d',wait_until='networkidle',timeout=60000)
+                  d=p.evaluate("""()=>({h1:document.querySelector('h1').innerText,division:document.querySelector('#division').value,overflow:document.documentElement.scrollWidth>innerWidth,formTop:document.querySelector('.form').getBoundingClientRect().top,introTop:document.querySelector('.intro').getBoundingClientRect().top})""")
+                  assert r.status==200 and d['h1']=='Request healthcare staff.' and d['division']=='Locum Tenens' and not d['overflow'] and not errors
+                  if w==390: assert d['formTop']<d['introTop']
+                  p.screenshot(path=str(out/f'request-live-{w}.png'),full_page=True)
+                  rows.append({'width':w,**d,'errors':errors})
+                  p.close()
+              browser.close()
+          (out/'results.json').write_text(json.dumps(rows,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: request-public-check
+          path: verification/request-public
+          retention-days: 7
