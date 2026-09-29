@@ -4256,11 +4256,6 @@ body{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
 .about-specialization{
   background:#f3f7f9;
 }
-.about-building{
-  background:
-    radial-gradient(circle at 85% 18%,rgba(95,223,229,.08),transparent 26%),
-    linear-gradient(135deg,#0f2747 0%,#102641 60%,#173b70 100%);
-}
 
 /* Limit overwide text blocks */
 .about-story-points,
