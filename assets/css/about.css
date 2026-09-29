@@ -2656,3 +2656,226 @@ body{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
   .about-story-head h2{font-size:34px}
   .about-story-lead{font-size:19px!important}
 }
+
+
+/* === About Medlivo full-page visual alignment: 2026-09-29 === */
+
+/* Section 3: organized like a premium operating model, not a process list */
+.about-specialization{
+  background:#f6f8fa;
+}
+.about-section-headline{
+  display:grid;
+  grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);
+  gap:64px;
+  align-items:end;
+  max-width:none;
+  margin-bottom:26px;
+}
+.about-section-headline .about-eyebrow{align-self:start}
+.about-section-headline h2{
+  max-width:16ch;
+}
+.about-model-rows{
+  border-top:1px solid #bfcdd7;
+}
+.about-model-rows article{
+  display:grid;
+  grid-template-columns:44px minmax(220px,.6fr) minmax(0,1fr);
+  gap:20px 28px;
+  align-items:center;
+  padding:22px 0;
+}
+.about-model-rows article>span{
+  width:32px;
+  height:32px;
+  background:#fff;
+  color:#235466;
+  border:1px solid #b9c9d4;
+}
+.about-model-rows article strong{
+  margin:0;
+  font-size:20px;
+}
+.about-model-rows article p{
+  margin:0!important;
+}
+
+/* Section 4: technology section remains the strongest mid-page visual moment */
+.about-building{
+  padding:68px 0;
+  background:
+    radial-gradient(circle at 85% 15%,rgba(95,223,229,.10),transparent 25%),
+    #102641;
+}
+.about-building-layout{
+  grid-template-columns:minmax(0,1.05fr) minmax(340px,.65fr);
+  gap:76px;
+}
+.about-building-copy h2{max-width:15ch}
+.about-building-copy p{max-width:62ch}
+.about-outcomes span{
+  grid-template-columns:34px 1fr;
+  padding:14px 0;
+}
+.about-outcomes span b{
+  font-size:10px;
+}
+
+/* Section 5: keep it concise and elevated */
+.about-standards{
+  padding-top:62px;
+  padding-bottom:52px;
+}
+.about-standard-grid{
+  gap:18px;
+}
+.about-standard-grid article{
+  min-height:170px;
+  padding:24px;
+  background:#fff;
+  border:1px solid #ccd8e0;
+}
+.about-standard-grid article:before{
+  left:24px;
+  width:36px;
+}
+.about-standard-grid strong{
+  font-size:20px;
+}
+.about-standard-close{
+  max-width:720px;
+  margin-top:22px!important;
+  margin-left:auto!important;
+  font-size:16px!important;
+  line-height:1.65!important;
+}
+
+/* About close now mirrors the division-page employer / clinician close */
+.about-connect{
+  padding:0 0 64px;
+  background:#fff;
+}
+.about-sr-only{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+}
+.about-connect-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  overflow:hidden;
+  border-radius:18px;
+  background:#102641;
+}
+.about-connect-card{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  min-width:0;
+  padding:clamp(28px,2.8vw,44px);
+}
+.about-connect-client{
+  color:#fff;
+}
+.about-connect-client .about-eyebrow{
+  color:#d0e7e9;
+}
+.about-connect-card h3{
+  margin:0;
+  font-size:clamp(27px,2vw,34px);
+  line-height:1.18;
+  letter-spacing:-.03em;
+}
+.about-connect-client h3{color:#fff!important}
+.about-connect-card p{
+  margin:14px 0 24px;
+  max-width:50ch;
+  font-size:16px!important;
+  line-height:1.65!important;
+}
+.about-connect-client p{color:#f1f5fa!important}
+.about-connect-clinician{
+  background:#f5f7fa;
+  border:1px solid #dde5ed;
+  border-left:0;
+}
+.about-connect-clinician .about-eyebrow{color:#235466}
+.about-connect-clinician h3{color:#102641!important}
+.about-connect-clinician p{color:#344b60!important}
+.about-connect-actions{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+  margin-top:auto;
+}
+.about-phone{
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  color:#fff;
+  font-size:15px;
+  font-weight:700;
+  text-decoration:underline;
+  text-underline-offset:5px;
+}
+.about-connect-clinician .about-light-btn{
+  background:#fff;
+  border:1px solid #8fa6bc;
+  color:#102641;
+}
+.about-connect-clinician .about-light-btn:hover{
+  background:#eef3f6;
+}
+
+/* Small refinements to overall flow */
+.about-story + .about-specialization,
+.about-specialization + .about-change,
+.about-change + .about-building,
+.about-building + .about-standards{
+  border-top:1px solid #e3e9ee;
+}
+
+@media(max-width:1040px){
+  .about-section-headline{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+  .about-model-rows article{
+    grid-template-columns:40px minmax(0,1fr);
+  }
+  .about-model-rows article p{
+    grid-column:2;
+    margin-top:-8px!important;
+  }
+  .about-connect-grid{
+    grid-template-columns:1fr;
+  }
+  .about-connect-clinician{
+    border-left:1px solid #dde5ed;
+    border-top:0;
+  }
+}
+@media(max-width:720px){
+  .about-connect{padding-bottom:48px}
+  .about-connect-card{padding:28px 24px}
+  .about-connect-actions{
+    width:100%;
+    flex-direction:column;
+    align-items:stretch;
+    gap:10px;
+  }
+  .about-connect-actions .btn{
+    width:100%;
+  }
+  .about-phone{
+    justify-content:center;
+  }
+}
