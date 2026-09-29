@@ -4097,3 +4097,209 @@ body{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
     margin-top:17px;
   }
 }
+
+
+/* === Full About page aesthetics, spacing, and rhythm polish === */
+.about-refined{
+  --ab-space-lg:clamp(60px,4.8vw,78px);
+  --ab-space-md:clamp(46px,3.8vw,62px);
+  --ab-gap-lg:clamp(36px,4.8vw,80px);
+}
+
+/* Global reading rhythm */
+.about-refined main>section:not(.about-hero):not(.about-connect){
+  padding-top:var(--ab-space-lg);
+  padding-bottom:var(--ab-space-lg);
+}
+.about-refined main h2{
+  margin:0;
+  max-width:24ch;
+}
+.about-refined main p{
+  max-width:68ch;
+}
+
+/* Hero spacing */
+.about-hero{
+  padding-top:58px;
+  padding-bottom:62px;
+}
+.about-hero-grid{
+  gap:clamp(44px,5vw,82px);
+}
+.about-hero-copy>p{
+  margin-top:18px;
+}
+.about-hero-copy>p+p{
+  margin-top:12px;
+}
+.about-hero-panel-head{
+  padding:22px 24px 18px;
+}
+.about-hero-panel-list>div{
+  padding:17px 22px;
+}
+
+/* Story */
+.about-story{
+  padding-top:64px!important;
+  padding-bottom:66px!important;
+}
+.about-story-grid-final{
+  gap:clamp(38px,4.6vw,76px);
+}
+.about-story-intro>p{
+  margin-top:16px;
+}
+.about-story-points article{
+  padding:22px 0;
+}
+.about-story-final-note{
+  margin-top:18px;
+}
+
+/* How organized */
+.about-specialization{
+  padding-top:42px!important;
+  padding-bottom:46px!important;
+}
+.about-section-headline{
+  margin-bottom:20px;
+}
+.about-model-rows article{
+  padding:18px 0;
+  gap:18px 22px;
+}
+.about-model-rows strong{
+  font-size:20px;
+}
+.about-model-rows p{
+  line-height:1.58!important;
+}
+
+/* Market changing */
+.about-change{
+  padding-top:62px!important;
+  padding-bottom:64px!important;
+}
+.about-change-head{
+  margin-bottom:26px;
+}
+.about-change-grid{
+  gap:clamp(34px,4.5vw,68px);
+}
+.about-change-copy p+p{
+  margin-top:13px;
+}
+.about-change-statement{
+  padding-left:18px;
+}
+
+/* Technology */
+.about-building{
+  padding-top:62px!important;
+  padding-bottom:64px!important;
+}
+.about-building-layout{
+  gap:clamp(36px,4.8vw,76px);
+}
+.about-building-copy p{
+  margin-top:15px;
+}
+.about-outcomes span{
+  padding:18px 0;
+}
+
+/* Standards */
+.about-standards{
+  padding-top:58px!important;
+  padding-bottom:44px!important;
+}
+.about-standards-layout{
+  gap:clamp(34px,4.6vw,72px);
+}
+.about-standard-list article{
+  padding:19px 0;
+}
+.about-standard-list p{
+  margin-top:6px;
+}
+
+/* Final connect */
+.about-connect{
+  padding-top:0;
+  padding-bottom:58px;
+}
+.about-connect-grid{
+  border-radius:16px;
+}
+.about-connect-card{
+  padding:clamp(28px,2.6vw,40px);
+}
+.about-connect-card p{
+  margin-top:12px;
+  margin-bottom:22px;
+}
+
+/* Footer relationship */
+.about-connect + .site-footer{
+  margin-top:0;
+}
+
+/* Visual continuity */
+.about-story,
+.about-change,
+.about-standards,
+.about-connect{
+  background:#fff;
+}
+.about-specialization{
+  background:#f3f7f9;
+}
+.about-building{
+  background:
+    radial-gradient(circle at 85% 18%,rgba(95,223,229,.08),transparent 26%),
+    linear-gradient(135deg,#0f2747 0%,#102641 60%,#173b70 100%);
+}
+
+/* Limit overwide text blocks */
+.about-story-points,
+.about-change-copy,
+.about-building-copy,
+.about-standard-list{
+  max-width:760px;
+}
+
+/* Mobile/tablet balance */
+@media(max-width:1040px){
+  .about-refined main>section:not(.about-hero):not(.about-connect){
+    padding-top:54px;
+    padding-bottom:54px;
+  }
+  .about-hero{
+    padding-top:44px;
+    padding-bottom:48px;
+  }
+  .about-story-grid-final,
+  .about-building-layout,
+  .about-standards-layout,
+  .about-change-grid{
+    gap:24px;
+  }
+}
+@media(max-width:720px){
+  .about-refined main>section:not(.about-hero):not(.about-connect){
+    padding-top:44px;
+    padding-bottom:44px;
+  }
+  .about-hero{
+    padding-top:36px;
+    padding-bottom:40px;
+  }
+  .about-connect{
+    padding-bottom:46px;
+  }
+  .about-connect-card{
+    padding:26px 22px;
+  }
+}
