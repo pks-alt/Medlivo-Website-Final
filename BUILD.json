@@ -1,5 +1,5 @@
 {
-  "build_id": "medlivo-locum-final-heading-order",
+  "build_id": "medlivo-jobs-results-first-20260928",
   "repository": "pks-alt/Medlivo-Website-Final",
   "source_policy": "One root version per page, all assets local. No runtime or ongoing build dependency on the old repository.",
   "initial_import_commit": "ec962a7bb7850cd6bfe7805664ca15a4261b508e",
@@ -56,7 +56,7 @@
       "original_revision": "8ad7bb331a03c987d0bcced4b2161dc90fd8f6f9",
       "original_path": "v2/search-jobs.html",
       "selection": "Preserved supporting page; no new design changes",
-      "sha256": "5d30528065e18b18e5032a426ebca3846b9e0722abf69de54be4bb761377741f"
+      "sha256": "8bfd7664db46450486b2c6a0269fcd80ff974b8578af7d4904afd7c3ff9e2276"
     },
     "about.html": {
       "source_page_sha256": "6990dd6989f01516411ce797a8e5c24b2769eaef105ffacb3d99b9618d4949b2",
@@ -95,6 +95,7 @@
     "assets/css/careers.css": "58ce3cf34fc787d393f1313c804a9ea14ebc32c840d04c456d5e2d90d4b88fed",
     "assets/css/home-responsive.css": "48baed5e6fb8fca7d45fb6a37012dc3d9a1a471877bb47416c2e96d9c880d711",
     "assets/css/index.css": "b5da58eed6194097a05beb54b34c055053a87bbb5d7de73a2beccd41638c9fce",
+    "assets/css/jobs-responsive.css": "0fee6dd95518aa93e64b94c6450ecfa156b85416f5ae09fe9accbc4e55a096a8",
     "assets/css/leadership.css": "58ce3cf34fc787d393f1313c804a9ea14ebc32c840d04c456d5e2d90d4b88fed",
     "assets/css/locum-responsive.css": "69228d37054ce30b60759a98b2cfa5169f9e736d279b5e8bd0efede20962ea74",
     "assets/css/locum-tenens.css": "6d0e89e4d478284c2a67904578b04477b085046375d3df1ba30976a0fbeffdc6",
@@ -119,7 +120,7 @@
     "assets/js/navigation-dropdowns.js": "53d90c3720300ff27162f27ce02c155c0b01cae856db4de7c6a2fb22a61f9bcb",
     "assets/js/navigation-menu.js": "a880e0fe96f1b3efdd91549ef5dd9aa6e81717a14f08fc12f8688ba75e7648c6",
     "assets/js/request-staff-1.js": "0f20bbc50c43c1eb9b703bc72a6080776135092a7f662ced5d4b9a6a90c3d43d",
-    "assets/js/search-jobs-3.js": "95711a0061e8ac99dc97508eec4a7957e65e4bc52b580b37cd057c8d9692fd64",
+    "assets/js/search-jobs-3.js": "823378b527fc284c12b05d3684524ac6193bd4f62e533244ca989e3f2f3b73cf",
     "careers.html": "461a07a10ee4cdab200fec6ab3b2301a331ec4662553cd5ade18bf5586cd3367",
     "index.html": "0fde87788951f80cdc294ac56daea8e63fd3ec51d586c18acb7571eb2d604f4d",
     "leadership.html": "ece3791c8578d8ecb20d613da7ccec3346cae32a1b5a6527190af10bab91aa08",
@@ -127,7 +128,7 @@
     "nursing-allied.html": "c31ea2985642e09f0df18c46a307fafdbd95a5baa4abf3488a33f117642be848",
     "rehabilitation.html": "c4ab4da627a9131c9ed526a4256418d285fd7f46c54b5cdc6e266012726fbe88",
     "request-staff.html": "457f1a2e991167135a522d1ad6bf41f15760160d511c720c6858e4c1ee54a8f0",
-    "search-jobs.html": "5d30528065e18b18e5032a426ebca3846b9e0722abf69de54be4bb761377741f",
+    "search-jobs.html": "8bfd7664db46450486b2c6a0269fcd80ff974b8578af7d4904afd7c3ff9e2276",
     "specialties.html": "7c5ec26689db824d27dd68f081ae3a4cf41fa90e6f4735e8a335bb22ed82085d",
     "workforce-solutions.html": "47d0ac6900c4743307741a1aadce1226470cce3b0b0452c5bc1c39fee2dc85c7"
   }

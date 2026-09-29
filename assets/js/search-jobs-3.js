@@ -59,7 +59,7 @@
 
   const divisionConfig={
     "":{
-      title:"Healthcare jobs across the U.S.",
+      title:"Job opportunities",
       eyebrow:"Popular Searches",
       contextTitle:"Start with a common search, or use the filters above.",
       contextText:"Choose a shortcut below, or leave any field set to All to see more jobs.",
@@ -126,12 +126,9 @@
   const specialty=qs("#searchSpecialty");
   const locationInput=qs("#searchLocation");
   const filterState=qs("#filterState");
-  const filterType=qs("#filterType");
   const sort=qs("#sortJobs");
   const allButton=qs(".jobs-all-button");
   const contextEyebrow=qs("#divisionContextEyebrow");
-  const contextTitle=qs("#divisionContextTitle");
-  const contextText=qs("#divisionContextText");
   const shortcuts=qs("#specialtyShortcuts");
   const pagination=qs("#jobsPagination");
   const paginationSummary=qs("#paginationSummary");
@@ -140,6 +137,7 @@
   const nextPage=qs("#jobsNextPage");
   const PAGE_SIZE=20;
   let currentPage=1;
+  let searchReady=false;
   let activeCategory="";
 
   function slug(value){
@@ -153,7 +151,7 @@
     if(["nursing-allied","nursing & allied","nursing and allied"].includes(v))return "Nursing & Allied";
     if(["rehab","rehabilitation"].includes(v))return "Rehabilitation";
     if(["locum","locums","locum-tenens","locum tenens"].includes(v))return "Locum Tenens";
-    return value||"";
+    return "";
   }
   function taxonomyItems(category){
     if(category && careerTaxonomy[category])return careerTaxonomy[category];
@@ -181,14 +179,12 @@
   }
   function rebuildProfessionOptions(preferred=""){
     const items=uniqueByValue(taxonomyItems(activeCategory));
-    const current=preferred||profession.value||filterType.value;
+    const current=preferred||profession.value;
     const options=['<option value="">All professions</option>']
       .concat(items.map(item=>'<option value="'+item.value.replace(/"/g,"&quot;")+'">'+item.label+'</option>'));
     profession.innerHTML=options.join("");
-    filterType.innerHTML=options.join("");
     if(items.some(item=>item.value===current)){
       profession.value=current;
-      filterType.value=current;
     }
   }
   function rebuildSpecialtyOptions(preferred=""){
@@ -210,7 +206,6 @@
   }
   function setProfession(value){
     profession.value=value||"";
-    filterType.value=value||"";
   }
   function payHigh(job){
     const nums=(String(job.pay||"").replace(/,/g,"").match(/\d+(?:\.\d+)?/g)||[]).map(Number);
@@ -274,14 +269,15 @@
   }
   function matches(job){
     const div=normalizeCategory(division.value||activeCategory);
-    const pr=profession.value||filterType.value||"";
+    const pr=profession.value||"";
     const sp=specialty.value||"";
     const l=(locationInput.value||"").trim().toLowerCase();
     const st=(filterState.value||"").toLowerCase();
     if(div && job.category!==div)return false;
     if(pr && !professionMatch(job,pr))return false;
     if(sp && !specialtyMatch(job,sp))return false;
-    if(l && !(job.city+" "+job.state).toLowerCase().includes(l))return false;
+    const stateName=[...filterState.options].find(o=>o.value===job.state)?.text||"";
+    if(l && !(job.city+" "+job.state+" "+stateName).toLowerCase().includes(l))return false;
     if(st && job.state.toLowerCase()!==st)return false;
     return true;
   }
@@ -323,7 +319,7 @@
     qsa(".jobs-division-card").forEach(btn=>{
       const selected=btn.dataset.category===activeCategory;
       btn.classList.toggle("active",selected);
-      btn.setAttribute("aria-selected",String(selected));
+      btn.setAttribute("aria-pressed",String(selected));
     });
     const selectedProfession=profession.value;
     const selectedSpecialty=specialty.value;
@@ -333,8 +329,6 @@
         ? selectedSpecialty+" jobs."
         : cfg.title;
     contextEyebrow.textContent=cfg.eyebrow;
-    contextTitle.textContent=cfg.contextTitle;
-    contextText.textContent=cfg.contextText;
     renderShortcuts();
   }
   function render(resetPage=false){
@@ -370,8 +364,8 @@
         <div class="job-card-side">
           <span class="job-pay-label">Pay range</span>
           <div class="job-pay">${job.pay||"Ask recruiter"}</div>
-          <a class="job-apply" href="${job.applyUrl||"https://www.medlivo.com/search-jobs"}" data-ats-apply-id="${job.id}" aria-label="View job details for ${job.title}">View Job →</a>
-          <span class="job-ats-note">See full details and apply if it fits</span>
+          <a class="job-apply" href="${job.applyUrl||"https://www.medlivo.com/search-jobs"}" data-ats-apply-id="${job.id}" aria-label="Open Medlivo’s current job search to check ${job.title}">View Current Jobs</a>
+          <span class="job-ats-note">Confirm availability with Medlivo</span>
         </div>
       </article>`).join("");
 
@@ -381,8 +375,8 @@
       ? (profession.options[profession.selectedIndex]?.text||profession.value)
       : specialty.value||activeCategory;
     summary.textContent=count
-      ? `${count.toLocaleString("en-US")} current opportunit${count===1?"y":"ies"} found${scope?` for ${scope}`:""}`
-      : "No matching jobs found with these selections.";
+      ? `${count.toLocaleString("en-US")} preview listing${count===1?"":"s"} found${scope?` for ${scope}`:""}`
+      : "No preview listings match these selections. A recruiter can check current availability.";
 
     const showPagination=count>PAGE_SIZE;
     pagination.hidden=!showPagination;
@@ -393,6 +387,7 @@
       nextPage.disabled=currentPage>=totalPages;
     }
     updateDivisionUI();
+    saveSearch();
   }
   function setDivision(category){
     activeCategory=normalizeCategory(category);
@@ -453,20 +448,6 @@
     render(true);
   });
   specialty.addEventListener("change",()=>render(true));
-  filterType.addEventListener("change",()=>{
-    setProfession(filterType.value);
-    if(!activeCategory && filterType.value){
-      const inferred=findDivisionForProfession(filterType.value);
-      if(inferred){
-        activeCategory=inferred;
-        division.value=inferred;
-        rebuildProfessionOptions(filterType.value);
-        setProfession(filterType.value);
-      }
-    }
-    rebuildSpecialtyOptions();
-    render(true);
-  });
   [filterState,sort].forEach(el=>el.addEventListener("change",()=>render(true)));
 
   qsa(".jobs-division-card").forEach(btn=>btn.addEventListener("click",()=>setDivision(btn.dataset.category||"")));
@@ -506,20 +487,15 @@
     qs(".jobs-results-head")?.scrollIntoView({behavior:"smooth",block:"start"});
   });
 
-  const filterToggle=qs("#mobileFilterToggle");
-  const filters=qs(".jobs-filters");
-  const filterBackdrop=qs("#filterBackdrop");
-  const filterClose=qs("#filterClose");
-  function setFiltersOpen(open){
-    filters.classList.toggle("open",open);
-    filterBackdrop.hidden=!open;
-    filterToggle?.setAttribute("aria-expanded",String(open));
-    document.body.style.overflow=open?"hidden":"";
+  // Keep the selected search shareable without a page reload. No backend submission.
+  function saveSearch(){
+    if(!searchReady || !/^https?:$/.test(window.location.protocol))return;
+    const url=new URL(window.location.href);
+    for(const key of ['division','profession','specialty','location','state','type'])url.searchParams.delete(key);
+    for(const [key,value] of Object.entries({division:activeCategory,profession:profession.value,specialty:specialty.value,location:locationInput.value.trim(),state:filterState.value}))if(value)url.searchParams.set(key,value);
+    history.replaceState(null,'',url);
   }
-  if(filterToggle)filterToggle.addEventListener("click",()=>setFiltersOpen(true));
-  if(filterClose)filterClose.addEventListener("click",()=>setFiltersOpen(false));
-  if(filterBackdrop)filterBackdrop.addEventListener("click",()=>setFiltersOpen(false));
-  document.addEventListener("keydown",e=>{if(e.key==="Escape")setFiltersOpen(false)});
-
+  locationInput.addEventListener('change',()=>render(true));
   render();
+  searchReady=true;
 })();
