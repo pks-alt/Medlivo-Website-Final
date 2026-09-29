@@ -3501,3 +3501,17 @@ body{background:#fff}
     font-size:13px!important;
   }
 }
+
+
+/* === Nav size test: 18px desktop === */
+@media(min-width:1201px){
+  .links{
+    font-size:18px!important;
+    gap:28px!important;
+    font-weight:700!important;
+  }
+  .links>a,
+  .nav-drop-trigger{
+    font-size:18px!important;
+  }
+}
