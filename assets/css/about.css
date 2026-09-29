@@ -4303,3 +4303,36 @@ body{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
     padding:26px 22px;
   }
 }
+
+
+/* === Tighten The Market Is Changing section === */
+.about-change{
+  padding-top:44px!important;
+  padding-bottom:46px!important;
+}
+.about-change-head{
+  margin-bottom:18px;
+}
+.about-change-grid{
+  gap:clamp(26px,3.6vw,52px);
+  align-items:start;
+}
+.about-change-copy p{
+  line-height:1.62!important;
+}
+.about-change-copy p+p{
+  margin-top:10px;
+}
+.about-change-statement{
+  padding-top:8px;
+  padding-bottom:8px;
+}
+@media(max-width:720px){
+  .about-change{
+    padding-top:38px!important;
+    padding-bottom:40px!important;
+  }
+  .about-change-head{
+    margin-bottom:14px;
+  }
+}
