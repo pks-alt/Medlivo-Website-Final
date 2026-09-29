@@ -9,57 +9,78 @@
 <meta property="og:title" content="Request Healthcare Staff | Medlivo">
 <meta property="og:description" content="Tell Medlivo the role, location, timing, and number of professionals you need.">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="assets/css/request-staff.css?v=20260928-light-final">
+<link rel="stylesheet" href="assets/css/request-staff.css?v=20260929-unified">
 </head>
-<body>
+<body class="request-staff-page">
 <header>
   <div class="wrap nav">
-    <a class="brand" href="index.html" aria-label="Medlivo home"><img class="logo" src="assets/brand/medlivo-logo.png" alt="Medlivo"></a>
-    <div class="spacer"></div>
-    <a class="back" href="index.html">Back to Medlivo</a>
+    <a href="index.html" aria-label="Medlivo home"><img class="logo" src="assets/brand/medlivo-logo.png" alt="Medlivo"></a>
+    <nav class="links">
+      <a href="workforce-solutions.html">Solutions</a>
+      <div class="nav-dropdown">
+        <button class="nav-drop-trigger" type="button" aria-haspopup="true" aria-expanded="false">Specialties<span class="nav-chevron" aria-hidden="true"></span></button>
+        <div class="nav-dropdown-menu">
+          <div class="nav-dropdown-panel">
+            <a href="nursing-allied.html"><span class="nav-drop-title">Nursing &amp; Allied</span><span class="nav-drop-desc">Nursing and allied clinical staffing</span></a>
+            <a href="rehabilitation.html"><span class="nav-drop-title">Rehabilitation</span><span class="nav-drop-desc">PT, OT and SLP staffing</span></a>
+            <a href="locum-tenens.html"><span class="nav-drop-title">Locum Tenens</span><span class="nav-drop-desc">Physician and APP coverage</span></a>
+          </div>
+        </div>
+      </div>
+      <a href="index.html#clinicians">For Clinicians</a>
+      <div class="nav-dropdown nav-company">
+        <button class="nav-drop-trigger" type="button" aria-haspopup="true" aria-expanded="false">Company<span class="nav-chevron" aria-hidden="true"></span></button>
+        <div class="nav-dropdown-menu">
+          <div class="nav-dropdown-panel">
+            <a href="about.html"><span class="nav-drop-title">About Medlivo</span><span class="nav-drop-desc">Our story, experience and healthcare focus</span></a>
+            <a href="index.html#why"><span class="nav-drop-title">Why Medlivo</span><span class="nav-drop-desc">How we work with clients and clinicians</span></a>
+            <a href="leadership.html"><span class="nav-drop-title">Leadership</span><span class="nav-drop-desc">The people behind Medlivo</span></a>
+            <a href="careers.html"><span class="nav-drop-title">Careers at Medlivo</span><span class="nav-drop-desc">Join our corporate and operations team</span></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="actions">
+      <a class="btn btn-outline" href="search-jobs.html">Search Jobs</a>
+      <a class="btn btn-green active-cta" href="request-staff.html" aria-current="page">Request Staff</a>
+      <button class="menu" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </div>
   </div>
 </header>
 
 <main>
-  <section class="request-stage" aria-labelledby="request-title">
-    <div class="wrap request-grid">
-      <div class="request-copy">
-        <div class="request-intro">
-          <div class="eyebrow">For Healthcare Organizations</div>
-          <h1 id="request-title">Tell us where you need coverage.</h1>
-          <p class="lead">Share the role, location and timing. We’ll connect your request with the right Medlivo team across Nursing &amp; Allied, Rehabilitation or Locum Tenens.</p>
-        </div>
+  <section class="request-hero" aria-labelledby="request-title">
+    <div class="wrap request-hero-grid">
+      <div class="request-hero-copy">
+        <div class="eyebrow">For Healthcare Organizations</div>
+        <h1 id="request-title">Tell us where you need coverage.</h1>
+        <p>Share the role, location and timing. We’ll connect your request with the right Medlivo team across Nursing &amp; Allied, Rehabilitation or Locum Tenens.</p>
+      </div>
+      <div class="request-hero-contact" aria-label="Direct contact">
+        <span>Prefer to talk first?</span>
+        <a href="tel:+18556335486">855-633-5486</a>
+        <a class="email-link" href="mailto:hello@medlivo.com">hello@medlivo.com</a>
+      </div>
+    </div>
+  </section>
 
-        <div class="request-support">
-        <div class="division-line" aria-label="Medlivo staffing divisions">
-          <span>Nursing &amp; Allied</span>
-          <span>Rehabilitation</span>
-          <span>Locum Tenens</span>
-        </div>
-
-        <div class="request-direct">
-          <div>
-            <small>Prefer to speak with us?</small>
-            <a href="tel:+18556335486">855-633-5486</a>
-          </div>
-          <div>
-            <small>Email</small>
-            <a href="mailto:hello@medlivo.com">hello@medlivo.com</a>
-          </div>
-        </div>
-
-        <div class="request-assurance" aria-label="What Medlivo needs to get started">
-          <div class="assurance-item"><span>01</span><strong>Role &amp; specialty</strong><p>Tell us the clinician or provider you need.</p></div>
-          <div class="assurance-item"><span>02</span><strong>Location &amp; timing</strong><p>Share where the need is and when coverage should begin.</p></div>
-          <div class="assurance-item"><span>03</span><strong>Number needed</strong><p>One position or a broader staffing requirement.</p></div>
-        </div>
+  <section class="request-form-section">
+    <div class="wrap request-layout">
+      <div class="request-context">
+        <div class="eyebrow">Staffing Request</div>
+        <h2>Start with the essentials.</h2>
+        <p>Tell us what you need. Our team can work through schedule, credentialing, coverage and assignment details with you directly.</p>
+        <div class="division-list" aria-label="Medlivo staffing divisions">
+          <a href="nursing-allied.html"><strong>Nursing &amp; Allied</strong><span>Clinical nursing and allied health staffing</span></a>
+          <a href="rehabilitation.html"><strong>Rehabilitation</strong><span>PT, OT and SLP staffing</span></a>
+          <a href="locum-tenens.html"><strong>Locum Tenens</strong><span>Physician and APP coverage</span></a>
         </div>
       </div>
 
       <form class="form" id="staffingRequestForm" aria-labelledby="form-title">
         <div class="form-head">
           <div>
-            <div class="eyebrow form-eyebrow">Staffing Request</div>
+            <div class="eyebrow">Request Details</div>
             <h2 id="form-title">What do you need?</h2>
           </div>
           <p>Required fields are marked *</p>
@@ -78,30 +99,80 @@
           <div class="field wide"><label for="details">Additional Details</label><textarea id="details" name="details" placeholder="Schedule, coverage dates, shift or call expectations, or anything else we should know."></textarea></div>
         </div>
 
-        <div class="foot">
+        <div class="form-foot">
           <div class="form-note">
             <p>By continuing, you’re asking Medlivo to contact you about this staffing request.</p>
             <p class="handoff-note">Your email app will open with the request prepared. Send the email to complete your request.</p>
             <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
           </div>
-          <button class="btn" type="submit">Continue to Send Request</button>
+          <button class="btn btn-green submit-btn" type="submit">Continue to Send Request</button>
         </div>
       </form>
     </div>
   </section>
+
+  <section class="request-close">
+    <div class="wrap request-close-inner">
+      <div>
+        <div class="eyebrow">Three staffing divisions. One point of contact.</div>
+        <h2>Not sure which team your request belongs with?</h2>
+      </div>
+      <p>Send us the need as you know it. We’ll route it to the right Medlivo staffing team.</p>
+    </div>
+  </section>
 </main>
 
-<footer class="site-mini-footer">
-  <div class="wrap">
-    <span>© 2026 Medlivo Inc. All rights reserved.</span>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="workforce-solutions.html">Workforce Solutions</a>
-      <a href="search-jobs.html">Search Jobs</a>
-      <a href="mailto:hello@medlivo.com">hello@medlivo.com</a>
-    </nav>
+<footer class="site-footer footer-minimal">
+  <div class="wrap footer-main-minimal">
+    <div class="footer-brand-minimal">
+      <a class="footer-logo-minimal" href="index.html" aria-label="Medlivo home">
+        <img src="assets/brand/medlivo-logo-transparent.png?v=20260924b" alt="Medlivo">
+      </a>
+      <p>Healthcare staffing across Nursing &amp; Allied, Rehabilitation, and Locum Tenens.</p>
+      <div class="footer-contact-minimal">
+        <a href="tel:+18556335486">+1 855-633-5486</a>
+        <a href="mailto:hello@medlivo.com">hello@medlivo.com</a>
+        <span>Redmond, Washington</span>
+      </div>
+    </div>
+    <div class="footer-links-minimal">
+      <div class="footer-col-minimal">
+        <h4>Specialties</h4>
+        <a href="nursing-allied.html">Nursing &amp; Allied</a>
+        <a href="rehabilitation.html">Rehabilitation</a>
+        <a href="locum-tenens.html">Locum Tenens</a>
+        <a href="workforce-solutions.html">Workforce Solutions</a>
+      </div>
+      <div class="footer-col-minimal">
+        <h4>For Clinicians</h4>
+        <a href="search-jobs.html">Search Jobs</a>
+        <a href="nursing-allied.html#clinicians">Nursing &amp; Allied Jobs</a>
+        <a href="rehabilitation.html#clinicians">Rehabilitation Jobs</a>
+        <a href="locum-tenens.html#clinicians">Locum Tenens Opportunities</a>
+      </div>
+      <div class="footer-col-minimal">
+        <h4>Company</h4>
+        <a href="about.html">About Medlivo</a>
+        <a href="index.html#why">Why Medlivo</a>
+        <a href="leadership.html">Leadership</a>
+        <a href="careers.html">Careers at Medlivo</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom-minimal">
+    <div class="wrap footer-bottom-row">
+      <span>© 2026 Medlivo Inc. All rights reserved.</span>
+      <div>
+        <a href="https://www.medlivo.com/privacy-policy">Privacy Policy</a>
+        <a href="https://www.medlivo.com/terms-of-use">Terms of Use</a>
+        <a href="mailto:hello@medlivo.com">Contact</a>
+      </div>
+    </div>
   </div>
 </footer>
+
+<script src="assets/js/navigation-menu.js"></script>
+<script src="assets/js/navigation-dropdowns.js"></script>
 <script src="assets/js/request-staff-1.js?v=20260928-locum"></script>
 </body>
 </html>
