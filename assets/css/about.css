@@ -4336,3 +4336,86 @@ body{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
     margin-bottom:14px;
   }
 }
+
+
+/* === Restore Building Medlivo to specialty-page readiness treatment === */
+.about-building{
+  background:#f5f7fa!important;
+  color:#263b50!important;
+  border-top:1px solid #e0e7ee!important;
+  border-bottom:1px solid #e0e7ee!important;
+  padding:clamp(52px,4.5vw,76px) 0!important;
+}
+.about-building-layout{
+  display:grid!important;
+  grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr)!important;
+  gap:clamp(32px,5vw,88px)!important;
+  align-items:start!important;
+}
+.about-building .about-eyebrow{
+  color:#235466!important;
+}
+.about-building h2{
+  color:#102641!important;
+  max-width:18ch!important;
+}
+.about-building-copy{
+  max-width:none!important;
+}
+.about-building-copy p{
+  margin-top:18px!important;
+  color:#263b50!important;
+  max-width:44ch!important;
+  font-size:17px!important;
+  line-height:1.7!important;
+}
+.about-outcomes{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  column-gap:30px!important;
+  margin:0!important;
+  border:0!important;
+}
+.about-outcomes span{
+  display:grid!important;
+  grid-template-columns:38px minmax(0,1fr)!important;
+  gap:12px!important;
+  align-items:center!important;
+  min-height:0!important;
+  padding:22px 0!important;
+  border:0!important;
+  border-top:1px solid #cbd7e2!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:#263b50!important;
+  font-size:16px!important;
+  line-height:1.5!important;
+  font-weight:600!important;
+}
+.about-outcomes span b{
+  display:grid!important;
+  place-items:center!important;
+  width:38px!important;
+  height:38px!important;
+  border-radius:50%!important;
+  background:#24456b!important;
+  color:#fff!important;
+  font-size:12px!important;
+}
+@media(max-width:1040px){
+  .about-building-layout{
+    grid-template-columns:1fr!important;
+    gap:30px!important;
+  }
+  .about-building-copy p{
+    max-width:68ch!important;
+  }
+}
+@media(max-width:540px){
+  .about-building{
+    padding:46px 0!important;
+  }
+  .about-outcomes{
+    grid-template-columns:1fr!important;
+  }
+}
