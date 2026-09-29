@@ -168,3 +168,87 @@
   .medlivo-agent-launcher:hover{transform:none}
   .medlivo-agent-thinking i{animation:none}
 }
+
+
+/* === Refined Ask Medlivo launcher === */
+.medlivo-agent-launcher{
+  right:22px!important;
+  bottom:22px!important;
+  min-height:52px!important;
+  padding:6px 8px 6px 14px!important;
+  gap:10px!important;
+  border:1px solid rgba(16,38,65,.13)!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.96)!important;
+  color:#102641!important;
+  box-shadow:0 10px 30px rgba(16,38,65,.16)!important;
+  backdrop-filter:blur(12px);
+  font-size:14px!important;
+  font-weight:750!important;
+  letter-spacing:-.01em;
+}
+.medlivo-agent-launcher:hover{
+  transform:translateY(-2px)!important;
+  border-color:rgba(16,38,65,.22)!important;
+  box-shadow:0 14px 34px rgba(16,38,65,.20)!important;
+}
+.medlivo-agent-launcher-dot{
+  width:8px!important;
+  height:8px!important;
+  background:#75c94a!important;
+  box-shadow:0 0 0 3px rgba(117,201,74,.12)!important;
+}
+.medlivo-agent-launcher-icon{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  flex:0 0 38px;
+  border-radius:50%;
+  background:#102641;
+  color:#fff;
+}
+.medlivo-agent-launcher-icon svg{
+  width:18px;
+  height:18px;
+  display:block;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.medlivo-agent-launcher-label{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.medlivo-agent-launcher-label small{
+  display:block;
+  margin-top:2px;
+  color:#748496;
+  font-size:10.5px;
+  font-weight:600;
+  letter-spacing:0;
+}
+@media(max-width:640px){
+  .medlivo-agent-launcher{
+    right:16px!important;
+    bottom:16px!important;
+    width:54px!important;
+    height:54px!important;
+    min-height:54px!important;
+    padding:0!important;
+    justify-content:center;
+    border-radius:50%!important;
+  }
+  .medlivo-agent-launcher-label,
+  .medlivo-agent-launcher-dot{
+    display:none!important;
+  }
+  .medlivo-agent-launcher-icon{
+    width:54px;
+    height:54px;
+    background:#102641;
+  }
+}
