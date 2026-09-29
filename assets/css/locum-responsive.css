@@ -146,11 +146,12 @@
 @media(max-width:540px){.locum-division .ld-hero h1{font-size:35px;line-height:1.12}.locum-division .ld-hero-photo{height:300px}.ld-provider-grid{grid-template-columns:1fr;gap:22px}.ld-provider-item h3{font-size:23px}.ld-provider-item p{max-width:none}.ld-coverage-card{padding:23px}.ld-coverage-card h3{font-size:24px}.ld-role-tag{margin-top:5px}.ld-coverage-head,.ld-provider-head{margin-bottom:23px}}
 @media(max-width:359px){.locum-division .ld-hero h1{font-size:32px}}
 
-/* Compact specialty coverage within the provider section; no extra page section. */
-.ld-specialty-band{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(0,3.2fr);gap:18px 30px;align-items:start;margin-top:27px;padding-top:22px;border-top:1px solid var(--ld-line)}
-.locum-division .ld-specialty-band h3{color:var(--ld-ink);font-size:18px;line-height:1.45;margin:0}
-.ld-specialty-list{display:flex;flex-wrap:wrap;gap:8px 24px;list-style:none;margin:0;padding:0;min-width:0}
-.ld-specialty-list li{position:relative;max-width:100%;padding-left:12px;color:var(--ld-body);font-size:16px;line-height:1.55;font-weight:500}
-.ld-specialty-list li::before{content:"";position:absolute;left:0;top:.65em;width:4px;height:4px;border-radius:50%;background:#21616b}
-@media(max-width:820px){.ld-specialty-band{grid-template-columns:1fr;gap:12px;margin-top:23px;padding-top:20px}.ld-specialty-list{gap:7px 20px}}
-@media(max-width:540px){.ld-specialty-list{column-gap:16px}.ld-specialty-list li{font-size:16px}}
+/* Specialty directory: aligned names, no loose bullets or button-like pills. */
+.ld-specialty-band{display:block;margin-top:26px;padding:20px 24px 22px;background:#f7f9fb;border:1px solid #dce5ed;border-radius:10px;scroll-margin-top:108px}
+.locum-division .ld-specialty-band h3{color:var(--ld-ink);font-size:18px;line-height:1.45;font-weight:750;margin:0 0 14px;padding-left:12px;border-left:3px solid #21616b}
+.ld-specialty-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 26px;list-style:none;margin:0;padding:0;min-width:0}
+.ld-specialty-list li{position:static;min-width:0;max-width:100%;padding:0;color:var(--ld-body);font-size:16px;line-height:1.5;font-weight:500}
+.ld-specialty-list li::before{content:none}
+@media(max-width:1199px){.ld-specialty-list{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:22px}}
+@media(max-width:820px){.ld-specialty-band{margin-top:24px;padding:18px 20px 20px}.ld-specialty-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px}}
+@media(max-width:540px){.ld-specialty-band{padding:19px 0 0;background:#fff;border:0;border-top:1px solid #dce5ed;border-radius:0}.locum-division .ld-specialty-band h3{margin-bottom:15px}.ld-specialty-list{gap:12px 18px}}

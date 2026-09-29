@@ -7,7 +7,7 @@ from pathlib import Path
 from urllib.parse import urljoin, urlsplit, parse_qs
 import argparse, base64, hashlib, json, mimetypes, shutil, urllib.request
 from bs4 import BeautifulSoup
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, expect
 
 ROOT = Path(__file__).resolve().parents[1]
 WIDTHS = [320,390,540,768,820,1024,1040,1041,1100,1200,1280,1440,1920,2560,3440]
@@ -58,6 +58,15 @@ def main():
               const clipped=[];document.querySelectorAll('main h1,main h2,main h3,main h4,main p,main a.btn,.ld-role-tag,.ld-specialty-list li').forEach(e=>{if(e.classList.contains('ld-sr-only'))return;const r=e.getBoundingClientRect();if(r.width>2&&(e.scrollWidth>e.clientWidth+2||r.right>innerWidth+2||r.left< -2))clipped.push(e.textContent.trim())});
               return {width:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth,clipped_text:clipped,grid:rect('.ld-hero-grid'),copy:rect('.ld-hero-copy'),photo:rect('.ld-hero-photo'),sections:[...document.querySelectorAll('main>section')].map(e=>e.className),section_heights:[...document.querySelectorAll('main>section')].map(e=>e.getBoundingClientRect().height),care_settings:[...document.querySelectorAll('.ld-setting-row h3')].map(e=>e.textContent.trim()),settings_height:document.querySelector('#care-settings').getBoundingClientRect().height,models:[...document.querySelectorAll('.ld-coverage-card h3')].map(e=>e.textContent.trim()),role_tags:[...document.querySelectorAll('.ld-role-tag')].map(e=>e.textContent.trim()),what_matters:document.querySelectorAll('.ld-setting-factors').length,recruiting_steps:document.querySelectorAll('.ld-process-step').length,readiness_items:document.querySelectorAll('.ld-ready-item').length,opportunity_cards:document.querySelectorAll('.ld-opportunity-card').length,opportunity_links:[...document.querySelectorAll('.ld-opportunity-card a')].map(e=>e.getAttribute('href')),photo_width:document.querySelector('.ld-hero-photo img').naturalWidth,em_dash_absent:!document.querySelector('main').innerText.includes('—'),no_unrelated_claim:!document.querySelector('main').innerText.includes('20+'),extra_nav_absent:!document.querySelector('.section-nav,.page-nav')};
             }''')
+            directory=page.locator('.ld-specialty-band').evaluate("""e=>{const list=e.querySelector('ul'),s=getComputedStyle(list),r=e.getBoundingClientRect();return {columns:s.gridTemplateColumns.split(' ').length,height:r.height,items:[...list.children].map(x=>{const r=x.getBoundingClientRect(),s=getComputedStyle(x);return {text:x.textContent.trim(),left:r.left,right:r.right,top:r.top,bottom:r.bottom,font:parseFloat(s.fontSize),marker:getComputedStyle(x,'::before').content}})}}""")
+            row['specialty_directory']=directory
+            expected_columns=4 if width>1199 else 3 if width>820 else 2
+            assert directory['columns']==expected_columns,'Specialty column count'
+            assert all(x['font']>=16 and x['marker'] in ['none','normal'] for x in directory['items']),'Specialty font or marker'
+            assert directory['height']<=200 if width>=1440 else directory['height']<=330 if width<=540 else True,'Oversized specialty directory'
+            for i,a in enumerate(directory['items']):
+                for b in directory['items'][i+1:]:
+                    assert min(a['right'],b['right'])<=max(a['left'],b['left'])+1 or min(a['bottom'],b['bottom'])<=max(a['top'],b['top'])+1,'Overlapping specialty names'
             contrast=page.evaluate(CONTRAST);(out/f'contrast-{width}.json').write_text(json.dumps(contrast,indent=2))
             if contrast['failures'] or contrast['unknown']:failures.append({'width':width,'contrast':contrast['failures'],'unresolved':contrast['unknown']})
             if any(x['font_size']<16 for x in contrast['results'] if x['required']==7):failures.append({'width':width,'error':'Body text below 16px'})
@@ -86,6 +95,7 @@ def main():
                 if width in [390,1920]:
                     page.screenshot(path=str(out/f'locum-{width}-full.png'),full_page=True,animations='disabled')
                     page.locator('#care-settings').screenshot(path=str(out/f'care-settings-{width}.png'),animations='disabled')
+                    page.locator('.ld-specialty-band').screenshot(path=str(out/f'specialties-{width}.png'),animations='disabled')
             if width in [390,1920]:
                 page.evaluate('window.scrollTo(0,0)')
                 if width==390:page.locator('button.menu').click()
@@ -105,8 +115,8 @@ def main():
                     assert page.locator('#division').input_value()=='Locum Tenens';row['request_division_prefill']='passed; form not submitted'
                     for i,target in enumerate(row['opportunity_links']):
                         page.goto(url,wait_until='networkidle');page.locator('.ld-opportunity-card a').nth(i).click();assert page.url==urljoin(args.base_url,target)
-                        assert page.locator('#searchDivision').input_value()=='Locum Tenens'
-                        assert page.locator('#searchProfession').input_value()==PROFESSIONS[i]
+                        expect(page.locator('#searchDivision')).to_have_value('Locum Tenens')
+                        expect(page.locator('#searchProfession')).to_have_value(PROFESSIONS[i])
                         cards=page.locator('.job-card').all_text_contents()
                         if i==0:assert not any('Physician Assistant' in c or 'Nurse Practitioner' in c for c in cards)
                         if i==1:assert all('Physician Assistant' in c or 'Nurse Practitioner' in c for c in cards)
