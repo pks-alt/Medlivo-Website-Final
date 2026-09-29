@@ -1,0 +1,101 @@
+name: Verify final Locum heading and specialty order
+on:
+  push:
+    branches: [polish/locum-final-heading-order]
+    paths: [.github/workflows/prepare-locum-closeout.yml]
+permissions:
+  contents: write
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: polish/locum-final-heading-order
+      - name: Install existing verification tools
+        run: python -m pip install -r requirements-dev.txt
+      - name: Apply only the approved heading and ordering edits
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          import json, hashlib, re, subprocess
+          root=Path('.'); manifest=json.loads(Path('BUILD.json').read_text())
+          assert manifest['repository']=='pks-alt/Medlivo-Website-Final'
+          page=Path('locum-tenens.html'); old=page.read_text(); text=old
+          heading='<h3>Certified Registered Nurse Anesthetists</h3>'
+          description='Anesthesia coverage matched to case mix and the facility’s care-team model.'
+          assert text.count(heading)==1 and text.count(description)==1
+          text=text.replace(heading,'<h3>Nurse Anesthetists</h3>')
+          text=text.replace(description,'Certified Registered Nurse Anesthetists matched to the case mix and the facility’s care-team model.')
+          original_names=['Primary Care','Hospitalist Medicine','Emergency Medicine','Behavioral Health','Surgery','Critical Care','Urgent Care','Women’s Health','Cardiology','Orthopedics','Anesthesia']
+          ordered=sorted(original_names,key=str.casefold)
+          old_list=''.join('<li>'+name+'</li>' for name in original_names)
+          new_list=''.join('<li>'+name+'</li>' for name in ordered)
+          assert text.count(old_list)==1
+          text=text.replace(old_list,new_list)
+          page.write_text(text,encoding='utf-8')
+          before=BeautifulSoup(old,'html.parser');after=BeautifulSoup(text,'html.parser')
+          for selector in ['header','footer','.ld-hero','.ld-coverage','.ld-settings','.ld-recruiting','.ld-readiness','.ld-opportunities','.ld-connect']:
+              assert str(before.select_one(selector))==str(after.select_one(selector)),selector+' changed'
+          assert [a.get('href') for a in before.select('a')]==[a.get('href') for a in after.select('a')]
+          assert after.select_one('.ld-provider-item:last-child .ld-role-tag').get_text()=='CRNA'
+          assert [li.get_text() for li in after.select('.ld-specialty-list li')]==ordered
+          for name,digest in manifest['files'].items():
+              if name!='locum-tenens.html':
+                  assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==digest,'Unexpected change '+name
+          test=Path('scripts/verify_locum_layout.py');source=test.read_text()
+          previous="['Primary Care','Hospitalist Medicine','Emergency Medicine','Behavioral Health','Surgery','Critical Care','Urgent Care','Women’s Health','Cardiology','Orthopedics','Anesthesia']"
+          assert source.count(previous)==1
+          source=source.replace(previous,repr(ordered))
+          marker="              'ongoing_support':"
+          assert source.count(marker)==1
+          source=source.replace(marker,"              'balanced_crna_heading':page.locator('.ld-provider-item h3').last.inner_text()=='Nurse Anesthetists',\n              'full_crna_title_preserved':'Certified Registered Nurse Anesthetists' in page.locator('.ld-provider-item p').last.inner_text(),\n"+marker)
+          test.write_text(source,encoding='utf-8')
+          subprocess.run(['python','scripts/update_manifest.py','--build-id','medlivo-locum-final-heading-order'],check=True)
+          out=Path('verification/closeout');out.mkdir(parents=True,exist_ok=True)
+          (out/'scope.json').write_text(json.dumps({'base_commit':'d46e661abc69a99a1cb4e5b1a59dde6485339892','specialties':ordered,'changes':['Shorter Nurse Anesthetists heading; full professional name in description','Alphabetical specialty directory'],'unchanged':['all CSS','all link destinations','all original images','all other page HTML']},indent=2))
+          PY
+      - name: Check source, all page routes and fifteen Locum widths
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/medlivo-closeout.log 2>&1 &
+          python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/closeout/all
+          python scripts/verify_locum_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/closeout/locum
+      - name: Inspect the next page without modifying it
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from playwright.sync_api import sync_playwright
+          import json,shutil
+          out=Path('verification/closeout');report=[]
+          with sync_playwright() as p:
+              exe=shutil.which('google-chrome') or shutil.which('chromium')
+              browser=p.chromium.launch(headless=True,args=['--no-sandbox'],**({'executable_path':exe} if exe else {}))
+              for width in [1920,390]:
+                  page=browser.new_page(viewport={'width':width,'height':1080 if width==1920 else 844})
+                  page.goto('http://127.0.0.1:8765/search-jobs.html',wait_until='networkidle')
+                  page.screenshot(path=str(out/f'next-search-jobs-{width}.png'),full_page=True)
+                  report.append(page.evaluate('''()=>({width:innerWidth,headings:[...document.querySelectorAll('main h1,main h2')].map(x=>x.innerText),states:document.querySelectorAll('#filterState option').length-1,divisions:[...document.querySelectorAll('.jobs-division-card strong')].map(x=>x.innerText),alertLinks:[...document.querySelectorAll('[data-ats-action="job-alerts"]')].map(x=>x.getAttribute('href')),firstJobTop:document.querySelector('.job-card')?.getBoundingClientRect().top,overflow:document.documentElement.scrollWidth>innerWidth})'''))
+                  page.close()
+              page=browser.new_page(viewport={'width':1920,'height':1080})
+              page.goto('http://127.0.0.1:8765/locum-tenens.html',wait_until='networkidle')
+              page.locator('#providers').screenshot(path=str(out/'locum-final-providers-1920.png'))
+              browser.close()
+          (out/'next-search-jobs-review.json').write_text(json.dumps(report,indent=2))
+          PY
+      - name: Save only verified changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add locum-tenens.html scripts/verify_locum_layout.py BUILD.json
+          git rm .github/workflows/prepare-locum-closeout.yml
+          git commit -m 'Finalize Locum heading balance and alphabetize specialty directory'
+          git push origin HEAD:polish/locum-final-heading-order
+      - name: Save browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: locum-final-closeout
+          path: verification/closeout/
+          retention-days: 14
