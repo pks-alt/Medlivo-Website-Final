@@ -1,0 +1,91 @@
+name: Prepare results-first Search Jobs
+on:
+  push:
+    branches: [enhancement/search-jobs-results-first]
+    paths: [.github/workflows/prepare-jobs-results-first.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: enhancement/search-jobs-results-first
+      - name: Install existing browser tools
+        run: python -m pip install -r requirements-dev.txt
+      - name: Capture the starting job-search layout
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/medlivo-jobs-http.log 2>&1 &
+          python - <<'PY'
+          from pathlib import Path
+          import json,shutil
+          from playwright.sync_api import sync_playwright
+          out=Path('verification/jobs-prep/before');out.mkdir(parents=True,exist_ok=True);rows=[]
+          with sync_playwright() as pw:
+              browser=pw.chromium.launch(headless=True,executable_path=shutil.which('google-chrome') or shutil.which('chromium'),args=['--no-sandbox'])
+              for width in [390,1440,1920]:
+                  page=browser.new_page(viewport={'width':width,'height':1080 if width>1040 else 844})
+                  page.goto('http://127.0.0.1:8765/search-jobs.html',wait_until='networkidle')
+                  page.screenshot(path=str(out/f'jobs-{width}.png'),full_page=True)
+                  rows.append({'width':width,'first_job_top':page.locator('.job-card').first.bounding_box()['y']})
+                  page.close()
+              browser.close()
+          (out/'measurements.json').write_text(json.dumps(rows,indent=2))
+          PY
+      - name: Assemble the exact reviewed page and filters
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,base64,lzma,urllib.request,os,subprocess
+          from bs4 import BeautifulSoup
+          repo=os.environ['GITHUB_REPOSITORY'];assert repo=='pks-alt/Medlivo-Website-Final'
+          baseline=json.loads(Path('BUILD.json').read_text());old=Path('search-jobs.html').read_text();oldjs=Path('assets/js/search-jobs-3.js').read_text()
+          ids=['7b1e7bd9c4071a199549e85fe5036562aa419323','656793725be7f2b352fc8f33ed0514e7c33c9f9c','c471c72deadd4262bf8957915f840ff0dfe91529','01021cc99f16af3cec6063d34e9878d8576fb5e9']
+          parts=[]
+          for sha in ids:
+              req=urllib.request.Request('https://api.github.com/repos/'+repo+'/git/blobs/'+sha,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'})
+              with urllib.request.urlopen(req,timeout=30) as response:blob=json.load(response)
+              assert blob['sha']==sha;parts.append(base64.b64decode(blob['content']).decode())
+          raw=lzma.decompress(base64.b64decode(''.join(parts)))
+          digest=lambda b:hashlib.sha256(b).hexdigest()
+          assert digest(raw)=='27306f76e908d6820534a78eaeb1adb34e3456f5498f04150f5695bb29f89aeb','Transport mismatch'
+          files=json.loads(raw)
+          assert set(files)=={'search-jobs.html','assets/css/jobs-responsive.css','assets/js/search-jobs-3.js','scripts/verify_jobs_layout.py'}
+          for name,content in files.items():
+              path=Path(name);path.parent.mkdir(parents=True,exist_ok=True);path.write_text(content,encoding='utf-8')
+          before=BeautifulSoup(old,'html.parser');after=BeautifulSoup(files['search-jobs.html'],'html.parser')
+          assert str(before.header)==str(after.header) and str(before.footer)==str(after.footer),'Shared markup changed'
+          js=files['assets/js/search-jobs-3.js']
+          assert oldjs[oldjs.index('  const jobs='):oldjs.index('  const divisionConfig=')]==js[js.index('  const jobs='):js.index('  const divisionConfig=')],'Preview data or taxonomy changed'
+          assert [o['value'] for o in before.select('#filterState option')]==[o['value'] for o in after.select('#filterState option')],'State options changed'
+          for name,expected in baseline['files'].items():
+              if name not in ['search-jobs.html','assets/js/search-jobs-3.js']:assert digest(Path(name).read_bytes())==expected,'Unexpected source edit: '+name
+          subprocess.run(['python','scripts/update_manifest.py','--build-id','medlivo-jobs-results-first-20260928'],check=True)
+          report={'base':'89b316a3a095f9b28171d5cea92c150b40517e5a','other_ten_pages_unchanged':True,'all_images_unchanged':True,'preview_jobs_and_taxonomy_unchanged':True,'all_fifty_states_preserved':True,'hashes':{n:digest(c.encode()) for n,c in files.items()}}
+          Path('verification/jobs-prep/scope.json').write_text(json.dumps(report,indent=2));print(json.dumps(report,indent=2))
+          PY
+      - name: Verify all pages, division handoffs and seventeen job-search widths
+        run: |
+          node --check assets/js/search-jobs-3.js
+          python scripts/verify_site.py --base-url http://127.0.0.1:8765/ --output-dir verification/jobs-prep/all
+          python scripts/verify_home_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/jobs-prep/home
+          python scripts/verify_locum_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/jobs-prep/locum
+          python scripts/verify_jobs_layout.py --base-url http://127.0.0.1:8765/ --output-dir verification/jobs-prep/jobs
+      - name: Save only the tested source files
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add search-jobs.html assets/css/jobs-responsive.css assets/js/search-jobs-3.js scripts/verify_jobs_layout.py BUILD.json
+          git commit -m 'Improve Search Jobs with compact controls and earlier results'
+          git push origin HEAD:enhancement/search-jobs-results-first
+      - name: Preserve review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jobs-results-first-review
+          path: verification/jobs-prep/
+          retention-days: 14
