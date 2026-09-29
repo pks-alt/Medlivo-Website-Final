@@ -1902,3 +1902,254 @@ body{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
   .about-outcomes{grid-template-columns:1fr}
   .about-change-statement{border-radius:0 12px 12px 0;padding:22px}
 }
+
+
+/* === About Medlivo readability reset: 2026-09-29 === */
+.about-refined{
+  --wrap:min(1320px,calc(100vw - clamp(36px,6vw,96px)));
+}
+
+/* Keep one strong visual moment at the top. */
+.about-hero{
+  background:#102641;
+  padding:56px 0 60px;
+}
+.about-hero:after{display:none}
+.about-hero-grid{
+  grid-template-columns:minmax(0,1.18fr) minmax(320px,.62fr);
+  gap:64px;
+  align-items:center;
+}
+.about-hero h1{
+  max-width:18ch;
+  font-size:clamp(44px,3.8vw,62px);
+  line-height:1.08;
+}
+.about-hero-copy>p{
+  max-width:60ch;
+  font-size:17px;
+  line-height:1.68;
+}
+.about-hero-copy>p+p{margin-top:14px}
+.about-hero-panel{
+  border-radius:16px;
+  box-shadow:none;
+  backdrop-filter:none;
+  background:rgba(255,255,255,.04);
+}
+.about-hero-panel-head{padding:22px 24px 18px}
+.about-hero-panel-head>strong{font-size:22px}
+.about-hero-panel-list>div{padding:17px 22px}
+.about-hero-panel-list small{font-size:12px;line-height:1.45}
+
+/* Use one consistent content rhythm below the hero. */
+.about-story,
+.about-specialization,
+.about-change,
+.about-building,
+.about-standards{
+  padding:72px 0;
+  border:0;
+}
+.about-story,
+.about-change,
+.about-standards{background:#fff}
+.about-specialization,
+.about-building{background:#f6f8fa}
+
+.about-story-grid,
+.about-specialization-grid,
+.about-change-grid,
+.about-building-grid,
+.about-standards-grid{
+  display:grid;
+  grid-template-columns:minmax(260px,.72fr) minmax(0,1.28fr);
+  gap:72px;
+  align-items:start;
+}
+
+.about-section-intro,
+.about-specialization-grid>div:first-child,
+.about-change-copy>div:first-child,
+.about-building-grid>div:first-child,
+.about-standards-grid>div:first-child{
+  padding:0;
+}
+.about-section-intro:before{display:none}
+
+.about-section-intro h2,
+.about-specialization h2,
+.about-change h2,
+.about-building h2,
+.about-standards h2{
+  max-width:16ch;
+  font-size:clamp(34px,2.7vw,44px);
+  line-height:1.16;
+}
+
+.about-story-copy,
+.about-specialization-copy,
+.about-change-copy,
+.about-building-copy,
+.about-standards-copy{
+  max-width:720px;
+  padding:0;
+  margin:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+
+.about-story-copy p,
+.about-specialization-copy p,
+.about-change-copy p,
+.about-building-copy p,
+.about-standards-copy p{
+  font-size:17px;
+  line-height:1.75;
+  color:#31465a!important;
+}
+.about-story-copy p+p,
+.about-specialization-copy p+p,
+.about-change-copy p+p,
+.about-building-copy p+p,
+.about-standards-copy p+p{
+  margin-top:18px;
+  padding-top:0;
+  border:0;
+}
+
+/* Remove oversized or boxed treatments that interrupt reading. */
+.about-story-copy p:first-child{
+  font-size:17px;
+  line-height:1.75;
+  color:#31465a;
+}
+.about-story-copy p:last-child{
+  padding-top:0;
+  border:0;
+  font-weight:400;
+}
+.about-specialization-copy{padding:0;border:0;background:transparent}
+.about-change{
+  color:var(--about-ink);
+}
+.about-change:after{display:none}
+.about-change .about-eyebrow{color:#235466}
+.about-change h2{color:var(--about-ink)!important}
+.about-change-copy p{color:#31465a!important}
+.about-change-statement{
+  margin-top:26px;
+  max-width:660px;
+  padding:18px 20px;
+  border:0;
+  border-left:3px solid #21616b;
+  border-radius:0;
+  background:#f6f8fa;
+}
+.about-change-statement span{color:#235466}
+.about-change-statement strong{
+  color:var(--about-ink);
+  font-size:21px;
+  line-height:1.35;
+}
+
+.about-building-copy{
+  padding:0;
+  border:0;
+  background:transparent;
+}
+.about-outcomes{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:22px 0;
+}
+.about-outcomes span{
+  padding:7px 10px;
+  border:1px solid #c7d5df;
+  border-radius:999px;
+  background:#fff;
+  box-shadow:none;
+  font-size:13px;
+}
+.about-outcomes span:before{display:none}
+
+.about-standards-grid{
+  padding-top:0;
+  border-top:0;
+}
+.about-standards h2{max-width:18ch}
+.about-standards-copy p:last-child{
+  margin-top:18px;
+  padding-left:0;
+  border-left:0;
+  font-weight:400;
+}
+
+/* Keep the close compact and easy to scan. */
+.about-close{
+  padding:0 0 64px;
+  background:#fff;
+}
+.about-close-shell{
+  padding:32px 36px;
+  border-radius:16px;
+  box-shadow:none;
+}
+.about-close h2{
+  font-size:clamp(30px,2.5vw,38px);
+}
+
+/* Readability on tablet and mobile */
+@media(max-width:1040px){
+  .about-hero-grid,
+  .about-story-grid,
+  .about-specialization-grid,
+  .about-change-grid,
+  .about-building-grid,
+  .about-standards-grid{
+    grid-template-columns:1fr;
+    gap:26px;
+  }
+  .about-hero-panel{max-width:760px}
+  .about-story-copy,
+  .about-specialization-copy,
+  .about-change-copy,
+  .about-building-copy,
+  .about-standards-copy{
+    max-width:760px;
+  }
+  .about-section-intro h2,
+  .about-specialization h2,
+  .about-change h2,
+  .about-building h2,
+  .about-standards h2{
+    max-width:24ch;
+  }
+}
+@media(max-width:720px){
+  .about-refined{--wrap:min(100% - 28px,1320px)}
+  .about-hero{padding:38px 0 42px}
+  .about-hero h1{font-size:36px}
+  .about-hero-copy>p{font-size:16px}
+  .about-hero-panel{margin-top:6px}
+  .about-story,
+  .about-specialization,
+  .about-change,
+  .about-building,
+  .about-standards{
+    padding:48px 0;
+  }
+  .about-story-copy p,
+  .about-specialization-copy p,
+  .about-change-copy p,
+  .about-building-copy p,
+  .about-standards-copy p{
+    font-size:16px;
+    line-height:1.7;
+  }
+  .about-change-statement{margin-top:20px}
+  .about-close{padding-bottom:48px}
+  .about-close-shell{padding:26px 22px}
+}
