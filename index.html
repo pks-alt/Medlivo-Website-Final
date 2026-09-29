@@ -44,6 +44,7 @@
   "description":"Healthcare staffing and workforce solutions across Nursing & Allied, Rehabilitation, and Locum Tenens."
 }
 </script>
+<link rel="stylesheet" href="assets/css/medlivo-agent.css?v=20260929">
 </head>
 <!-- FINAL HOMEPAGE BUILD: agreed-order-v10 -->
 <body>
@@ -314,10 +315,38 @@
   </div>
 </footer>
 
+<button class="medlivo-agent-launcher" type="button" data-medlivo-agent-launcher aria-expanded="false" aria-controls="medlivo-agent-panel">
+  <span class="medlivo-agent-launcher-dot" aria-hidden="true"></span>
+  <span>Ask Medlivo</span>
+</button>
+
+<section class="medlivo-agent-panel" id="medlivo-agent-panel" data-medlivo-agent-panel aria-label="Ask Medlivo">
+  <div class="medlivo-agent-head">
+    <div class="medlivo-agent-brand">
+      <div class="medlivo-agent-mark" aria-hidden="true">M</div>
+      <div class="medlivo-agent-title">
+        <strong>Ask Medlivo</strong>
+        <span>Staffing and job support</span>
+      </div>
+    </div>
+    <button class="medlivo-agent-close" type="button" data-agent-close aria-label="Close Ask Medlivo">×</button>
+  </div>
+  <div class="medlivo-agent-body" data-agent-body aria-live="polite"></div>
+  <form class="medlivo-agent-foot" data-agent-form>
+    <div class="medlivo-agent-input-row">
+      <input class="medlivo-agent-input" type="text" data-agent-input autocomplete="off" placeholder="Type a message" aria-label="Message Ask Medlivo">
+      <button class="medlivo-agent-send" type="submit" data-agent-send aria-label="Send message">Send</button>
+    </div>
+    <div class="medlivo-agent-note">For staffing and employment support only. Please do not share patient information.</div>
+  </form>
+</section>
+
+
 <script src="assets/js/navigation-menu.js"></script>
 
 
 
 <script src="assets/js/navigation-dropdowns.js"></script>
+<script src="assets/js/medlivo-agent.js?v=20260929"></script>
 </body>
 </html>
