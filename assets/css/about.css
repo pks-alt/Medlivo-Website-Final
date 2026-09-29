@@ -2412,3 +2412,140 @@ body{--wrap:min(1560px,calc(100vw - clamp(40px,8vw,160px)))}
   .about-standard-grid article:last-child{border-bottom:0}
   .about-standard-close{margin-left:0!important}
 }
+
+
+/* === About Medlivo final polish: 2026-09-29 === */
+.about-story,
+.about-specialization,
+.about-change,
+.about-building,
+.about-standards{
+  padding-top:64px;
+  padding-bottom:64px;
+}
+
+/* Operating model: more brand-level, less process-heavy */
+.about-model-rows article{
+  grid-template-columns:48px minmax(0,1fr);
+  gap:20px;
+  padding:22px 0;
+}
+.about-model-rows article>span{
+  width:34px;
+  height:34px;
+  background:#eef4f6;
+  color:#235466;
+  border:1px solid #bfd0d8;
+}
+.about-model-rows strong{
+  font-size:21px;
+  font-weight:750;
+}
+.about-model-rows p{
+  max-width:700px;
+}
+
+/* Market-change callout: less like a consulting card */
+.about-change-statement{
+  padding:4px 0 4px 24px;
+  border:0;
+  border-left:3px solid #21616b;
+  border-radius:0;
+  background:transparent;
+}
+.about-change-statement strong{
+  font-size:23px;
+  max-width:14ch;
+}
+
+/* Standards: more visual distinction without turning into generic value cards */
+.about-standard-grid{
+  gap:16px;
+  border:0;
+}
+.about-standard-grid article{
+  position:relative;
+  min-height:190px;
+  padding:26px 24px 24px;
+  border:1px solid #d1dce4;
+  border-radius:14px;
+  background:#f8fafb;
+}
+.about-standard-grid article:first-child,
+.about-standard-grid article:last-child{
+  padding-left:24px;
+  padding-right:24px;
+}
+.about-standard-grid article:before{
+  content:"";
+  position:absolute;
+  left:24px;
+  top:0;
+  width:46px;
+  height:3px;
+  background:#21616b;
+}
+.about-standard-grid strong{
+  font-size:21px;
+}
+.about-standard-grid p{
+  margin-top:12px;
+}
+.about-standard-close{
+  max-width:760px;
+  margin-top:24px!important;
+}
+
+/* Bring CTA closer to standards so it feels like the natural conclusion */
+.about-standards{
+  padding-bottom:42px;
+}
+.about-close{
+  padding-top:0;
+  padding-bottom:58px;
+}
+.about-close-shell{
+  border-radius:14px;
+  padding:28px 32px;
+  background:linear-gradient(135deg,#102641 0%,#17385f 100%);
+}
+.about-close h2{
+  font-size:clamp(28px,2.3vw,36px);
+}
+.about-close-actions .btn{
+  min-width:142px;
+}
+
+/* Slightly tighter reading width for cleaner page rhythm */
+.about-story .wrap,
+.about-specialization .wrap,
+.about-change .wrap,
+.about-building .wrap,
+.about-standards .wrap,
+.about-close .wrap{
+  max-width:1240px;
+}
+
+@media(max-width:760px){
+  .about-story,
+  .about-specialization,
+  .about-change,
+  .about-building,
+  .about-standards{
+    padding-top:46px;
+    padding-bottom:46px;
+  }
+  .about-standard-grid{gap:12px}
+  .about-standard-grid article,
+  .about-standard-grid article:first-child,
+  .about-standard-grid article:last-child{
+    min-height:0;
+    padding:22px 20px;
+  }
+  .about-standard-grid article:before{
+    left:20px;
+  }
+  .about-change-statement{
+    padding-left:18px;
+  }
+}
