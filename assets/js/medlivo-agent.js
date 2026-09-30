@@ -8,6 +8,28 @@
   const input=panel.querySelector('[data-agent-input]');
   const close=panel.querySelector('[data-agent-close]');
   const state={mode:'home',step:null,data:{}};
+  const STORAGE_KEY='medlivoAgentSessionV1';
+
+  function track(eventName,detail={}){
+    const payload={event:eventName,source:'ask_medlivo',...detail};
+    window.dataLayer=window.dataLayer||[];
+    window.dataLayer.push(payload);
+    window.dispatchEvent(new CustomEvent('medlivo:agent',{detail:payload}));
+  }
+  function saveState(){
+    try{sessionStorage.setItem(STORAGE_KEY,JSON.stringify({mode:state.mode,step:state.step,data:state.data}))}catch(e){}
+  }
+  function clearState(){
+    try{sessionStorage.removeItem(STORAGE_KEY)}catch(e){}
+  }
+  function restoreState(){
+    try{
+      const saved=JSON.parse(sessionStorage.getItem(STORAGE_KEY)||'null');
+      if(saved&&saved.mode&&saved.step){state.mode=saved.mode;state.step=saved.step;state.data=saved.data||{};return true}
+    }catch(e){}
+    return false;
+  }
+  function validEmail(value){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)}
   const divisions=['Nursing & Allied','Rehabilitation','Locum Tenens'];
   let thinkingNode=null;
 
@@ -38,7 +60,7 @@
   function showThinking(){thinkingNode=document.createElement('div');thinkingNode.className='medlivo-agent-message bot';thinkingNode.innerHTML='<div class="medlivo-agent-thinking"><i></i><i></i><i></i></div>';body.appendChild(thinkingNode);scrollBottom()}
   function hideThinking(){if(thinkingNode){thinkingNode.remove();thinkingNode=null}}
   function reset(){
-    state.mode='home';state.step=null;state.data={};body.innerHTML='';
+    state.mode='home';state.step=null;state.data={};clearState();body.innerHTML='';
     addMessage('Hi. I can help with staffing needs, healthcare jobs, or questions about Medlivo.');
     addMessage('What would you like to do?');
     addOptions([{label:'I need healthcare staff',onClick:startClient},{label:'I’m looking for a job',onClick:startClinician},{label:'I have a question',onClick:startQuestion}]);
@@ -46,20 +68,21 @@
   }
 
   function startClient(){
-    state.mode='client';state.step='division';state.data={};addMessage('I need healthcare staff','user');addStep('Staffing request',1,3);addMessage('Which team is closest to your need?');
+    state.mode='client';state.step='division';state.data={};saveState();track('ask_medlivo_client_started');addMessage('I need healthcare staff','user');addStep('Staffing request',1,3);addMessage('Which team is closest to your need?');
     addOptions(divisions.map(d=>({label:d,onClick:()=>chooseClientDivision(d)})).concat([{label:'Not sure',onClick:()=>chooseClientDivision('Not sure')}]));
   }
-  function chooseClientDivision(v){state.data.division=v;addMessage(v,'user');state.step='role';addMessage('What role or specialty do you need?');setPlaceholder('Example: ICU RN, PT, Urologist')}
+  function chooseClientDivision(v){state.data.division=v;addMessage(v,'user');state.step='role';saveState();addMessage('What role or specialty do you need?');setPlaceholder('Example: ICU RN, PT, Urologist')}
   function clientNext(v){
-    if(state.step==='role'){state.data.role=v;state.step='location';addMessage('What city and state is the coverage for?');setPlaceholder('Example: Tacoma, WA');return}
-    if(state.step==='location'){state.data.location=v;state.step='timing';addMessage('When do you need coverage to start?');setPlaceholder('Example: ASAP or October 15');return}
-    if(state.step==='timing'){state.data.startTiming=v;state.step='count';addMessage('How many people do you need?');setPlaceholder('Example: 2');return}
-    if(state.step==='count'){state.data.numberNeeded=v;state.step='organization';addStep('Organization',2,3);addMessage('What organization or facility is this for?');setPlaceholder('Organization or facility name');return}
-    if(state.step==='organization'){state.data.organization=v;state.step='contactName';addMessage('Who should our team contact?');setPlaceholder('Your name');return}
-    if(state.step==='contactName'){state.data.contactName=v;state.step='workEmail';addMessage('What is your work email?');setPlaceholder('name@organization.com');return}
-    if(state.step==='workEmail'){state.data.workEmail=v;state.step='phone';addMessage('Phone number? You can type “skip” if you prefer email.');setPlaceholder('Phone number or skip');return}
-    if(state.step==='phone'){state.data.phone=/^skip$/i.test(v)?'':v;state.step='notes';addStep('Review and send',3,3);addMessage('Anything else the team should know? You can type “skip”.');setPlaceholder('Schedule, shift, call, credentialing, or skip');return}
-    if(state.step==='notes'){state.data.notes=/^skip$/i.test(v)?'':v;submitClientLead()}
+    if(state.step==='workEmail'&&!validEmail(v)){addMessage('Please enter a valid work email so the Medlivo team can follow up.');setPlaceholder('name@organization.com');saveState();return}
+    if(state.step==='role'){state.data.role=v;state.step='location';addMessage('What city and state is the coverage for?');setPlaceholder('Example: Tacoma, WA');saveState();return}
+    if(state.step==='location'){state.data.location=v;state.step='timing';addMessage('When do you need coverage to start?');setPlaceholder('Example: ASAP or October 15');saveState();return}
+    if(state.step==='timing'){state.data.startTiming=v;state.step='count';addMessage('How many people do you need?');setPlaceholder('Example: 2');saveState();return}
+    if(state.step==='count'){state.data.numberNeeded=v;state.step='organization';addStep('Organization',2,3);addMessage('What organization or facility is this for?');setPlaceholder('Organization or facility name');saveState();return}
+    if(state.step==='organization'){state.data.organization=v;state.step='contactName';addMessage('Who should our team contact?');setPlaceholder('Your name');saveState();return}
+    if(state.step==='contactName'){state.data.contactName=v;state.step='workEmail';addMessage('What is your work email?');setPlaceholder('name@organization.com');saveState();return}
+    if(state.step==='workEmail'){state.data.workEmail=v;state.step='phone';addMessage('Phone number? You can type “skip” if you prefer email.');setPlaceholder('Phone number or skip');saveState();return}
+    if(state.step==='phone'){state.data.phone=/^skip$/i.test(v)?'':v;state.step='notes';addStep('Review and send',3,3);addMessage('Anything else the team should know? You can type “skip”.');setPlaceholder('Schedule, shift, call, credentialing, or skip');saveState();return}
+    if(state.step==='notes'){state.data.notes=/^skip$/i.test(v)?'':v;saveState();submitClientLead()}
   }
   async function submitClientLead(){
     state.step='submitting';showThinking();
@@ -69,7 +92,9 @@
       const result=await response.json(),d=state.data;
       addMessage('Thank you. Your staffing request has been sent to Medlivo.');
       addCard('Request received',[d.division,d.role,d.location,d.startTiming,d.numberNeeded?d.numberNeeded+' needed':null].filter(Boolean).join(' · '),[{label:'Workforce Solutions',href:'workforce-solutions.html'},{label:'Call Medlivo',href:'tel:+18556335486'}]);
-      if(result.leadId)addMessage('Reference: '+result.leadId);state.step='complete';setPlaceholder('Ask another question');
+      if(result.assignedTeam)addMessage('Routed to: '+result.assignedTeam+'.');
+      if(result.leadId)addMessage('Reference: '+result.leadId);
+      state.step='complete';clearState();track('ask_medlivo_client_submitted',{division:d.division||'',lead_id:result.leadId||''});setPlaceholder('Ask another question');
     }catch(e){
       hideThinking();console.error(e);addMessage('I could not send the request online. I can still take you to the Request Staff form with the details already filled in.');
       const d=state.data,p=new URLSearchParams();if(d.division&&d.division!=='Not sure')p.set('division',d.division);if(d.role)p.set('role',d.role);if(d.location)p.set('location',d.location);if(d.startTiming)p.set('start',d.startTiming);if(d.numberNeeded)p.set('count',d.numberNeeded);
@@ -78,17 +103,18 @@
   }
 
   function startClinician(){
-    state.mode='clinician';state.step='division';state.data={};addMessage('I’m looking for a job','user');addStep('Career preferences',1,3);addMessage('Which area best matches your profession?');
+    state.mode='clinician';state.step='division';state.data={};saveState();track('ask_medlivo_clinician_started');addMessage('I’m looking for a job','user');addStep('Career preferences',1,3);addMessage('Which area best matches your profession?');
     addOptions(divisions.map(d=>({label:d,onClick:()=>chooseClinicianDivision(d)})));
   }
-  function chooseClinicianDivision(v){state.data.division=v;addMessage(v,'user');state.step='profession';addMessage('What is your profession?');setPlaceholder('Example: RN, Physical Therapist, CRNA')}
+  function chooseClinicianDivision(v){state.data.division=v;addMessage(v,'user');state.step='profession';saveState();addMessage('What is your profession?');setPlaceholder('Example: RN, Physical Therapist, CRNA')}
   function clinicianNext(v){
-    if(state.step==='profession'){state.data.profession=v;state.step='specialty';addMessage('What specialty best describes your experience? You can type “skip”.');setPlaceholder('Example: ICU, Pediatrics, Outpatient, or skip');return}
-    if(state.step==='specialty'){state.data.specialty=/^skip$/i.test(v)?'':v;state.step='preferredLocations';addMessage('Where would you like to work?');setPlaceholder('City, state, or states');return}
-    if(state.step==='preferredLocations'){state.data.preferredLocations=v;state.step='travelLocal';addMessage('Are you looking for travel, local, or either?');addOptions(['Travel','Local','Either'].map(x=>({label:x,onClick:()=>{state.data.travelLocal=x;addMessage(x,'user');state.step='availability';addMessage('When are you available to start?');setPlaceholder('Example: ASAP, October, or flexible')}})));return}
-    if(state.step==='availability'){state.data.availability=v;state.step='name';addStep('Contact details',2,3);addMessage('What is your name?');setPlaceholder('Your name');return}
-    if(state.step==='name'){state.data.name=v;state.step='email';addMessage('What email should a recruiter use?');setPlaceholder('you@example.com');return}
-    if(state.step==='email'){state.data.email=v;state.step='phone';addMessage('What is the best phone number? You can type “skip”.');setPlaceholder('Phone number or skip');return}
+    if(state.step==='email'&&!validEmail(v)){addMessage('Please enter a valid email so a recruiter can follow up.');setPlaceholder('you@example.com');return}
+    if(state.step==='profession'){state.data.profession=v;state.step='specialty';addMessage('What specialty best describes your experience? You can type “skip”.');setPlaceholder('Example: ICU, Pediatrics, Outpatient, or skip');saveState();return}
+    if(state.step==='specialty'){state.data.specialty=/^skip$/i.test(v)?'':v;state.step='preferredLocations';addMessage('Where would you like to work?');setPlaceholder('City, state, or states');saveState();return}
+    if(state.step==='preferredLocations'){state.data.preferredLocations=v;state.step='travelLocal';addMessage('Are you looking for travel, local, or either?');addOptions(['Travel','Local','Either'].map(x=>({label:x,onClick:()=>{state.data.travelLocal=x;addMessage(x,'user');state.step='availability';addMessage('When are you available to start?');setPlaceholder('Example: ASAP, October, or flexible')}})));saveState();return}
+    if(state.step==='availability'){state.data.availability=v;state.step='name';addStep('Contact details',2,3);addMessage('What is your name?');setPlaceholder('Your name');saveState();return}
+    if(state.step==='name'){state.data.name=v;state.step='email';addMessage('What email should a recruiter use?');setPlaceholder('you@example.com');saveState();return}
+    if(state.step==='email'){state.data.email=v;state.step='phone';addMessage('What is the best phone number? You can type “skip”.');setPlaceholder('Phone number or skip');saveState();return}
     if(state.step==='phone'){state.data.phone=/^skip$/i.test(v)?'':v;addStep('Connect with Medlivo',3,3);submitClinicianLead()}
   }
   async function submitClinicianLead(){
@@ -100,7 +126,9 @@
       if(d.division)p.set('division',d.division);if(d.profession)p.set('profession',d.profession);if(d.specialty)p.set('specialty',d.specialty);if(d.preferredLocations)p.set('location',d.preferredLocations);
       addMessage('Thanks. Your information has been sent to the Medlivo recruiting team.');
       addCard('You’re connected',[d.profession,d.specialty,d.preferredLocations,d.travelLocal,d.availability].filter(Boolean).join(' · '),[{label:'View Jobs',href:'search-jobs.html?'+p.toString()},{label:'About Medlivo',href:'about.html'}]);
-      if(result.leadId)addMessage('Reference: '+result.leadId);state.step='complete';setPlaceholder('Ask another question');
+      if(result.assignedRecruiter)addMessage('Routed to: '+result.assignedRecruiter+'.');
+      if(result.leadId)addMessage('Reference: '+result.leadId);
+      state.step='complete';clearState();track('ask_medlivo_clinician_submitted',{division:d.division||'',lead_id:result.leadId||''});setPlaceholder('Ask another question');
     }catch(e){hideThinking();console.error(e);addMessage('I could not send your information online right now. You can still search Medlivo jobs or contact us directly.');addCard('Next step','',[{label:'Search Jobs',href:'search-jobs.html'},{label:'Contact Medlivo',href:'contact.html'}]);state.step='complete'}
   }
 
@@ -127,8 +155,8 @@
   }
   async function handleFreeText(text){
     const known=answerKnownQuestion(text);
-    if(known){addMessage(known.text);if(known.startClient)addOptions([{label:'Start staffing request',onClick:startClient}]);else if(known.actions)addCard('Next step','',known.actions);return}
-    showThinking();const api=await askApi(text);hideThinking();if(api){addMessage(api.message);return}
+    if(known){addMessage(known.text);if(known.startClient)addOptions([{label:'Start staffing request',onClick:startClient}]);else if(known.actions)addCard('Next step','',known.actions);saveState();return}
+    showThinking();const api=await askApi(text);hideThinking();if(api){addMessage(api.message);saveState();return}
     addMessage('I can help with staffing requests, healthcare jobs, Medlivo services, credentialing, and contact information.');
     addOptions([{label:'I need staff',onClick:startClient},{label:'Find a job',onClick:startClinician},{label:'Contact Medlivo',onClick:()=>addCard('Contact Medlivo','',[{label:'Contact Medlivo',href:'contact.html'}])}]);
   }
@@ -138,7 +166,21 @@
     if(state.mode==='clinician'&&['profession','specialty','preferredLocations','availability','name','email','phone'].includes(state.step))return clinicianNext(v);
     return handleFreeText(v);
   }
-  launcher.addEventListener('click',()=>{panel.classList.toggle('open');launcher.setAttribute('aria-expanded',panel.classList.contains('open')?'true':'false');if(panel.classList.contains('open')&&!body.children.length)reset();if(panel.classList.contains('open'))setTimeout(()=>input.focus(),100)});
+  launcher.addEventListener('click',()=>{
+    panel.classList.toggle('open');
+    const isOpen=panel.classList.contains('open');
+    launcher.setAttribute('aria-expanded',isOpen?'true':'false');
+    if(isOpen&&!body.children.length){
+      track('ask_medlivo_opened');
+      if(restoreState()&&state.step!=='complete'){
+        addMessage('Welcome back. I kept your progress from this visit.');
+        addMessage('You can continue where you left off.');
+      }else{
+        reset();
+      }
+    }
+    if(isOpen)setTimeout(()=>input.focus(),100);
+  });
   close.addEventListener('click',()=>{panel.classList.remove('open');launcher.setAttribute('aria-expanded','false');launcher.focus()});
   form.addEventListener('submit',e=>{e.preventDefault();submitText(input.value)});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel.classList.contains('open')){panel.classList.remove('open');launcher.setAttribute('aria-expanded','false');launcher.focus()}});
