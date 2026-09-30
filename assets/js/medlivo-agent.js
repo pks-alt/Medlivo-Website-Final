@@ -226,7 +226,7 @@
     try{
       const controller=new AbortController();
       const timeout=setTimeout(()=>controller.abort(),6500);
-      const response=await fetch('/api/medlivo-agent',{
+      const response=await fetch('https://medlivo-ai-agent-397967014447.us-west1.run.app/api/medlivo-agent',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
@@ -237,7 +237,11 @@
         signal:controller.signal
       });
       clearTimeout(timeout);
-      if(!response.ok)return null;
+      if(!response.ok){
+        const errorText=await response.text().catch(()=>"");
+        console.error('Ask Medlivo API error',response.status,errorText);
+        return null;
+      }
       const data=await response.json();
       if(!data||!data.message)return null;
       return data;
