@@ -252,3 +252,32 @@
     background:#102641;
   }
 }
+
+/* Ask Medlivo conversion concierge refinements */
+.medlivo-agent-panel{width:min(448px,calc(100vw - 32px));max-height:min(720px,calc(100vh - 112px));border-radius:20px}
+.medlivo-agent-head{padding:16px 17px;background:#fff}
+.medlivo-agent-mark{width:36px;height:36px;border-radius:10px;font-size:12px}
+.medlivo-agent-title strong{font-size:15.5px}
+.medlivo-agent-title span{font-size:11px;color:#778798}
+.medlivo-agent-body{padding:18px 18px 22px}
+.medlivo-agent-bubble{max-width:88%;font-size:13.5px;line-height:1.48}
+.medlivo-agent-message.bot .medlivo-agent-bubble{background:#f1f5f7}
+.medlivo-agent-option{min-height:39px;padding:0 14px;border-color:#d4dfe6;background:#fff}
+.medlivo-agent-option:hover{background:#f5f8fa;border-color:#9ab1bf}
+.medlivo-agent-progress{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center;margin:2px 0 14px;padding:0 2px;color:#657789;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.medlivo-agent-progress strong{color:#102641;font-size:10.5px}
+.medlivo-agent-progress i{grid-column:1/-1;height:3px;border-radius:999px;background:#e7edf1;overflow:hidden}
+.medlivo-agent-progress i b{display:block;height:100%;border-radius:inherit;background:#7ccf3b}
+.medlivo-agent-card{padding:15px;border-radius:13px;box-shadow:0 5px 18px rgba(16,38,65,.05)}
+.medlivo-agent-card strong{font-size:13.5px}
+.medlivo-agent-card p{font-size:12.25px;line-height:1.55}
+.medlivo-agent-link{min-height:39px}
+.medlivo-agent-foot{padding:11px 13px 12px}
+.medlivo-agent-note{font-size:10px}
+.medlivo-agent-send{width:auto;min-width:58px;padding:0 12px}
+@media(max-width:640px){
+  .medlivo-agent-panel{left:6px;right:6px;bottom:76px;width:auto;max-height:calc(100dvh - 88px);border-radius:18px}
+  .medlivo-agent-body{padding:16px 14px 20px}
+  .medlivo-agent-head{padding:14px}
+  .medlivo-agent-foot{padding:10px 10px 11px}
+}
