@@ -29,6 +29,28 @@
     }catch(e){}
     return false;
   }
+  function resumePrompt(){
+    const prompts={
+      role:['What role or specialty do you need?','Example: ICU RN, PT, Urologist'],
+      location:['What city and state is the coverage for?','Example: Tacoma, WA'],
+      timing:['When do you need coverage to start?','Example: ASAP or October 15'],
+      count:['How many people do you need?','Example: 2'],
+      organization:['What organization or facility is this for?','Organization or facility name'],
+      contactName:['Who should our team contact?','Your name'],
+      workEmail:['What is your work email?','name@organization.com'],
+      notes:['Anything else the team should know? You can type “skip”.','Schedule, shift, call, credentialing, or skip'],
+      profession:['What is your profession?','Example: RN, Physical Therapist, CRNA'],
+      specialty:['What specialty best describes your experience? You can type “skip”.','Example: ICU, Pediatrics, Outpatient, or skip'],
+      preferredLocations:['Where would you like to work?','City, state, or states'],
+      availability:['When are you available to start?','Example: ASAP, October, or flexible'],
+      name:['What is your name?','Your name'],
+      email:['What email should a recruiter use?','you@example.com'],
+      phone:['What is the best phone number? You can type “skip”.','Phone number or skip']
+    };
+    const p=prompts[state.step];
+    if(p){addMessage(p[0]);setPlaceholder(p[1]);}
+    else setPlaceholder('Type a message');
+  }
   function validEmail(value){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)}
   const divisions=['Nursing & Allied','Rehabilitation','Locum Tenens'];
   let thinkingNode=null;
@@ -174,7 +196,7 @@
       track('ask_medlivo_opened');
       if(restoreState()&&state.step!=='complete'){
         addMessage('Welcome back. I kept your progress from this visit.');
-        addMessage('You can continue where you left off.');
+        resumePrompt();
       }else{
         reset();
       }
