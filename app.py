@@ -91,6 +91,46 @@ def _lead_id(prefix):
 def _now_iso():
     return datetime.now(timezone.utc).isoformat()
 
+def _clean(value, limit=500):
+    return str(value or "").strip()[:limit]
+
+def _valid_email(value):
+    value = _clean(value, 254)
+    return "@" in value and "." in value.split("@")[-1] and " " not in value
+
+def _client_team(division):
+    return {
+        "Nursing & Allied": "Nursing & Allied Team",
+        "Rehabilitation": "Rehabilitation Team",
+        "Locum Tenens": "Locum Tenens Team",
+    }.get(_clean(division), "Medlivo Intake")
+
+def _clinician_team(division):
+    return {
+        "Nursing & Allied": "Nursing & Allied Recruiting",
+        "Rehabilitation": "Rehabilitation Recruiting",
+        "Locum Tenens": "Locum Tenens Recruiting",
+    }.get(_clean(division), "Medlivo Recruiting")
+
+def _client_summary(d):
+    parts = [
+        _clean(d.get("role")),
+        f"in {_clean(d.get('location'))}" if _clean(d.get("location")) else "",
+        f"starting {_clean(d.get('startTiming'))}" if _clean(d.get("startTiming")) else "",
+        f"{_clean(d.get('numberNeeded'))} needed" if _clean(d.get("numberNeeded")) else "",
+    ]
+    return " | ".join([p for p in parts if p])
+
+def _clinician_summary(d):
+    parts = [
+        _clean(d.get("profession")),
+        _clean(d.get("specialty")),
+        _clean(d.get("preferredLocations")),
+        _clean(d.get("travelLocal")),
+        f"available {_clean(d.get('availability'))}" if _clean(d.get("availability")) else "",
+    ]
+    return " | ".join([p for p in parts if p])
+
 @app.before_request
 def protect_api():
     if not request.path.startswith("/api/"):
@@ -143,63 +183,75 @@ Reply in 1-4 short sentences. If a next step is useful, mention it naturally. Do
 def create_client_lead():
     d = request.get_json(silent=True) or {}
     required = ["organization", "contactName", "workEmail", "role", "location"]
-    missing = [k for k in required if not str(d.get(k, "")).strip()]
+    missing = [k for k in required if not _clean(d.get(k))]
     if missing:
         return jsonify({"error": "missing_fields", "fields": missing}), 400
+    if not _valid_email(d.get("workEmail")):
+        return jsonify({"error": "invalid_email"}), 400
 
     lead_id = _lead_id("CL")
     now = _now_iso()
+    summary = _client_summary(d)
+    notes = _clean(d.get("notes"), 1200)
+    notes_value = f"Lead summary: {summary}" + (f"\nNotes: {notes}" if notes else "")
+    assigned_team = _clean(d.get("assignedTeam")) or _client_team(d.get("division"))
+
     row = [
         lead_id,
         now,
-        str(d.get("organization", "")).strip(),
-        str(d.get("contactName", "")).strip(),
-        str(d.get("workEmail", "")).strip(),
-        str(d.get("phone", "")).strip(),
-        str(d.get("division", "")).strip(),
-        str(d.get("role", "")).strip(),
-        str(d.get("location", "")).strip(),
-        str(d.get("startTiming", "")).strip(),
-        str(d.get("numberNeeded", "")).strip(),
-        str(d.get("notes", "")).strip(),
-        str(d.get("source", "Ask Medlivo")).strip(),
+        _clean(d.get("organization")),
+        _clean(d.get("contactName")),
+        _clean(d.get("workEmail"), 254),
+        _clean(d.get("phone"), 50),
+        _clean(d.get("division")),
+        _clean(d.get("role")),
+        _clean(d.get("location")),
+        _clean(d.get("startTiming")),
+        _clean(d.get("numberNeeded"), 50),
+        notes_value[:1500],
+        _clean(d.get("source", "Ask Medlivo")),
         "New",
-        str(d.get("assignedTeam", "")).strip(),
+        assigned_team,
         now,
     ]
     _append_row("Client Leads", row)
-    return jsonify({"ok": True, "leadId": lead_id})
+    return jsonify({"ok": True, "leadId": lead_id, "assignedTeam": assigned_team, "summary": summary})
 
 @app.post("/api/leads/clinician")
 def create_clinician_lead():
     d = request.get_json(silent=True) or {}
     required = ["name", "email", "profession"]
-    missing = [k for k in required if not str(d.get(k, "")).strip()]
+    missing = [k for k in required if not _clean(d.get(k))]
     if missing:
         return jsonify({"error": "missing_fields", "fields": missing}), 400
+    if not _valid_email(d.get("email")):
+        return jsonify({"error": "invalid_email"}), 400
 
     lead_id = _lead_id("CN")
     now = _now_iso()
+    assigned_recruiter = _clean(d.get("assignedRecruiter")) or _clinician_team(d.get("division"))
+    summary = _clinician_summary(d)
+
     row = [
         lead_id,
         now,
-        str(d.get("name", "")).strip(),
-        str(d.get("email", "")).strip(),
-        str(d.get("phone", "")).strip(),
-        str(d.get("division", "")).strip(),
-        str(d.get("profession", "")).strip(),
-        str(d.get("specialty", "")).strip(),
-        str(d.get("preferredLocations", "")).strip(),
-        str(d.get("travelLocal", "")).strip(),
-        str(d.get("availability", "")).strip(),
-        str(d.get("resumeLink", "")).strip(),
-        str(d.get("source", "Ask Medlivo")).strip(),
+        _clean(d.get("name")),
+        _clean(d.get("email"), 254),
+        _clean(d.get("phone"), 50),
+        _clean(d.get("division")),
+        _clean(d.get("profession")),
+        _clean(d.get("specialty")),
+        _clean(d.get("preferredLocations")),
+        _clean(d.get("travelLocal")),
+        _clean(d.get("availability")),
+        _clean(d.get("resumeLink"), 1000),
+        _clean(d.get("source", "Ask Medlivo")),
         "New",
-        str(d.get("assignedRecruiter", "")).strip(),
+        assigned_recruiter,
         now,
     ]
     _append_row("Clinician Leads", row)
-    return jsonify({"ok": True, "leadId": lead_id})
+    return jsonify({"ok": True, "leadId": lead_id, "assignedRecruiter": assigned_recruiter, "summary": summary})
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", "8080"))
