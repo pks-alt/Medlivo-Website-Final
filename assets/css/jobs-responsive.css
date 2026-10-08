@@ -132,3 +132,18 @@
 @media(prefers-reduced-motion:reduce){.jobs-refined *{scroll-behavior:auto!important;transition:none!important}}
 
 .jobs-refined .jobs-support-item::before,.jobs-refined .jobs-support-item::after{display:none}
+
+
+/* Medlivo Career API states */
+.jobs-refined .jobs-loading,
+.jobs-refined .jobs-api-error{
+  grid-column:1/-1;
+  padding:28px;
+  border:1px solid #c7d5df;
+  border-radius:12px;
+  background:#f5f8fa;
+  color:#30475b;
+}
+.jobs-refined .jobs-api-error h3{margin:0 0 8px;font-size:23px;color:#102641}
+.jobs-refined .jobs-api-error p{margin:0;max-width:62ch}
+.jobs-refined #sortJobs:disabled{opacity:.72;cursor:not-allowed}
