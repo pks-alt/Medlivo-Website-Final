@@ -55,9 +55,26 @@
         </div>
         <aside class="job-apply-panel">
           <span class="job-apply-eyebrow">Interested in this role?</span>
-          <h2>Connect with Medlivo.</h2>
-          <p>Share your information and a recruiter can help confirm current availability, requirements, and next steps.</p>
-          <a class="btn btn-green" id="applyNow" href="mailto:hello@medlivo.com?subject=Healthcare%20Job%20Interest">Apply / Contact Recruiter</a>
+          <h2>Apply with Medlivo.</h2>
+          <p>Share a few details so we can connect your interest to this exact job and route it to the right recruiter.</p>
+          <form id="jobApplyForm" class="job-apply-form">
+            <input type="hidden" id="applyJobId" name="job_id">
+            <input type="hidden" id="applyProfession" name="profession">
+            <input type="hidden" id="applySpecialty" name="specialty">
+            <label for="applyName">Name</label>
+            <input id="applyName" name="name" maxlength="200" autocomplete="name" required>
+            <label for="applyEmail">Email</label>
+            <input id="applyEmail" name="email" type="email" maxlength="254" autocomplete="email" required>
+            <label for="applyPhone">Phone</label>
+            <input id="applyPhone" name="phone" maxlength="50" autocomplete="tel">
+            <label for="applyAvailability">Availability</label>
+            <input id="applyAvailability" name="availability" maxlength="200" placeholder="e.g. Available November 15">
+            <label for="applyResumeUrl">Resume link <span>(optional)</span></label>
+            <input id="applyResumeUrl" name="resume_url" type="url" maxlength="1000" placeholder="https://">
+            <label class="job-consent"><input id="applyConsent" name="consent_to_contact" type="checkbox" required> <span>I agree that Medlivo may contact me about this job and related opportunities.</span></label>
+            <button class="btn btn-green" id="applyNow" type="submit">Submit Interest</button>
+            <div id="applyMessage" class="job-apply-message" role="status" aria-live="polite"></div>
+          </form>
           <a class="job-phone-link" href="tel:+18556335486">Call 855-633-5486</a>
         </aside>
       </div>
