@@ -1,4 +1,5 @@
 import os
+import json
 import time
 import uuid
 from datetime import datetime, timezone
@@ -231,6 +232,53 @@ def career_job(job_id):
         return jsonify({"error": "career_jobs_unavailable"}), 503
     response = app.response_class(payload, status=200, mimetype="application/json")
     response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
+    return response
+
+
+def _career_api_post(path, body):
+    if not CAREER_API_BASE_URL:
+        return None, 503
+    url = CAREER_API_BASE_URL + path
+    payload = json.dumps(body).encode("utf-8")
+    req = URLRequest(url, data=payload, headers={
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "User-Agent": "Medlivo-Website/1.0",
+    }, method="POST")
+    try:
+        with urlopen(req, timeout=8) as response:
+            return response.read(1024 * 1024), response.status
+    except HTTPError as exc:
+        try:
+            error_payload = exc.read(64 * 1024)
+        except Exception:
+            error_payload = None
+        if exc.code in {400, 404, 422}:
+            return error_payload, exc.code
+        return None, 503
+    except (URLError, TimeoutError):
+        return None, 503
+
+
+@app.post("/api/careers/applications")
+def career_application():
+    d = request.get_json(silent=True) or {}
+    allowed = {
+        "job_id", "name", "email", "phone", "profession", "specialty",
+        "preferred_location", "availability", "resume_url", "consent_to_contact"
+    }
+    payload = {key: d.get(key) for key in allowed if key in d}
+    if not _clean(payload.get("job_id"), 64) or not _clean(payload.get("name"), 200) or not _valid_email(payload.get("email")):
+        return jsonify({"error": "missing_or_invalid_fields"}), 400
+    if payload.get("consent_to_contact") is not True:
+        return jsonify({"error": "consent_required"}), 400
+    body, status = _career_api_post("/api/v1/careers/applications", payload)
+    if status in {400, 404, 422} and body is not None:
+        return app.response_class(body, status=status, mimetype="application/json")
+    if status != 201 or body is None:
+        return jsonify({"error": "application_unavailable"}), 503
+    response = app.response_class(body, status=201, mimetype="application/json")
+    response.headers["Cache-Control"] = "no-store"
     return response
 
 
