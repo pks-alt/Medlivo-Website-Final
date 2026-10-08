@@ -1,0 +1,47 @@
+.job-detail-page{background:#fff}
+.job-detail-hero{background:#102641;color:#fff;padding:38px 0 48px}
+.job-back-link{display:inline-flex;color:#d6e5ee;font-size:14px;font-weight:650;margin-bottom:28px;text-decoration:underline;text-underline-offset:4px}
+.job-detail-hero-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.55fr);gap:54px;align-items:start}
+.job-detail-hero .kicker{color:#d0e7e9;margin-bottom:12px}
+.job-detail-hero h1{color:#fff;font-size:clamp(38px,4.2vw,58px);line-height:1.08;letter-spacing:-.04em;max-width:19ch}
+.job-detail-hero p{color:#e5edf4;max-width:70ch;margin-top:18px;font-size:17px;line-height:1.65}
+.job-hero-meta{display:flex;flex-wrap:wrap;gap:9px;margin-top:24px}
+.job-hero-meta span{padding:7px 10px;border-radius:5px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.13);font-size:13px;font-weight:650;color:#fff}
+.job-apply-panel{background:#fff;color:#102641;border-radius:14px;padding:25px;box-shadow:0 18px 38px rgba(0,0,0,.15)}
+.job-apply-panel h2{font-size:26px;line-height:1.2;margin:8px 0 10px}
+.job-apply-panel p{color:#405469;font-size:14px;margin:0 0 19px}
+.job-apply-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.09em;font-weight:800;color:#235466}
+.job-apply-panel .btn{width:100%}
+.job-phone-link{display:flex;justify-content:center;margin-top:13px;font-weight:700;color:#164c6d;text-decoration:underline;text-underline-offset:4px}
+.job-detail-main{padding:48px 0 56px}
+.job-detail-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:56px;align-items:start}
+.job-section{padding:0 0 30px;margin-bottom:30px;border-bottom:1px solid #dce5eb}
+.job-section:last-child{border-bottom:0}
+.job-section h2{font-size:27px;line-height:1.25;margin-bottom:13px;color:#102641}
+.job-section p{white-space:pre-line;font-size:16px;line-height:1.72;color:#30475b}
+.job-facts{position:sticky;top:110px;padding:22px;border:1px solid #c8d6df;border-radius:12px;background:#f7f9fb}
+.job-facts h2{font-size:21px;margin-bottom:10px}
+.job-fact{padding:12px 0;border-top:1px solid #d7e1e7}
+.job-fact:first-child{border-top:0}
+.job-fact small{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:750;color:#607588;margin-bottom:3px}
+.job-fact strong{font-size:14px;line-height:1.45;color:#1f3b51}
+.job-loading,.job-error{padding:28px;border:1px solid #cedbe3;border-radius:12px;background:#f7f9fb;color:#41576b}
+.job-error h2{margin-bottom:8px}
+.job-detail-bottom{padding:0 0 54px}
+.job-detail-bottom-shell{display:flex;justify-content:space-between;gap:30px;align-items:center;background:#102641;color:#fff;padding:30px 34px;border-radius:14px}
+.job-detail-bottom h2{color:#fff;margin:8px 0;font-size:30px}
+.job-detail-bottom p{color:#e5edf4;max-width:62ch}
+@media(max-width:900px){.job-detail-hero-grid,.job-detail-layout{grid-template-columns:1fr}.job-apply-panel{max-width:620px}.job-facts{position:static}.job-detail-bottom-shell{display:grid}}
+@media(max-width:540px){.job-detail-hero{padding:26px 0 36px}.job-detail-hero h1{font-size:35px}.job-detail-main{padding:34px 0 42px}.job-section h2{font-size:24px}.job-detail-bottom-shell{padding:24px 22px}}
+.job-apply-form{display:grid;gap:9px;margin-top:18px}
+.job-apply-form label{font-size:12px;line-height:1.4;font-weight:700;color:#30475b}
+.job-apply-form label>span{font-weight:500;color:#718394}
+.job-apply-form input{width:100%;height:44px;border:1px solid #a9bbc7;border-radius:7px;padding:0 10px;font:inherit;color:#102641;background:#fff}
+.job-apply-form input:focus{outline:3px solid rgba(38,113,191,.22);border-color:#2671bf}
+.job-apply-form .btn{margin-top:5px}
+.job-consent{display:grid!important;grid-template-columns:18px 1fr;gap:8px;align-items:start;margin:4px 0}
+.job-consent input{width:16px;height:16px;margin:2px 0 0}
+.job-consent span{font-size:11px;line-height:1.45;color:#50677a}
+.job-apply-message{min-height:18px;font-size:12px;line-height:1.5;color:#50677a}
+.job-apply-message.success{padding:9px 10px;border-radius:6px;background:#edf7ec;color:#315a31}
+.job-apply-message.error{padding:9px 10px;border-radius:6px;background:#fff0f0;color:#8a3333}
