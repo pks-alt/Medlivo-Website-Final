@@ -62,7 +62,7 @@
 
   <section class="jobs-search-stage" aria-label="Find healthcare opportunities">
     <div class="wrap">
-      <form class="jobs-search-panel" id="jobsSearchForm" action="search-jobs.html" method="get" data-ats-integration="pending">
+      <form class="jobs-search-panel" id="jobsSearchForm" action="search-jobs.html" method="get" data-career-api="medlivo-ai-platform">
         <div class="jobs-division-switcher">
           <div class="jobs-division-head"><span class="jobs-category-label">Browse by division</span><button class="jobs-all-button active" data-category="" type="button" aria-pressed="true">All divisions</button></div>
           <div class="jobs-division-grid" role="group" aria-label="Choose a healthcare division">
@@ -148,8 +148,8 @@
           <div class="jobs-results-tools"><label class="jobs-sort-label" for="sortJobs">Sort by</label><select id="sortJobs"><option value="newest">Newest first</option><option value="pay-high">Pay: high to low</option><option value="location">Location</option></select></div>
         </div>
         <p class="jobs-preview-note" data-ats-preview-notice>Job availability, pay, and start dates can change. Confirm current details with your recruiter.</p>
-        <div class="job-list" id="jobList" data-ats-results="pending"></div>
-        <nav class="jobs-pagination" id="jobsPagination" aria-label="Job results pages" data-ats-pagination="required" hidden><div class="jobs-pagination-summary" id="paginationSummary"></div><div class="jobs-pagination-actions"><button type="button" id="jobsPrevPage" aria-label="Previous page">Previous</button><span id="paginationPage"></span><button type="button" id="jobsNextPage" aria-label="Next page">Next</button></div></nav>
+        <div class="job-list" id="jobList" data-career-results="approved-only"></div>
+        <nav class="jobs-pagination" id="jobsPagination" aria-label="Job results pages" data-career-pagination="cursor" hidden><div class="jobs-pagination-summary" id="paginationSummary"></div><div class="jobs-pagination-actions"><button type="button" id="jobsPrevPage" aria-label="Previous page">Previous</button><span id="paginationPage"></span><button type="button" id="jobsNextPage" aria-label="Next page">Next</button></div></nav>
         <div class="jobs-no-results" id="noResults" hidden><h3>No jobs match this search.</h3><p>Try a broader profession or location, or ask a recruiter about current availability.</p><div class="jobs-no-results-actions"><button class="btn btn-primary" type="button" id="viewAllJobs">Clear Filters</button><a class="btn btn-outline" href="mailto:hello@medlivo.com?subject=Help%20Finding%20a%20Healthcare%20Job">Ask a Recruiter</a></div></div>
         <noscript><p class="jobs-preview-note">JavaScript is required to use the job filters. Contact a Medlivo recruiter for help with current openings.</p></noscript>
       </div>
@@ -202,7 +202,7 @@
 <script src="assets/js/navigation-dropdowns.js"></script>
 
 
-<script src="assets/js/search-jobs-3.js?v=jobs-production-clean-20260929"></script>
+<script src="assets/js/search-jobs-ai.js?v=career-api-20261007"></script>
 
 </body>
 </html>
