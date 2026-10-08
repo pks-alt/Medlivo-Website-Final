@@ -3,6 +3,9 @@ import time
 import uuid
 from datetime import datetime, timezone
 from collections import defaultdict, deque
+from urllib.parse import urlencode, quote
+from urllib.request import Request as URLRequest, urlopen
+from urllib.error import HTTPError, URLError
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -23,6 +26,7 @@ CORS(app, resources={r"/api/*": {"origins": list(ALLOWED_ORIGINS)}})
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-6-luna")
 GOOGLE_SHEET_ID = os.getenv("GOOGLE_SHEET_ID", "1gqhLy5RnmpNM33HE_4JvecO7lKfZEDiVgrLDzEUa_ac")
 MAX_REQUESTS_PER_MINUTE = int(os.getenv("MAX_REQUESTS_PER_MINUTE", "30"))
+CAREER_API_BASE_URL = os.getenv("CAREER_API_BASE_URL", "").rstrip("/")
 
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) if os.getenv("OPENAI_API_KEY") else None
 _rate = defaultdict(deque)
@@ -178,6 +182,57 @@ Reply in 1-4 short sentences. If a next step is useful, mention it naturally. Do
         store=False,
     )
     return jsonify({"message": response.output_text.strip()})
+
+def _career_api(path, params=None):
+    if not CAREER_API_BASE_URL:
+        return None, 503
+    url = CAREER_API_BASE_URL + path
+    if params:
+        clean_params = {k: v for k, v in params.items() if v not in (None, "")}
+        if clean_params:
+            url += "?" + urlencode(clean_params)
+    req = URLRequest(url, headers={
+        "Accept": "application/json",
+        "User-Agent": "Medlivo-Website/1.0",
+    }, method="GET")
+    try:
+        with urlopen(req, timeout=8) as response:
+            payload = response.read(1024 * 1024)
+            return payload, response.status
+    except HTTPError as exc:
+        if exc.code == 404:
+            return b'{"detail":"Job not found"}', 404
+        return None, 503
+    except (URLError, TimeoutError):
+        return None, 503
+
+
+@app.get("/api/careers/jobs")
+def career_jobs():
+    allowed = {"division", "profession", "specialty", "state", "city", "after", "limit"}
+    params = {key: request.args.get(key, "") for key in allowed}
+    payload, status = _career_api("/api/v1/careers/jobs", params)
+    if status != 200 or payload is None:
+        return jsonify({"error": "career_jobs_unavailable"}), status
+    response = app.response_class(payload, status=200, mimetype="application/json")
+    response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
+    return response
+
+
+@app.get("/api/careers/jobs/<job_id>")
+def career_job(job_id):
+    safe_id = _clean(job_id, 64)
+    if not safe_id or any(ch not in "0123456789abcdefABCDEF-" for ch in safe_id):
+        return jsonify({"detail": "Job not found"}), 404
+    payload, status = _career_api("/api/v1/careers/jobs/" + quote(safe_id, safe=""))
+    if status == 404:
+        return jsonify({"detail": "Job not found"}), 404
+    if status != 200 or payload is None:
+        return jsonify({"error": "career_jobs_unavailable"}), 503
+    response = app.response_class(payload, status=200, mimetype="application/json")
+    response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
+    return response
+
 
 @app.post("/api/leads/client")
 def create_client_lead():
