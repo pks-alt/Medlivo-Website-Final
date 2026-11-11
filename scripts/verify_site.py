@@ -38,7 +38,8 @@ def verify_source(manifest: dict) -> dict:
             failures.append(name + ': em dash in page text')
         if soup.find('base'):
             failures.append(name + ': base tag redirects relative routes')
-        if len(soup.find_all('h1')) != 1:
+        is_redirect = soup.find('meta', attrs={'http-equiv': 'refresh'}) is not None
+        if not is_redirect and len(soup.find_all('h1')) != 1:
             failures.append(name + ': expected exactly one H1')
         for element in soup.select('[href], [src], form[action]'):
             attr = 'src' if element.has_attr('src') else ('action' if element.name == 'form' else 'href')
