@@ -17,6 +17,18 @@
     Replace the temporary Quick Apply and Job Alert email actions with existing ATS workflows.
   */
   const jobs=[];
+  // Public job list written about once an hour by Medlivo Recruit AI. It holds no pay, client or recruiter details.
+  const JOBS_URL="https://storage.googleapis.com/medlivo-public-jobs/jobs.json";
+  const clean=v=>String(v==null?"":v).replace(/[<>"]/g,"").trim();
+  function mapPublicJob(j){
+    const start=j.start_date?new Date(j.start_date+"T12:00:00"):null;
+    return {
+      id:clean(j.id),title:clean(j.title),category:clean(j.division),profession:clean(j.profession),
+      specialty:clean(j.specialty),type:clean(j.employment_type),state:clean(j.state),city:clean(j.city),
+      pay:"",start:start&&!Number.isNaN(start.getTime())?start.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}):"",
+      posted:"",applyUrl:"mailto:hello@medlivo.com?subject="+encodeURIComponent("Interested in job "+clean(j.id)+" - "+clean(j.title))
+    };
+  }
 
   const careerTaxonomy={
     "Nursing & Allied":[
@@ -352,9 +364,9 @@
           </div>
         </div>
         <div class="job-card-side">
-          <span class="job-pay-label">Pay range</span>
-          <div class="job-pay">${job.pay||"Ask recruiter"}</div>
-          <a class="job-apply" href="${job.applyUrl||"https://www.medlivo.com/search-jobs"}" data-ats-apply-id="${job.id}" aria-label="Open Medlivo’s current job search to check ${job.title}">View Current Jobs</a>
+          <span class="job-pay-label">Pay</span>
+          <div class="job-pay">${job.pay||"Talk to a recruiter"}</div>
+          <a class="job-apply" href="${job.applyUrl||"https://www.medlivo.com/search-jobs"}" data-ats-apply-id="${job.id}" aria-label="Email a Medlivo recruiter about ${job.title}">Talk to a recruiter</a>
           <span class="job-ats-note">Confirm availability with Medlivo</span>
         </div>
       </article>`).join("");
@@ -488,4 +500,8 @@
   locationInput.addEventListener('change',()=>render(true));
   render();
   searchReady=true;
+  fetch(JOBS_URL,{cache:"no-cache"}).then(r=>r.ok?r.json():Promise.reject(new Error("jobs unavailable"))).then(data=>{
+    (Array.isArray(data.jobs)?data.jobs:[]).forEach(j=>jobs.push(mapPublicJob(j)));
+    render();
+  }).catch(()=>{});
 })();
