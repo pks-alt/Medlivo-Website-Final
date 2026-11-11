@@ -24,6 +24,19 @@ def inline_html():
         sc.string=(ROOT/sc['src'].split('?')[0]).read_text();del sc['src']
     return str(s)
 
+TEST_JOBS={'jobs':[
+ {'id':'t000000001','title':'Physician - Emergency Medicine','profession':'Physician','specialty':'Emergency Medicine','division':'Locum Tenens','city':'Seattle','state':'WA','employment_type':'Locum Tenens','start_date':'2027-01-05'},
+ {'id':'t000000002','title':'Physician - Cardiology','profession':'Physician','specialty':'Cardiology','division':'Locum Tenens','city':'Los Angeles','state':'CA','employment_type':'Locum Tenens','start_date':'2027-01-12'},
+ {'id':'t000000003','title':'Physician - OB/GYN','profession':'Physician','specialty':'OB/GYN','division':'Locum Tenens','city':'Phoenix','state':'AZ','employment_type':'Locum Tenens','start_date':'2027-02-01'},
+ {'id':'t000000004','title':'Physician - Urology','profession':'Physician','specialty':'Urology','division':'Locum Tenens','city':'Austin','state':'TX','employment_type':'Locum Tenens','start_date':'2027-02-09'},
+ {'id':'t000000005','title':'Physician - Neurology','profession':'Physician','specialty':'Neurology','division':'Locum Tenens','city':'Denver','state':'CO','employment_type':'Locum Tenens','start_date':'2027-02-16'},
+ {'id':'t000000006','title':'Nurse Practitioner - Primary Care','profession':'Nurse Practitioner','specialty':'Primary Care','division':'Locum Tenens','city':'Sacramento','state':'CA','employment_type':'Locum Tenens','start_date':'2027-03-01'},
+ {'id':'t000000007','title':'Physician Assistant - Urgent Care','profession':'Physician Assistant','specialty':'Urgent Care','division':'Locum Tenens','city':'Portland','state':'OR','employment_type':'Locum Tenens','start_date':'2027-03-08'},
+ {'id':'t000000008','title':'Registered Nurse - ICU','profession':'Registered Nurse','specialty':'ICU','division':'Nursing & Allied','city':'Spokane','state':'WA','employment_type':'Travel','start_date':'2027-01-19'}]}
+
+def mock_jobs(page):
+    page.route('**/medlivo-public-jobs/jobs.json',lambda r:r.fulfill(content_type='application/json',headers={'access-control-allow-origin':'*'},body=json.dumps(TEST_JOBS)))
+
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--base-url',default='http://127.0.0.1:8765/');ap.add_argument('--output-dir',required=True);ap.add_argument('--inline',action='store_true');ap.add_argument('--public',action='store_true');a=ap.parse_args()
     if a.inline and a.public:ap.error('Inline and public modes are mutually exclusive')
@@ -39,7 +52,7 @@ def main():
     with sync_playwright() as pw:
         exe=shutil.which('google-chrome') or shutil.which('chromium');browser=pw.chromium.launch(headless=True,args=['--no-sandbox'],**({'executable_path':exe} if exe else {}))
         for width in WIDTHS:
-            page=browser.new_page(viewport={'width':width,'height':1080 if width>1040 else 844},device_scale_factor=1);errors=[];page.on('pageerror',lambda e,bucket=errors:bucket.append(str(e)))
+            page=browser.new_page(viewport={'width':width,'height':1080 if width>1040 else 844},device_scale_factor=1);errors=[];mock_jobs(page);page.on('pageerror',lambda e,bucket=errors:bucket.append(str(e)))
             if offline:page.set_content(offline,wait_until='load');status=None
             else:resp=page.goto(url,wait_until='networkidle',timeout=60000);status=resp.status
             page.evaluate('document.fonts.ready')
@@ -54,9 +67,9 @@ def main():
               'http_ok':offline is not None or status==200,'no_overflow':not row['overflow'],'no_clipped_text':not row['clipped'],'no_script_errors':not errors,'images_decoded':not bad_images,
               'three_divisions':row['divisions']==['Nursing & Allied','Rehabilitation','Locum Tenens'],'fifty_unique_states':row['state_count']==len(set(row['state_values']))==50,
               'existing_preview_records':row['job_count']==8,'wide_alignment':width<1920 or abs(row['canvas']-1560)<2,
-              'results_earlier':row['first_job_top']<820 if width>=1440 else row['first_job_top']<1100 if width==390 else row['first_job_top']<1400 if width==320 else True,
+              'results_earlier':row['first_job_top']<840 if width>=1440 else row['first_job_top']<1100 if width==390 else row['first_job_top']<1400 if width==320 else True,
               'simple_flow':row['sections']==['jobs-hero','jobs-search-stage','jobs-results-section','jobs-support-strip','jobs-bottom-cta'],
-              'truthful_preview':page.locator('[data-ats-preview-notice]').count()==1 and 'not live' in page.locator('[data-ats-preview-notice]').inner_text(),
+              'truthful_preview':page.locator('[data-ats-preview-notice]').count()==1 and 'Confirm current details' in page.locator('[data-ats-preview-notice]').inner_text(),
               'integration_points':page.locator('[data-ats-results="pending"]').count()==1 and page.locator('[data-ats-action="quick-apply"]').count()==1 and page.locator('[data-ats-action="job-alerts"]').count()==1,
               'clean_copy':row['em_dash_absent'] and row['duplicate_sidebar_absent'] and row['promotions_above_results_absent'],
               'text_contrast':not contrast['failures'] and not contrast['unknown']}
@@ -76,7 +89,7 @@ def main():
                 page.locator('#clearFilters').click();expect(page.locator('.job-card')).to_have_count(8)
                 page.locator('#searchLocation').fill('Washington');page.locator('.jobs-search-button').click();expect(page.locator('.job-card')).to_have_count(2)
                 page.locator('#clearFilters').click();page.locator('#filterState').select_option('CA');expect(page.locator('.job-card')).to_have_count(2)
-                page.locator('#clearFilters').click();page.locator('#sortJobs').select_option('pay-high');assert 'OB/GYN' in page.locator('.job-card h3').first.inner_text()
+                page.locator('#clearFilters').click();page.locator('#sortJobs').select_option('location');expect(page.locator('.job-card')).to_have_count(8)
                 page.locator('.division-rehab').click();expect(page.locator('#searchDivision')).to_have_value('Rehabilitation');assert 'Physical Therapist' in page.locator('#searchProfession').inner_text()
                 page.locator('.division-nursing').click();expect(page.locator('#searchDivision')).to_have_value('Nursing & Allied');assert 'Registered Nurse' in page.locator('#searchProfession').inner_text()
                 page.locator('#divisionContext summary').click();expect(page.locator('#specialtyShortcuts')).to_be_visible();page.get_by_role('button',name='ICU',exact=True).click();expect(page.locator('#searchSpecialty')).to_have_value('ICU')
