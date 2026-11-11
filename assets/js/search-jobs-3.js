@@ -17,8 +17,8 @@
     Replace the temporary Quick Apply and Job Alert email actions with existing ATS workflows.
   */
   const jobs=[];
-  // Public job list written about once an hour by Medlivo Recruit AI and passed on by the Medlivo web service. It holds no pay, client or recruiter details.
-  const JOBS_URL="https://medlivo-ai-agent-397967014447.us-west1.run.app/api/jobs";
+  // Public job list written about once an hour by Medlivo Recruit AI. It holds no pay, client or recruiter details.
+  const JOBS_URL="https://storage.googleapis.com/medlivo-site-jobs/jobs.json";
   const clean=v=>String(v==null?"":v).replace(/[<>"]/g,"").trim();
   function mapPublicJob(j){
     const start=j.start_date?new Date(j.start_date+"T12:00:00"):null;

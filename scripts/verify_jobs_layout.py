@@ -35,7 +35,7 @@ TEST_JOBS={'jobs':[
  {'id':'t000000008','title':'Registered Nurse - ICU','profession':'Registered Nurse','specialty':'ICU','division':'Nursing & Allied','city':'Spokane','state':'WA','employment_type':'Travel','start_date':'2027-01-19'}]}
 
 def mock_jobs(page):
-    page.route('**/api/jobs',lambda r:r.fulfill(content_type='application/json',headers={'access-control-allow-origin':'*'},body=json.dumps(TEST_JOBS)))
+    page.route('**/medlivo-site-jobs/jobs.json',lambda r:r.fulfill(content_type='application/json',headers={'access-control-allow-origin':'*'},body=json.dumps(TEST_JOBS)))
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--base-url',default='http://127.0.0.1:8765/');ap.add_argument('--output-dir',required=True);ap.add_argument('--inline',action='store_true');ap.add_argument('--public',action='store_true');a=ap.parse_args()
