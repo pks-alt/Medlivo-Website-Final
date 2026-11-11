@@ -22,9 +22,6 @@ CORS(app, resources={r"/api/*": {"origins": list(ALLOWED_ORIGINS)}})
 
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-6-luna")
 GOOGLE_SHEET_ID = os.getenv("GOOGLE_SHEET_ID", "1gqhLy5RnmpNM33HE_4JvecO7lKfZEDiVgrLDzEUa_ac")
-JOBS_BUCKET = os.getenv("JOBS_BUCKET", "medlivo-public-jobs")
-JOBS_CACHE_SECONDS = 300
-_jobs_cache = {"at": 0.0, "body": None}
 MAX_REQUESTS_PER_MINUTE = int(os.getenv("MAX_REQUESTS_PER_MINUTE", "30"))
 
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) if os.getenv("OPENAI_API_KEY") else None
@@ -147,29 +144,6 @@ def protect_api():
 @app.get("/health")
 def health():
     return jsonify({"ok": True, "service": "medlivo-ai-agent"})
-
-def _load_jobs_file():
-    """Read the public job list from the private bucket; cached for a few minutes."""
-    now = time.time()
-    if _jobs_cache["body"] is not None and now - _jobs_cache["at"] < JOBS_CACHE_SECONDS:
-        return _jobs_cache["body"]
-    credentials, _ = google_auth_default(scopes=["https://www.googleapis.com/auth/devstorage.read_only"])
-    storage = build("storage", "v1", credentials=credentials, cache_discovery=False)
-    body = storage.objects().get_media(bucket=JOBS_BUCKET, object="jobs.json").execute()
-    _jobs_cache.update(at=now, body=body)
-    return body
-
-@app.get("/api/jobs")
-def public_jobs():
-    try:
-        body = _load_jobs_file()
-    except Exception:
-        if _jobs_cache["body"] is None:
-            return jsonify({"jobs": [], "count": 0, "unavailable": True}), 200
-        body = _jobs_cache["body"]
-    resp = app.response_class(body, mimetype="application/json")
-    resp.headers["Cache-Control"] = "public, max-age=300"
-    return resp
 
 @app.post("/api/medlivo-agent")
 def medlivo_agent():
