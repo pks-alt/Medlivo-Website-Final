@@ -141,3 +141,10 @@ Recommended:
 - job_clicked
 - recruiter_handoff
 - contact_handoff
+
+## Claude agent (v2)
+- Endpoint: `POST /api/chat` with `{messages:[{role,content}], page}`; returns `{message, jobs[], lead, actions?}`. `/api/medlivo-agent` remains for compatibility.
+- Model: Anthropic Claude (`ANTHROPIC_MODEL`, default `claude-sonnet-5-5`). Key: `ANTHROPIC_API_KEY` (set as a secret on the Cloud Run service; never in code).
+- Tools: `search_jobs` (reads the public jobs.json, 5 minute cache), `submit_staffing_request`, `submit_candidate_interest` (reuse the existing Google Sheet lead logic; model confirms details with the visitor first).
+- Without a key the service returns a safe fallback with links.
+- Widget is injected by `assets/js/medlivo-agent.js` on every page; chat history lives in sessionStorage only.
