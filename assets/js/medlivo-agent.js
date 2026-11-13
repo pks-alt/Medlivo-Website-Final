@@ -1,209 +1,91 @@
 (function(){
-  const panel=document.querySelector('[data-medlivo-agent-panel]');
-  const launcher=document.querySelector('[data-medlivo-agent-launcher]');
-  if(!panel||!launcher)return;
+  if(window.__medlivoAgentLoaded)return;window.__medlivoAgentLoaded=true;
   const API_BASE='https://medlivo-ai-agent-397967014447.us-west1.run.app';
-  const body=panel.querySelector('[data-agent-body]');
-  const form=panel.querySelector('[data-agent-form]');
-  const input=panel.querySelector('[data-agent-input]');
-  const close=panel.querySelector('[data-agent-close]');
-  const state={mode:'home',step:null,data:{}};
-  const STORAGE_KEY='medlivoAgentSessionV1';
+  const KEY='medlivoAgentChatV2';
+  const CHIPS=['I need healthcare staff','Find me a job','What does Medlivo do?'];
+  const WELCOME='Hi, I’m Ask Medlivo. I can search our open jobs, send a staffing request to the right team, or answer questions about Medlivo. What can I help with?';
 
-  function track(eventName,detail={}){
-    const payload={event:eventName,source:'ask_medlivo',...detail};
-    window.dataLayer=window.dataLayer||[];
-    window.dataLayer.push(payload);
-    window.dispatchEvent(new CustomEvent('medlivo:agent',{detail:payload}));
+  function ensureMarkup(){
+    if(document.querySelector('[data-medlivo-agent-panel]'))return;
+    const wrap=document.createElement('div');
+    wrap.innerHTML='<button class="medlivo-agent-launcher" type="button" data-medlivo-agent-launcher aria-expanded="false" aria-controls="medlivo-agent-panel"><span class="medlivo-agent-launcher-dot" aria-hidden="true"></span><span class="medlivo-agent-launcher-label"><span>Ask Medlivo<small>Jobs &amp; staffing help</small></span></span><span class="medlivo-agent-launcher-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 18.5 3.5 21v-5A8 8 0 1 1 7 18.5Z"/><path d="M8 10h8M8 14h5"/></svg></span></button>'+
+    '<div class="medlivo-agent-panel" id="medlivo-agent-panel" data-medlivo-agent-panel role="dialog" aria-label="Ask Medlivo"><div class="medlivo-agent-head"><div class="medlivo-agent-brand"><div class="medlivo-agent-mark" aria-hidden="true">M</div><div class="medlivo-agent-title"><strong>Ask Medlivo</strong><span>AI assistant · jobs and staffing</span></div></div><div class="medlivo-agent-head-actions"><button class="medlivo-agent-new" type="button" data-agent-new aria-label="Start a new chat">New chat</button><button class="medlivo-agent-close" type="button" data-agent-close aria-label="Close Ask Medlivo">×</button></div></div><div class="medlivo-agent-body" data-agent-body aria-live="polite"></div><form class="medlivo-agent-foot" data-agent-form><div class="medlivo-agent-input-row"><input class="medlivo-agent-input" type="text" data-agent-input maxlength="1000" autocomplete="off" placeholder="Type a message" aria-label="Message Ask Medlivo"><button class="medlivo-agent-send" type="submit" data-agent-send aria-label="Send message">Send</button></div><div class="medlivo-agent-note">AI assistant for staffing and jobs. Please do not share patient information.</div></form></div>';
+    while(wrap.firstChild)document.body.appendChild(wrap.firstChild);
   }
-  function saveState(){
-    try{sessionStorage.setItem(STORAGE_KEY,JSON.stringify({mode:state.mode,step:state.step,data:state.data}))}catch(e){}
-  }
-  function clearState(){
-    try{sessionStorage.removeItem(STORAGE_KEY)}catch(e){}
-  }
-  function restoreState(){
-    try{
-      const saved=JSON.parse(sessionStorage.getItem(STORAGE_KEY)||'null');
-      if(saved&&saved.mode&&saved.step){state.mode=saved.mode;state.step=saved.step;state.data=saved.data||{};return true}
-    }catch(e){}
-    return false;
-  }
-  function resumePrompt(){
-    const prompts={
-      role:['What role or specialty do you need?','Example: ICU RN, PT, Urologist'],
-      location:['What city and state is the coverage for?','Example: Tacoma, WA'],
-      timing:['When do you need coverage to start?','Example: ASAP or October 15'],
-      count:['How many people do you need?','Example: 2'],
-      organization:['What organization or facility is this for?','Organization or facility name'],
-      contactName:['Who should our team contact?','Your name'],
-      workEmail:['What is your work email?','name@organization.com'],
-      notes:['Anything else the team should know? You can type “skip”.','Schedule, shift, call, credentialing, or skip'],
-      profession:['What is your profession?','Example: RN, Physical Therapist, CRNA'],
-      specialty:['What specialty best describes your experience? You can type “skip”.','Example: ICU, Pediatrics, Outpatient, or skip'],
-      preferredLocations:['Where would you like to work?','City, state, or states'],
-      availability:['When are you available to start?','Example: ASAP, October, or flexible'],
-      name:['What is your name?','Your name'],
-      email:['What email should a recruiter use?','you@example.com'],
-      phone:['What is the best phone number? You can type “skip”.','Phone number or skip']
-    };
-    const p=prompts[state.step];
-    if(p){addMessage(p[0]);setPlaceholder(p[1]);}
-    else setPlaceholder('Type a message');
-  }
-  function validEmail(value){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)}
-  const divisions=['Nursing & Allied','Rehabilitation','Locum Tenens'];
-  let thinkingNode=null;
+  function init(){
+    ensureMarkup();
+    const panel=document.querySelector('[data-medlivo-agent-panel]');
+    const launcher=document.querySelector('[data-medlivo-agent-launcher]');
+    const body=panel.querySelector('[data-agent-body]');
+    const form=panel.querySelector('[data-agent-form]');
+    const input=panel.querySelector('[data-agent-input]');
+    const closeBtn=panel.querySelector('[data-agent-close]');
+    let newBtn=panel.querySelector('[data-agent-new]');
+    let history=[],busy=false,thinking=null;
 
-  function scrollBottom(){body.scrollTop=body.scrollHeight}
-  function setPlaceholder(text){input.placeholder=text||'Type a message';input.focus()}
-  function addMessage(text,who='bot'){
-    const row=document.createElement('div');row.className='medlivo-agent-message '+who;
-    const bubble=document.createElement('div');bubble.className='medlivo-agent-bubble';bubble.textContent=text;
-    row.appendChild(bubble);body.appendChild(row);scrollBottom();return row;
-  }
-  function addStep(label,current,total){
-    const wrap=document.createElement('div');wrap.className='medlivo-agent-progress';
-    wrap.innerHTML='<span>'+label+'</span><strong>'+current+' of '+total+'</strong><i><b style="width:'+Math.round((current/total)*100)+'%"></b></i>';
-    body.appendChild(wrap);scrollBottom();
-  }
-  function addOptions(options){
-    const wrap=document.createElement('div');wrap.className='medlivo-agent-options';
-    options.forEach(opt=>{const btn=document.createElement('button');btn.type='button';btn.className='medlivo-agent-option';btn.textContent=opt.label;btn.addEventListener('click',()=>{wrap.remove();opt.onClick()});wrap.appendChild(btn)});
-    body.appendChild(wrap);scrollBottom();return wrap;
-  }
-  function addCard(title,text,actions=[]){
-    const card=document.createElement('div');card.className='medlivo-agent-card';
-    const strong=document.createElement('strong');strong.textContent=title;card.appendChild(strong);
-    if(text){const p=document.createElement('p');p.textContent=text;card.appendChild(p)}
-    if(actions.length){const row=document.createElement('div');row.className='medlivo-agent-card-actions';actions.forEach((a,i)=>{const link=document.createElement('a');link.className='medlivo-agent-link'+(i?' secondary':'');link.href=a.href;link.textContent=a.label;row.appendChild(link)});card.appendChild(row)}
-    body.appendChild(card);scrollBottom();return card;
-  }
-  function showThinking(){thinkingNode=document.createElement('div');thinkingNode.className='medlivo-agent-message bot';thinkingNode.innerHTML='<div class="medlivo-agent-thinking"><i></i><i></i><i></i></div>';body.appendChild(thinkingNode);scrollBottom()}
-  function hideThinking(){if(thinkingNode){thinkingNode.remove();thinkingNode=null}}
-  function reset(){
-    state.mode='home';state.step=null;state.data={};clearState();body.innerHTML='';
-    addMessage('Hi. I can help with staffing needs, healthcare jobs, or questions about Medlivo.');
-    addMessage('What would you like to do?');
-    addOptions([{label:'I need healthcare staff',onClick:startClient},{label:'I’m looking for a job',onClick:startClinician},{label:'I have a question',onClick:startQuestion}]);
-    setPlaceholder('Type a message');
-  }
-
-  function startClient(){
-    state.mode='client';state.step='division';state.data={};saveState();track('ask_medlivo_client_started');addMessage('I need healthcare staff','user');addStep('Staffing request',1,3);addMessage('Which team is closest to your need?');
-    addOptions(divisions.map(d=>({label:d,onClick:()=>chooseClientDivision(d)})).concat([{label:'Not sure',onClick:()=>chooseClientDivision('Not sure')}]));
-  }
-  function chooseClientDivision(v){state.data.division=v;addMessage(v,'user');state.step='role';saveState();addMessage('What role or specialty do you need?');setPlaceholder('Example: ICU RN, PT, Urologist')}
-  function clientNext(v){
-    if(state.step==='workEmail'&&!validEmail(v)){addMessage('Please enter a valid work email so the Medlivo team can follow up.');setPlaceholder('name@organization.com');saveState();return}
-    if(state.step==='role'){state.data.role=v;state.step='location';addMessage('What city and state is the coverage for?');setPlaceholder('Example: Tacoma, WA');saveState();return}
-    if(state.step==='location'){state.data.location=v;state.step='timing';addMessage('When do you need coverage to start?');setPlaceholder('Example: ASAP or October 15');saveState();return}
-    if(state.step==='timing'){state.data.startTiming=v;state.step='count';addMessage('How many people do you need?');setPlaceholder('Example: 2');saveState();return}
-    if(state.step==='count'){state.data.numberNeeded=v;state.step='organization';addStep('Organization',2,3);addMessage('What organization or facility is this for?');setPlaceholder('Organization or facility name');saveState();return}
-    if(state.step==='organization'){state.data.organization=v;state.step='contactName';addMessage('Who should our team contact?');setPlaceholder('Your name');saveState();return}
-    if(state.step==='contactName'){state.data.contactName=v;state.step='workEmail';addMessage('What is your work email?');setPlaceholder('name@organization.com');saveState();return}
-    if(state.step==='workEmail'){state.data.workEmail=v;state.step='phone';addMessage('Phone number? You can type “skip” if you prefer email.');setPlaceholder('Phone number or skip');saveState();return}
-    if(state.step==='phone'){state.data.phone=/^skip$/i.test(v)?'':v;state.step='notes';addStep('Review and send',3,3);addMessage('Anything else the team should know? You can type “skip”.');setPlaceholder('Schedule, shift, call, credentialing, or skip');saveState();return}
-    if(state.step==='notes'){state.data.notes=/^skip$/i.test(v)?'':v;saveState();submitClientLead()}
-  }
-  async function submitClientLead(){
-    state.step='submitting';showThinking();
-    try{
-      const response=await fetch(API_BASE+'/api/leads/client',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...state.data,source:'Ask Medlivo'})});
-      hideThinking();if(!response.ok)throw new Error('Client lead '+response.status);
-      const result=await response.json(),d=state.data;
-      addMessage('Thank you. Your staffing request has been sent to Medlivo.');
-      addCard('Request received',[d.division,d.role,d.location,d.startTiming,d.numberNeeded?d.numberNeeded+' needed':null].filter(Boolean).join(' · '),[{label:'Workforce Solutions',href:'workforce-solutions.html'},{label:'Call Medlivo',href:'tel:+18556335486'}]);
-      if(result.assignedTeam)addMessage('Routed to: '+result.assignedTeam+'.');
-      if(result.leadId)addMessage('Reference: '+result.leadId);
-      state.step='complete';clearState();track('ask_medlivo_client_submitted',{division:d.division||'',lead_id:result.leadId||''});setPlaceholder('Ask another question');
-    }catch(e){
-      hideThinking();console.error(e);addMessage('I could not send the request online. I can still take you to the Request Staff form with the details already filled in.');
-      const d=state.data,p=new URLSearchParams();if(d.division&&d.division!=='Not sure')p.set('division',d.division);if(d.role)p.set('role',d.role);if(d.location)p.set('location',d.location);if(d.startTiming)p.set('start',d.startTiming);if(d.numberNeeded)p.set('count',d.numberNeeded);
-      addCard('Continue your request','Your details can be carried into the form.',[{label:'Open Request Staff',href:'request-staff.html?'+p.toString()},{label:'Call 855-633-5486',href:'tel:+18556335486'}]);state.step='complete';
+    function track(e,d){const p=Object.assign({event:e,source:'ask_medlivo'},d||{});window.dataLayer=window.dataLayer||[];window.dataLayer.push(p)}
+    function save(){try{sessionStorage.setItem(KEY,JSON.stringify(history.slice(-30)))}catch(e){}}
+    function load(){try{const h=JSON.parse(sessionStorage.getItem(KEY)||'[]');return Array.isArray(h)?h:[]}catch(e){return[]}}
+    function scroll(){body.scrollTop=body.scrollHeight}
+    function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n}
+    function bubble(text,who){const row=el('div','medlivo-agent-message '+who);row.appendChild(el('div','medlivo-agent-bubble',text));body.appendChild(row);scroll();return row}
+    function chips(list){const w=el('div','medlivo-agent-options');list.forEach(t=>{const b=el('button','medlivo-agent-option',t);b.type='button';b.addEventListener('click',()=>{w.remove();send(t)});w.appendChild(b)});body.appendChild(w);scroll()}
+    function link(label,href,secondary){const a=el('a','medlivo-agent-link'+(secondary?' secondary':''),label);a.href=href;return a}
+    function jobCards(jobs){
+      jobs.forEach(j=>{
+        const c=el('div','medlivo-agent-card medlivo-agent-job');
+        c.appendChild(el('strong','',j.title||j.profession||'Open role'));
+        const loc=[j.city,j.state].filter(Boolean).join(', ');
+        const meta=[j.division,loc,j.specialty,j.contract_weeks?j.contract_weeks+' wks':'',j.shift,j.start_date?'Starts '+j.start_date:''].filter(Boolean).join(' · ');
+        if(meta)c.appendChild(el('p','',meta));
+        const row=el('div','medlivo-agent-card-actions');
+        row.appendChild(link('Talk to a recruiter','mailto:hello@medlivo.com?subject='+encodeURIComponent('Interested in job '+(j.id||'')+' - '+(j.title||''))));
+        c.appendChild(row);body.appendChild(c);
+      });
+      if(jobs.length){const r=el('div','medlivo-agent-card-actions');r.style.margin='0 0 14px';r.appendChild(link('See all jobs','search-jobs.html',true));body.appendChild(r)}
+      scroll();
     }
-  }
+    function actions(list){const c=el('div','medlivo-agent-card');const r=el('div','medlivo-agent-card-actions');list.forEach((a,i)=>r.appendChild(link(a.label,a.href,i>0)));c.appendChild(r);body.appendChild(c);scroll()}
+    function showThinking(){thinking=el('div','medlivo-agent-message bot');thinking.innerHTML='<div class="medlivo-agent-thinking"><i></i><i></i><i></i></div>';body.appendChild(thinking);scroll()}
+    function hideThinking(){if(thinking){thinking.remove();thinking=null}}
+    function setBusy(v){busy=v;input.disabled=v;form.querySelector('[data-agent-send]').disabled=v;if(!v)input.focus()}
 
-  function startClinician(){
-    state.mode='clinician';state.step='division';state.data={};saveState();track('ask_medlivo_clinician_started');addMessage('I’m looking for a job','user');addStep('Career preferences',1,3);addMessage('Which area best matches your profession?');
-    addOptions(divisions.map(d=>({label:d,onClick:()=>chooseClinicianDivision(d)})));
-  }
-  function chooseClinicianDivision(v){state.data.division=v;addMessage(v,'user');state.step='profession';saveState();addMessage('What is your profession?');setPlaceholder('Example: RN, Physical Therapist, CRNA')}
-  function clinicianNext(v){
-    if(state.step==='email'&&!validEmail(v)){addMessage('Please enter a valid email so a recruiter can follow up.');setPlaceholder('you@example.com');return}
-    if(state.step==='profession'){state.data.profession=v;state.step='specialty';addMessage('What specialty best describes your experience? You can type “skip”.');setPlaceholder('Example: ICU, Pediatrics, Outpatient, or skip');saveState();return}
-    if(state.step==='specialty'){state.data.specialty=/^skip$/i.test(v)?'':v;state.step='preferredLocations';addMessage('Where would you like to work?');setPlaceholder('City, state, or states');saveState();return}
-    if(state.step==='preferredLocations'){state.data.preferredLocations=v;state.step='travelLocal';addMessage('Are you looking for travel, local, or either?');addOptions(['Travel','Local','Either'].map(x=>({label:x,onClick:()=>{state.data.travelLocal=x;addMessage(x,'user');state.step='availability';addMessage('When are you available to start?');setPlaceholder('Example: ASAP, October, or flexible')}})));saveState();return}
-    if(state.step==='availability'){state.data.availability=v;state.step='name';addStep('Contact details',2,3);addMessage('What is your name?');setPlaceholder('Your name');saveState();return}
-    if(state.step==='name'){state.data.name=v;state.step='email';addMessage('What email should a recruiter use?');setPlaceholder('you@example.com');saveState();return}
-    if(state.step==='email'){state.data.email=v;state.step='phone';addMessage('What is the best phone number? You can type “skip”.');setPlaceholder('Phone number or skip');saveState();return}
-    if(state.step==='phone'){state.data.phone=/^skip$/i.test(v)?'':v;addStep('Connect with Medlivo',3,3);submitClinicianLead()}
-  }
-  async function submitClinicianLead(){
-    state.step='submitting';showThinking();
-    try{
-      const response=await fetch(API_BASE+'/api/leads/clinician',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...state.data,source:'Ask Medlivo'})});
-      hideThinking();if(!response.ok)throw new Error('Clinician lead '+response.status);
-      const result=await response.json(),d=state.data,p=new URLSearchParams();
-      if(d.division)p.set('division',d.division);if(d.profession)p.set('profession',d.profession);if(d.specialty)p.set('specialty',d.specialty);if(d.preferredLocations)p.set('location',d.preferredLocations);
-      addMessage('Thanks. Your information has been sent to the Medlivo recruiting team.');
-      addCard('You’re connected',[d.profession,d.specialty,d.preferredLocations,d.travelLocal,d.availability].filter(Boolean).join(' · '),[{label:'View Jobs',href:'search-jobs.html?'+p.toString()},{label:'About Medlivo',href:'about.html'}]);
-      if(result.assignedRecruiter)addMessage('Routed to: '+result.assignedRecruiter+'.');
-      if(result.leadId)addMessage('Reference: '+result.leadId);
-      state.step='complete';clearState();track('ask_medlivo_clinician_submitted',{division:d.division||'',lead_id:result.leadId||''});setPlaceholder('Ask another question');
-    }catch(e){hideThinking();console.error(e);addMessage('I could not send your information online right now. You can still search Medlivo jobs or contact us directly.');addCard('Next step','',[{label:'Search Jobs',href:'search-jobs.html'},{label:'Contact Medlivo',href:'contact.html'}]);state.step='complete'}
-  }
-
-  function startQuestion(){state.mode='question';state.step='question';addMessage('I have a question','user');addMessage('Ask about Medlivo, staffing, jobs, credentialing, or how to reach the right team.');setPlaceholder('Type your question')}
-  function answerKnownQuestion(text){
-    const q=text.toLowerCase();
-    if(/medical advice|diagnos|symptom|patient treatment/.test(q))return {text:'I can help with staffing, jobs, and Medlivo services, but I can’t provide medical advice or collect patient information.',actions:[{label:'Contact Medlivo',href:'contact.html'}]};
-    if(/nursing|allied/.test(q))return {text:'Medlivo’s Nursing & Allied team supports nursing and allied health staffing across healthcare settings.',actions:[{label:'Nursing & Allied',href:'nursing-allied.html'},{label:'Search Jobs',href:'search-jobs.html?division=Nursing%20%26%20Allied'}]};
-    if(/rehab|physical therap|occupational therap|speech|slp|pt\b|ot\b/.test(q))return {text:'Medlivo’s Rehabilitation division focuses on Physical Therapy, Occupational Therapy, and Speech-Language Pathology.',actions:[{label:'Rehabilitation',href:'rehabilitation.html'},{label:'Search Rehab Jobs',href:'search-jobs.html?division=Rehabilitation'}]};
-    if(/locum|physician|provider|crna|nurse practitioner|physician assistant/.test(q))return {text:'Medlivo’s Locum Tenens team supports physicians and advanced practice providers.',actions:[{label:'Locum Tenens',href:'locum-tenens.html'},{label:'Search Provider Jobs',href:'search-jobs.html?division=Locum%20Tenens'}]};
-    if(/job|career|opening|work/.test(q))return {text:'You can search Medlivo opportunities by division, profession, specialty, and location.',actions:[{label:'Search Jobs',href:'search-jobs.html'}]};
-    if(/staff|coverage|hire|need people|need talent/.test(q))return {text:'I can collect your staffing need here and send it directly to the right Medlivo team.',startClient:true};
-    if(/credential|onboard|compliance/.test(q))return {text:'Credentialing and onboarding requirements vary by role, client, and program. Medlivo coordinates required documentation, compliance steps, and start readiness.',actions:[{label:'Contact Medlivo',href:'contact.html'}]};
-    if(/contact|phone|email|reach/.test(q))return {text:'You can reach Medlivo at 855-633-5486 or hello@medlivo.com.',actions:[{label:'Contact Medlivo',href:'contact.html'}]};
-    if(/about|who is medlivo|company/.test(q))return {text:'Medlivo is a healthcare staffing company with specialized Nursing & Allied, Rehabilitation, and Locum Tenens practices.',actions:[{label:'About Medlivo',href:'about.html'}]};
-    return null;
-  }
-  async function askApi(text){
-    try{
-      const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),7000);
-      const response=await fetch(API_BASE+'/api/medlivo-agent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,page:location.pathname,context:{mode:state.mode,data:state.data}}),signal:controller.signal});
-      clearTimeout(timeout);if(!response.ok)return null;const data=await response.json();return data&&data.message?data:null;
-    }catch(e){return null}
-  }
-  async function handleFreeText(text){
-    const known=answerKnownQuestion(text);
-    if(known){addMessage(known.text);if(known.startClient)addOptions([{label:'Start staffing request',onClick:startClient}]);else if(known.actions)addCard('Next step','',known.actions);saveState();return}
-    showThinking();const api=await askApi(text);hideThinking();if(api){addMessage(api.message);saveState();return}
-    addMessage('I can help with staffing requests, healthcare jobs, Medlivo services, credentialing, and contact information.');
-    addOptions([{label:'I need staff',onClick:startClient},{label:'Find a job',onClick:startClinician},{label:'Contact Medlivo',onClick:()=>addCard('Contact Medlivo','',[{label:'Contact Medlivo',href:'contact.html'}])}]);
-  }
-  async function submitText(text){
-    const v=(text||'').trim();if(!v)return;addMessage(v,'user');input.value='';
-    if(state.mode==='client'&&['role','location','timing','count','organization','contactName','workEmail','phone','notes'].includes(state.step))return clientNext(v);
-    if(state.mode==='clinician'&&['profession','specialty','preferredLocations','availability','name','email','phone'].includes(state.step))return clinicianNext(v);
-    return handleFreeText(v);
-  }
-  launcher.addEventListener('click',()=>{
-    panel.classList.toggle('open');
-    const isOpen=panel.classList.contains('open');
-    launcher.setAttribute('aria-expanded',isOpen?'true':'false');
-    if(isOpen&&!body.children.length){
-      track('ask_medlivo_opened');
-      if(restoreState()&&state.step!=='complete'){
-        addMessage('Welcome back. I kept your progress from this visit.');
-        resumePrompt();
-      }else{
-        reset();
+    async function send(text){
+      const v=(text||'').trim();if(!v||busy)return;
+      input.value='';bubble(v,'user');history.push({role:'user',content:v});save();
+      setBusy(true);showThinking();
+      let data=null;
+      try{
+        const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),30000);
+        const r=await fetch(API_BASE+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history.slice(-20),page:location.pathname}),signal:ctl.signal});
+        clearTimeout(t);if(r.ok)data=await r.json();
+      }catch(e){}
+      hideThinking();setBusy(false);
+      if(!data||!data.message){
+        bubble('I’m having trouble connecting right now. You can reach the team directly at hello@medlivo.com or 855-633-5486.','bot');
+        actions([{label:'Request Staff',href:'request-staff.html'},{label:'Search Jobs',href:'search-jobs.html'},{label:'Call 855-633-5486',href:'tel:+18556335486'}]);
+        return;
       }
+      history.push({role:'assistant',content:data.message});save();
+      bubble(data.message,'bot');
+      if(data.jobs&&data.jobs.length){track('ask_medlivo_jobs_shown',{count:data.jobs.length});jobCards(data.jobs)}
+      if(data.actions&&data.actions.length)actions(data.actions);
+      if(data.lead){track('ask_medlivo_lead_submitted',{type:data.lead.type,lead_id:data.lead.leadId});
+        const c=el('div','medlivo-agent-card');c.appendChild(el('strong','','Sent to Medlivo'));c.appendChild(el('p','','Reference '+data.lead.leadId+(data.lead.team?' · '+data.lead.team:'')));body.appendChild(c);scroll()}
     }
-    if(isOpen)setTimeout(()=>input.focus(),100);
-  });
-  close.addEventListener('click',()=>{panel.classList.remove('open');launcher.setAttribute('aria-expanded','false');launcher.focus()});
-  form.addEventListener('submit',e=>{e.preventDefault();submitText(input.value)});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel.classList.contains('open')){panel.classList.remove('open');launcher.setAttribute('aria-expanded','false');launcher.focus()}});
+    function render(){
+      body.innerHTML='';
+      if(!history.length){bubble(WELCOME,'bot');chips(CHIPS);return}
+      history.forEach(m=>bubble(m.content,m.role==='user'?'user':'bot'));
+      chips(['Search jobs','Request staff']);
+    }
+    function open(){panel.classList.add('open');launcher.setAttribute('aria-expanded','true');if(!body.children.length){history=load();render();track('ask_medlivo_opened')}setTimeout(()=>input.focus(),100)}
+    function close(){panel.classList.remove('open');launcher.setAttribute('aria-expanded','false');launcher.focus()}
+    launcher.addEventListener('click',()=>panel.classList.contains('open')?close():open());
+    closeBtn.addEventListener('click',close);
+    if(newBtn)newBtn.addEventListener('click',()=>{if(busy)return;history=[];save();render()});
+    form.addEventListener('submit',e=>{e.preventDefault();send(input.value)});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel.classList.contains('open'))close()});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();

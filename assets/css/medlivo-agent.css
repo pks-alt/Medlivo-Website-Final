@@ -281,3 +281,12 @@
   .medlivo-agent-head{padding:14px}
   .medlivo-agent-foot{padding:10px 10px 11px}
 }
+
+/* Chat v2 additions */
+.medlivo-agent-head-actions{display:flex;align-items:center;gap:8px}
+.medlivo-agent-new{height:30px;padding:0 11px;border:1px solid #cfdce5;border-radius:999px;background:#fff;color:var(--agent-navy);font-size:12px;font-weight:700;cursor:pointer}
+.medlivo-agent-new:hover{background:var(--agent-soft)}
+.medlivo-agent-message .medlivo-agent-bubble{white-space:pre-wrap;overflow-wrap:anywhere}
+.medlivo-agent-job{border-left:3px solid var(--agent-green)}
+.medlivo-agent-input:disabled,.medlivo-agent-send:disabled{opacity:.6;cursor:progress}
+.medlivo-agent-panel{padding:0}
