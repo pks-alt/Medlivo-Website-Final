@@ -359,13 +359,10 @@
           ${showSpecialty(job)?`<div class="job-specialty-line">Specialty: <strong>${showSpecialty(job)}</strong></div>`:""}
           <div class="job-detail-grid">
             <div class="job-detail"><small>Starts</small><strong>${job.start||"Ask recruiter"}</strong></div>
-            <div class="job-detail"><small>Posted</small><strong>${formatPosted(job.posted)}</strong></div>
             <div class="job-detail job-id"><small>Job ID</small><strong>${job.id}</strong></div>
           </div>
         </div>
         <div class="job-card-side">
-          <span class="job-pay-label">Pay</span>
-          <div class="job-pay">${job.pay||"Talk to a recruiter"}</div>
           <a class="job-apply" href="${job.applyUrl||"https://www.medlivo.com/search-jobs"}" data-ats-apply-id="${job.id}" aria-label="Email a Medlivo recruiter about ${job.title}">Talk to a recruiter</a>
           <span class="job-ats-note">Confirm availability with Medlivo</span>
         </div>

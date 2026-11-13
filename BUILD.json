@@ -1,5 +1,5 @@
 {
-  "build_id": "jobs-public-list-20261111",
+  "build_id": "jobs-card-cleanup-20261112",
   "repository": "pks-alt/Medlivo-Website-Final",
   "source_policy": "One root version per page, all assets local. No runtime or ongoing build dependency on the old repository.",
   "initial_import_commit": "ec962a7bb7850cd6bfe7805664ca15a4261b508e",
@@ -56,7 +56,7 @@
       "original_revision": "8ad7bb331a03c987d0bcced4b2161dc90fd8f6f9",
       "original_path": "v2/search-jobs.html",
       "selection": "Preserved supporting page; no new design changes",
-      "sha256": "79218c3b349666dd00f17ac80d1dd287ca3c52f01bedbb2505a35cfd2f23872d"
+      "sha256": "283db62755fcc85ca4141993452968030e93e2b4fbc962839469d4ff94cec5fa"
     },
     "about.html": {
       "source_page_sha256": "6990dd6989f01516411ce797a8e5c24b2769eaef105ffacb3d99b9618d4949b2",
@@ -125,7 +125,7 @@
     "assets/js/navigation-dropdowns.js": "53d90c3720300ff27162f27ce02c155c0b01cae856db4de7c6a2fb22a61f9bcb",
     "assets/js/navigation-menu.js": "a880e0fe96f1b3efdd91549ef5dd9aa6e81717a14f08fc12f8688ba75e7648c6",
     "assets/js/request-staff-1.js": "ff8b208b7d9076fda916c6d1ea483b416c61abac11044cd3d613de1eb35c7b9d",
-    "assets/js/search-jobs-3.js": "7a9896e86b97aa2faf2cc2f047979cd01af0601de5df14f9e64df53036792018",
+    "assets/js/search-jobs-3.js": "c9e20eecbca568ece337e18d70e04fbcca4d0aff96dcf739bf0e3b49ebce1f73",
     "careers.html": "a4973dbd1a2d513ae0f4c775918f6cadccf092cc362f041699e8ea6ac2ae40a5",
     "index.html": "2706a9a1144334aed47a48f55d9809ff6b42b940b4cba2f02fffe1d4099dce4e",
     "leadership.html": "e868f7d4c03fea3c2132658ba5d3439eb51a9bfc3d9b7e6fcdacaed2d2b0e9b8",
@@ -133,7 +133,7 @@
     "nursing-allied.html": "f694eba05ec6cfef0f7084d10eb11e17b5d7e808ab66718a0ee55b2a7798f85f",
     "rehabilitation.html": "6263cc35ba36c3a90c38972b943e90e7ffd84abd873df8e4f435fb9edbfdcca7",
     "request-staff.html": "2e17e1333f51223d87e2cf52e595c972e1074029ee4bb5545f49305f89d1df8f",
-    "search-jobs.html": "79218c3b349666dd00f17ac80d1dd287ca3c52f01bedbb2505a35cfd2f23872d",
+    "search-jobs.html": "283db62755fcc85ca4141993452968030e93e2b4fbc962839469d4ff94cec5fa",
     "specialties.html": "2356fddbfd286aa28612f2ff55c499b93120dbeec7150fe4c7766dbc04490615",
     "workforce-solutions.html": "dd0163ac1a43e7f17b2c28ec5e841575d013bfa10c2d09bd04a7775873dd56cc"
   }
