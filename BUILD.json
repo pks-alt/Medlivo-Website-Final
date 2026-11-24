@@ -1,5 +1,5 @@
 {
-  "build_id": "claude-chat-agent-20261112",
+  "build_id": "site-icons-404-20261124",
   "repository": "pks-alt/Medlivo-Website-Final",
   "source_policy": "One root version per page, all assets local. No runtime or ongoing build dependency on the old repository.",
   "initial_import_commit": "ec962a7bb7850cd6bfe7805664ca15a4261b508e",
@@ -14,81 +14,83 @@
       "original_revision": "874b820c1b81d9233bb02ddda9a331734646aaf8",
       "original_path": "index.html",
       "selection": "19:58 PDT homepage V2, confirmed by FINAL_HOME_BUILD.md at 20:06",
-      "sha256": "63d9e75d953c1983646eb557ffc1b2facbd346497c883b9f2ecb90fc9dc12392"
+      "sha256": "f96de1cccb3c0659841ed322f26e2df7e41847cf41cd51a9e675541f12da9c62"
     },
     "workforce-solutions.html": {
       "source_page_sha256": "5222fc2717bf3a614923b9bf4be872a73fa75cd65d5c73b38ebbf18ec989507d",
       "original_revision": "62134bf75c62a5b5b53c2c36ac6f13fc8be1b4dc",
       "original_path": "workforce-solutions-preview/index.html",
       "selection": "20:30 PDT polished Solutions, without repeated enterprise-program section",
-      "sha256": "e148ab6700a1e87da2bf42701357bf4aa9b9b518368010e85f5bdb453e52f3ec"
+      "sha256": "18ded2b3191619eab089b2adf3a0da2882b3eba5df2807c312789700098aba00"
     },
     "nursing-allied.html": {
       "source_page_sha256": "df60d64b1c550001b5c116bf45ff395894c15f21b68a58c8db379187475cd8cf",
       "original_revision": "794f81e033b74151d0c169185121bbcd500e8bb5",
       "original_path": "nursing-allied-preview/index.html",
       "selection": "Approved Nursing and Allied page with openings and final spacing pass",
-      "sha256": "9106c5bbf932b1c8a19a32aeca3874273a74359abe8002051979d1cf33ebd720"
+      "sha256": "7164cee2b39353eb18cbe00116357c97fc2330b1982a151a6012e3832b681062"
     },
     "rehabilitation.html": {
       "source_page_sha256": "882a045fa8eecbff20ee1b6e928d76eda0c1f466efca45d51023be1d3d6753c8",
       "original_revision": "038bc2a20b8dec869574edf12ca0fd7a9446f680",
       "original_path": "rehabilitation-preview.html",
       "selection": "Four editorial care-setting rows, combined post-acute and home-based care, openings",
-      "sha256": "c654fb1248db100e20089d43066350c95498eb2158cc7a86c343974bfc11e750"
+      "sha256": "95e279d69bf8d00f8584700cec47c5abef159ac7bd8f5fa17efe9e807b82f984"
     },
     "request-staff.html": {
       "source_page_sha256": "618ae06b9868c06cecd30aeff4dee18b1dd3cbad480bb2b9add763f88de381b9",
       "original_revision": "780d3fc3bd125e5d1aae1960ed23f340e8c80b39",
       "original_path": "request-staff.html",
       "selection": "20:50 PDT dedicated request page aligned with final Medlivo design",
-      "sha256": "636b0ba692486e71454449310fd65fbd49051a54c14d54076f6770693a9f656f"
+      "sha256": "ff56e64f7d6e3b31bd99d4ce63ecdb0b68e14d8c307623e7d7e1531e8ae04096"
     },
     "locum-tenens.html": {
       "source_page_sha256": "b47e98d312a7bde40c8790258e810a4dd8bf30440d31bd651125e1cd6cc55663",
       "original_revision": "8ad7bb331a03c987d0bcced4b2161dc90fd8f6f9",
       "original_path": "v2/locum-tenens.html",
       "selection": "Preserved supporting page; no new design changes",
-      "sha256": "8b71f140b7c8565d02de88f47f0e1c75b8c61033a16bcc487f9d50d3132a034b"
+      "sha256": "177ba929fc5edf750f55259754ff1fddaefe7227e2e23b02584b369ac84ee4c9"
     },
     "search-jobs.html": {
       "source_page_sha256": "0797657fdf89de78133cf49cd433619814108cad90655c89799300a28e62e40e",
       "original_revision": "8ad7bb331a03c987d0bcced4b2161dc90fd8f6f9",
       "original_path": "v2/search-jobs.html",
       "selection": "Preserved supporting page; no new design changes",
-      "sha256": "ba05bf7f166f1a7681631f30ce1a334dfe49ed7ef6c6da72aa6f510bb3a446b9"
+      "sha256": "73b8944c22c6d8bc878f33ed6b1e25166c4838772be8d48347ed45fd2cfa2260"
     },
     "about.html": {
       "source_page_sha256": "6990dd6989f01516411ce797a8e5c24b2769eaef105ffacb3d99b9618d4949b2",
       "original_revision": "8ad7bb331a03c987d0bcced4b2161dc90fd8f6f9",
       "original_path": "v2/about.html",
       "selection": "Preserved supporting page; no new design changes",
-      "sha256": "01849752346cb6e4237a82a514b94a679a0d4b908c7baedd84662a9b402c7e1c"
+      "sha256": "27f2cda892ae8637912f2cb9a221d2f6fff24f5ad7e7af39d85b45383d223541"
     },
     "leadership.html": {
       "source_page_sha256": "e9957bc55d8847d658fce0eb882e3f6cfd8631d53ab7bf3eca34df8a3f24d9a3",
       "original_revision": "8ad7bb331a03c987d0bcced4b2161dc90fd8f6f9",
       "original_path": "v2/leadership.html",
       "selection": "Preserved supporting page; no new design changes",
-      "sha256": "253a900828c63948a2a190f9d3455a08f6b7f47d38e540d9355c23d87dbf418b"
+      "sha256": "52a650eee574528d148c7b36c627c72949299efd97f5fcba32fb0971c6e30667"
     },
     "careers.html": {
       "source_page_sha256": "34d77bfe06b3b32a335080dec3b848a2ab0433698df2534d88bbfe2ebe9ffc2c",
       "original_revision": "8ad7bb331a03c987d0bcced4b2161dc90fd8f6f9",
       "original_path": "v2/careers.html",
       "selection": "Preserved supporting page; no new design changes",
-      "sha256": "a31cb8642a72548bfa68b5536b0a1c06e2a56cf0d8080cf594ae5a5002ecf021"
+      "sha256": "fb54fe190835abe41f16a9509348874171411877dd09880c2e8ed5af1e37dcc0"
     },
     "specialties.html": {
       "source_page_sha256": "3fe8203d30bb969a9496eb5004f750789adb03323f2bca7346e81b9ef65e7f7a",
       "original_revision": "8ad7bb331a03c987d0bcced4b2161dc90fd8f6f9",
       "original_path": "v2/specialties.html",
       "selection": "Preserved supporting page; no new design changes",
-      "sha256": "fcef48ea8de0eeddca87a0abc009661ff5eabcd5a8a366c358296ef14dfe5b2f"
+      "sha256": "7d8b5f3befba49cc1e0050fb1e75edad05883e25a2fafcca6f44277c50aab932"
     }
   },
   "files": {
-    "about.html": "01849752346cb6e4237a82a514b94a679a0d4b908c7baedd84662a9b402c7e1c",
+    "about.html": "27f2cda892ae8637912f2cb9a221d2f6fff24f5ad7e7af39d85b45383d223541",
+    "assets/brand/apple-touch-icon.png": "2212fd7cefff0e5cceb1333392e6ac39878ecfa418aba08899028d42b4056a91",
+    "assets/brand/favicon-32.png": "fe841165a7f687afc0d6ec27854cf2ef9878ea8da26573e922a24b15e39013a4",
     "assets/brand/medlivo-logo-transparent.png": "d4fa7637761277289f32829b7c58c300bfb128ffd0b75e89ecc7a4a052bc6717",
     "assets/brand/medlivo-logo.png": "a1ebff3756154b1ed8bdf1c50002012dd8650f8754117abdd1afe3e8eda5a445",
     "assets/css/about.css": "738139c128aef1f7da2d01ad91c1338d2e676178e212afccadf23b4f7eebd1d3",
@@ -126,15 +128,15 @@
     "assets/js/navigation-menu.js": "a880e0fe96f1b3efdd91549ef5dd9aa6e81717a14f08fc12f8688ba75e7648c6",
     "assets/js/request-staff-1.js": "ff8b208b7d9076fda916c6d1ea483b416c61abac11044cd3d613de1eb35c7b9d",
     "assets/js/search-jobs-3.js": "c9e20eecbca568ece337e18d70e04fbcca4d0aff96dcf739bf0e3b49ebce1f73",
-    "careers.html": "a31cb8642a72548bfa68b5536b0a1c06e2a56cf0d8080cf594ae5a5002ecf021",
-    "index.html": "63d9e75d953c1983646eb557ffc1b2facbd346497c883b9f2ecb90fc9dc12392",
-    "leadership.html": "253a900828c63948a2a190f9d3455a08f6b7f47d38e540d9355c23d87dbf418b",
-    "locum-tenens.html": "8b71f140b7c8565d02de88f47f0e1c75b8c61033a16bcc487f9d50d3132a034b",
-    "nursing-allied.html": "9106c5bbf932b1c8a19a32aeca3874273a74359abe8002051979d1cf33ebd720",
-    "rehabilitation.html": "c654fb1248db100e20089d43066350c95498eb2158cc7a86c343974bfc11e750",
-    "request-staff.html": "636b0ba692486e71454449310fd65fbd49051a54c14d54076f6770693a9f656f",
-    "search-jobs.html": "ba05bf7f166f1a7681631f30ce1a334dfe49ed7ef6c6da72aa6f510bb3a446b9",
-    "specialties.html": "fcef48ea8de0eeddca87a0abc009661ff5eabcd5a8a366c358296ef14dfe5b2f",
-    "workforce-solutions.html": "e148ab6700a1e87da2bf42701357bf4aa9b9b518368010e85f5bdb453e52f3ec"
+    "careers.html": "fb54fe190835abe41f16a9509348874171411877dd09880c2e8ed5af1e37dcc0",
+    "index.html": "f96de1cccb3c0659841ed322f26e2df7e41847cf41cd51a9e675541f12da9c62",
+    "leadership.html": "52a650eee574528d148c7b36c627c72949299efd97f5fcba32fb0971c6e30667",
+    "locum-tenens.html": "177ba929fc5edf750f55259754ff1fddaefe7227e2e23b02584b369ac84ee4c9",
+    "nursing-allied.html": "7164cee2b39353eb18cbe00116357c97fc2330b1982a151a6012e3832b681062",
+    "rehabilitation.html": "95e279d69bf8d00f8584700cec47c5abef159ac7bd8f5fa17efe9e807b82f984",
+    "request-staff.html": "ff56e64f7d6e3b31bd99d4ce63ecdb0b68e14d8c307623e7d7e1531e8ae04096",
+    "search-jobs.html": "73b8944c22c6d8bc878f33ed6b1e25166c4838772be8d48347ed45fd2cfa2260",
+    "specialties.html": "7d8b5f3befba49cc1e0050fb1e75edad05883e25a2fafcca6f44277c50aab932",
+    "workforce-solutions.html": "18ded2b3191619eab089b2adf3a0da2882b3eba5df2807c312789700098aba00"
   }
 }
